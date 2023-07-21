@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "837134992436",
+    "project_id": "wherewithal-dc32d",
+    "storage_bucket": "wherewithal-dc32d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837134992436:android:1490acc970653fd16e7661",
+        "android_client_info": {
+          "package_name": "com.mak.wherewithal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837134992436-7dt4gsdcd5g0skdk5iek6nj3jle6oegi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mak.wherewithal",
+            "certificate_hash": "ec573670e62a3263e15167c7047979a6c6de6121"
+          }
+        },
+        {
+          "client_id": "837134992436-sh57klt79ep7jr9mougtidsumpqpfbbu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV2ULZKKd83roTVdyP51zyhzak7j8OiPc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "837134992436-4fdjig75evn51ptkf296d5lg6krsb0mj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "837134992436-85p8dj5goth1qlbiqlig40ft9t3uugq7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mak.wherewithal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
