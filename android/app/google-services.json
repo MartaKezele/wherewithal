@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "837134992436-ui7n85df0gi5opmcruak4t93gjn97p6p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mak.wherewithal",
+            "certificate_hash": "b306ae613aa2459e8c37f9d01293f9555eec86a7"
+          }
+        },
+        {
           "client_id": "837134992436-sh57klt79ep7jr9mougtidsumpqpfbbu.apps.googleusercontent.com",
           "client_type": 3
         }
