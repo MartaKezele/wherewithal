@@ -3,19 +3,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../config/auth_provider.dart';
 import '../../constants/general.dart';
-import '../../models/action_result.dart';
+import '../../app_models/action_result.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 
 class FirebaseAuthRepo implements AuthRepo {
-  Future<OAuthCredential> _googleAuthCredential() async {
-    final googleUser = await GoogleSignIn().signIn();
-    final googleAuth = await googleUser?.authentication;
+  Future<OAuthCredential?> _googleAuthCredential() async {
+    try {
+      final googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
 
-    return GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      return GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<ActionResult> _reauth(
@@ -24,7 +28,7 @@ class FirebaseAuthRepo implements AuthRepo {
     if (FirebaseAuth.instance.currentUser == null) {
       return ActionResult(
         success: false,
-        message: 'You\'re not signed in.',
+        messageTitle: 'You\'re not signed in',
       );
     }
 
@@ -34,7 +38,7 @@ class FirebaseAuthRepo implements AuthRepo {
 
       return ActionResult(
         success: true,
-        message: 'Successfully reauthenticated.',
+        messageTitle: 'Successfully reauthenticated',
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -48,12 +52,13 @@ class FirebaseAuthRepo implements AuthRepo {
   ) async {
     try {
       if (FirebaseAuth.instance.currentUser == null) {
-        return ActionResult(success: false, message: 'You\'re not signed in.');
+        return ActionResult(
+            success: false, messageTitle: 'You\'re not signed in');
       }
       await FirebaseAuth.instance.currentUser!.linkWithCredential(credential);
       return ActionResult(
         success: true,
-        message: 'Successfully linked account with credentials.',
+        messageTitle: 'Successfully linked account with credentials',
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -75,7 +80,7 @@ class FirebaseAuthRepo implements AuthRepo {
 
       return ActionResult(
         success: true,
-        message: 'Successfully signed in.',
+        messageTitle: 'Successfully signed in',
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -96,7 +101,7 @@ class FirebaseAuthRepo implements AuthRepo {
       );
       return ActionResult(
         success: true,
-        message: 'Successfuly created account.',
+        messageTitle: 'Successfuly created account',
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -113,22 +118,25 @@ class FirebaseAuthRepo implements AuthRepo {
       if (user == null) {
         return ActionResult(
           success: false,
-          message: 'You are not signed in.',
+          messageTitle: 'Verification email could not be sent',
+          messageDescription:
+              'Verification email could not be sent because you\'re not signed in/your credentials are not valid.',
         );
       }
 
       if (user.emailVerified) {
         return ActionResult(
           success: false,
-          message: 'Email is already verified.',
+          messageTitle: 'Could not send verification email because email is already verified.',
         );
       }
 
       await user.sendEmailVerification();
       return ActionResult(
         success: true,
-        message:
-            'A verification email has been sent. Click on the link in the email to verify your email address.',
+        messageTitle: 'A verification email has been sent',
+        messageDescription:
+            'Click on the link in the email to verify your email address.',
       );
     } catch (_) {
       return genericFailureResult;
@@ -142,10 +150,10 @@ class FirebaseAuthRepo implements AuthRepo {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       return ActionResult(
-        success: true,
-        message:
-            'The email was sent, check your inbox. Didn\'t receive the email? Check your spam folder.',
-      );
+          success: true,
+          messageTitle: 'Password reset email was sent, check your inbox',
+          messageDescription:
+              'Didn\'t receive the email? Check your spam folder.');
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
     } catch (_) {
@@ -160,7 +168,7 @@ class FirebaseAuthRepo implements AuthRepo {
       await FirebaseAuth.instance.signOut();
       return ActionResult(
         success: true,
-        message: 'Successfully signed out.',
+        messageTitle: 'Successfully signed out',
       );
     } catch (_) {
       return genericFailureResult;
@@ -180,7 +188,8 @@ class FirebaseAuthRepo implements AuthRepo {
       if (googleUser == null) {
         return ActionResult(
           success: false,
-          message: 'Sign in process was aborted.',
+          messageTitle: 'Sign in process was aborted',
+          show: false,
         );
       }
 
@@ -194,17 +203,18 @@ class FirebaseAuthRepo implements AuthRepo {
 
       return ActionResult(
         success: true,
-        message: 'Successfully signed in.',
+        messageTitle: 'Successfully signed in',
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         final result = await fetchAuthProvidersForEmail(googleUser!.email);
         return ActionResult(
-          success: result.success,
-          message: result.success
-              ? 'Account with the given email isn\'t configured to sign in with google. Sign in using one of the following methods: ${result.data?.join(', ')}. Once signed in you can configure sign in with google account in the profile section.'
-              : result.message,
-        );
+            success: result.success,
+            messageTitle: result.success
+                ? 'Account with the given email isn\'t configured to sign in with google'
+                : result.messageTitle,
+            messageDescription:
+                'Sign in using one of the following methods: ${result.data?.join(', ')}. Once signed in you can configure sign in with google account in the profile section.');
       }
       return handleFirebaseAuthException(e);
     } catch (_) {
@@ -228,12 +238,12 @@ class FirebaseAuthRepo implements AuthRepo {
       if (signInMethods.isEmpty) {
         return ActionResult(
           success: false,
-          message: 'Account could not be found.',
+          messageTitle: 'Account could not be found',
         );
       }
       return ActionResult(
         success: true,
-        message: 'Successfuly fetched sign in methods.',
+        messageTitle: 'Successfuly fetched sign in methods',
         data: authProviders,
       );
     } on FirebaseAuthException catch (e) {
@@ -245,7 +255,13 @@ class FirebaseAuthRepo implements AuthRepo {
 
   @override
   Future<ActionResult> reauthWithGoogle() async {
-    return _reauth(await _googleAuthCredential());
+    final credential = await _googleAuthCredential();
+    if (credential == null) {
+      return ActionResult(
+          success: false, messageTitle: 'Proccess aborted', show: false);
+    }
+
+    return _reauth(credential);
   }
 
   @override
@@ -260,6 +276,10 @@ class FirebaseAuthRepo implements AuthRepo {
   @override
   Future<ActionResult> linkWithGoogleCredential() async {
     final credential = await _googleAuthCredential();
+    if (credential == null) {
+      return ActionResult(
+          success: false, messageTitle: 'Proccess aborted', show: false);
+    }
     return await _linkAccountWithCredential(credential);
   }
 

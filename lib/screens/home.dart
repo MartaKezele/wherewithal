@@ -11,7 +11,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () => context.navigateToSettings(),
+            onPressed: () => context.pushSettings(),
             icon: const Icon(Icons.settings_rounded),
           ),
         ],

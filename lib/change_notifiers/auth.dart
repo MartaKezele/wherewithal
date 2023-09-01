@@ -2,12 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../config/auth_provider.dart';
 
-class Auth extends ChangeNotifier {
-  Auth._privateConstructor() {
+class AuthChangeNotifier extends ChangeNotifier {
+  AuthChangeNotifier._privateConstructor() {
     registerListeners();
   }
 
-  static final Auth instance = Auth._privateConstructor();
+  static final AuthChangeNotifier instance =
+      AuthChangeNotifier._privateConstructor();
 
   User? _user;
   List<AuthProvider> _authProviders = [];

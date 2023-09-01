@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wherewithal/components/wrappers/screen.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
 
-import '../../../components/action_result_message.dart';
-import '../../../components/buttons/loading_label_button.dart';
+import '../../../constants/spacers.dart';
+import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
-import '../../../models/action_result.dart';
+import '../../../utils/overlay_banner.dart';
 
 class DeleteAccount extends StatefulWidget {
   const DeleteAccount({super.key});
@@ -14,38 +17,54 @@ class DeleteAccount extends StatefulWidget {
 
 class _DeleteAccountState extends State<DeleteAccount> {
   bool _deletingAccount = false;
-  ActionResult? _result;
+  OverlayEntry? _resultBanner;
 
   Future<void> _deleteAccount() async {
     setState(() {
       _deletingAccount = true;
-      _result = null;
     });
 
-    final result = await RepoFactory.userRepo().deleteAccount();
+    await RepoFactory.userRepo().deleteAccount().then((result) {
+      setState(() {
+        _deletingAccount = false;
+      });
 
-    setState(() {
-      _deletingAccount = false;
-      _result = result;
+      if (result.success) {
+        showActionResultOverlayBanner(context, result);
+      } else {
+        _resultBanner = showActionResultOverlayBanner(context, result);
+      }
     });
   }
 
   @override
+  void dispose() {
+    hideOverlayBanner(_resultBanner);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Screen(
       appBar: AppBar(),
-      body: Column(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Delete account'),
-          LoadingLabelButton(
-            label: 'Delete',
+          Text(
+            'Delete account',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          HeightSpacer.md,
+          FilledButton(
             onPressed: _deleteAccount,
-            isLoading: _deletingAccount,
-            constructor: ElevatedButton.new,
-          ),
-          ActionResultMessage(
-            result: _result,
-          ),
+            child: const Text('Delete'),
+          )
+              .addColorStyle(colorStyle: FilledButtonStyles.primary(context))
+              .loadingBtn(
+                constructor: FilledButton.new,
+                isLoading: _deletingAccount,
+                colorStyle: FilledButtonStyles.primary(context),
+              ),
         ],
       ),
     );

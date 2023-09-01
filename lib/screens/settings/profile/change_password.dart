@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:wherewithal/components/wrappers/screen.dart';
+import 'package:wherewithal/extensions/build_context.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
 
-import '../../../components/action_result_message.dart';
-import '../../../components/buttons/loading_label_button.dart';
-import '../../../components/form_fields/password_form_field.dart';
+import '../../../components/form/custom_form.dart';
+import '../../../components/form/form_fields/password_form_field.dart';
+import '../../../constants/spacers.dart';
+import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
-import '../../../models/action_result.dart';
 import '../../../utils/form.dart';
+import '../../../utils/overlay_banner.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -19,63 +24,71 @@ class _ChangePasswordState extends State<ChangePassword> {
   final _passwordController = TextEditingController();
 
   bool _changingPassword = false;
-  ActionResult? _result;
+  OverlayEntry? _resultBanner;
 
   Future<void> _changePassword() async {
     setState(() {
-      _result = null;
       _changingPassword = true;
     });
 
-    final result = await RepoFactory.userRepo().updatePassword(
+    await RepoFactory.userRepo()
+        .updatePassword(
       _passwordController.text,
-    );
+    )
+        .then((result) {
+      setState(() {
+        _changingPassword = false;
+      });
 
-    setState(() {
-      _result = result;
-      _changingPassword = false;
+      if (result.success) {
+        showActionResultOverlayBanner(context, result);
+        context.goToProfile();
+      } else {
+        _resultBanner = showActionResultOverlayBanner(context, result);
+      }
     });
   }
 
   @override
   void dispose() {
     _passwordController.dispose();
+    hideOverlayBanner(_resultBanner);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Screen(
       appBar: AppBar(),
-      body: Column(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Change password'),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                PasswordFormField(
-                  controller: _passwordController,
+          Text(
+            'Change password',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          HeightSpacer.md,
+          CustomForm(
+            formKey: _formKey,
+            contents: [
+              PasswordFormField(
+                controller: _passwordController,
+              ),
+              FilledButton(
+                onPressed: () => executeFnIfFormValid(
+                  formKey: _formKey,
+                  fn: _changePassword,
                 ),
-                Visibility(
-                  visible: _result == null || _result?.success == false
-                      ? true
-                      : false,
-                  child: LoadingLabelButton(
-                    label: 'Confirm'.toUpperCase(),
-                    onPressed: () => executeFnIfFormValid(
-                      formKey: _formKey,
-                      fn: _changePassword,
-                    ),
+                child: const Text('Confirm'),
+              )
+                  .addColorStyle(
+                      colorStyle: FilledButtonStyles.primary(context))
+                  .loadingBtn(
+                    constructor: FilledButton.new,
                     isLoading: _changingPassword,
-                    constructor: TextButton.new,
+                    colorStyle: FilledButtonStyles.primary(context),
                   ),
-                ),
-                ActionResultMessage(
-                  result: _result,
-                ),
-              ],
-            ),
+            ],
           ),
         ],
       ),

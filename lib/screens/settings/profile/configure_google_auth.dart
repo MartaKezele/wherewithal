@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wherewithal/components/wrappers/screen.dart';
+import 'package:wherewithal/config/auth_provider.dart';
+import 'package:wherewithal/constants/spacers.dart';
+import 'package:wherewithal/constants/styles/filled_button.dart';
+import 'package:wherewithal/extensions/build_context.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
+import 'package:wherewithal/utils/overlay_banner.dart';
 
-import '../../../components/action_result_message.dart';
-import '../../../components/buttons/loading_label_button.dart';
+import '../../../change_notifiers/auth.dart';
 import '../../../dal/repo_factory.dart';
-import '../../../models/action_result.dart';
 
 class ConfigureGoogleAuth extends StatefulWidget {
   const ConfigureGoogleAuth({super.key});
@@ -14,45 +21,64 @@ class ConfigureGoogleAuth extends StatefulWidget {
 
 class _ConfigureGoogleAuthState extends State<ConfigureGoogleAuth> {
   bool _linkingAuth = false;
-  ActionResult? _linkAuthResult;
+  OverlayEntry? _resultBanner;
 
   Future<void> _linkGoogleAccount() async {
     setState(() {
-      _linkAuthResult = null;
       _linkingAuth = true;
     });
 
-    final result = await RepoFactory.authRepo().linkWithGoogleCredential();
-
-    setState(() {
-      _linkAuthResult = result;
-      _linkingAuth = false;
+    await RepoFactory.authRepo().linkWithGoogleCredential().then((result) {
+      setState(() {
+        _linkingAuth = false;
+      });
+      if (result.success) {
+        showActionResultOverlayBanner(context, result);
+        context.goToProfile();
+      } else {
+        _resultBanner = showActionResultOverlayBanner(context, result);
+      }
     });
   }
 
   @override
+  void dispose() {
+    hideOverlayBanner(_resultBanner);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Screen(
       appBar: AppBar(),
-      body: Column(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          Text(
             'Link google account',
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.start,
           ),
-          Visibility(
-            visible:
-                _linkAuthResult == null || _linkAuthResult?.success == false
-                    ? true
-                    : false,
-            child: LoadingLabelButton(
-              label: 'Confirm'.toUpperCase(),
-              onPressed: _linkGoogleAccount,
-              isLoading: _linkingAuth,
-              constructor: TextButton.new,
+          HeightSpacer.md,
+          ChangeNotifierProvider.value(
+            value: AuthChangeNotifier.instance,
+            child: Consumer<AuthChangeNotifier>(
+              builder: (_, auth, __) {
+                return FilledButton(
+                  onPressed: auth.authProviders.contains(AuthProvider.google)
+                      ? null
+                      : _linkGoogleAccount,
+                  child: const Text('Confirm'),
+                )
+                    .addColorStyle(
+                        colorStyle: FilledButtonStyles.primary(context))
+                    .loadingBtn(
+                      constructor: FilledButton.new,
+                      isLoading: _linkingAuth,
+                      colorStyle: FilledButtonStyles.primary(context),
+                    );
+              },
             ),
-          ),
-          ActionResultMessage(
-            result: _linkAuthResult,
           ),
         ],
       ),

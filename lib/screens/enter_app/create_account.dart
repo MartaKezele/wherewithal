@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:wherewithal/components/form/custom_form.dart';
+import 'package:wherewithal/components/wrappers/enter_app_screen.dart';
+import 'package:wherewithal/constants/spacers.dart';
+import 'package:wherewithal/extensions/build_context.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
 
-import '../../change_notifiers/auth.dart';
-import '../../components/action_result_message.dart';
-import '../../components/buttons/loading_label_button.dart';
-import '../../components/form_fields/email_form_field.dart';
-import '../../components/form_fields/password_form_field.dart';
+import '../../components/form/form_fields/email_form_field.dart';
+import '../../components/form/form_fields/password_form_field.dart';
 import '../../components/social_auth.dart';
+import '../../constants/hero_tags.dart';
+import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../models/action_result.dart';
 import '../../utils/form.dart';
-import '../../extensions/build_context.dart';
+import '../../utils/overlay_banner.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -23,28 +27,26 @@ class _CreateAccountState extends State<CreateAccount> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  ActionResult? _result;
   bool _creatingAccount = false;
+  OverlayEntry? _resultBanner;
 
   Future<void> _createAccount() async {
     setState(() {
-      _result = null;
       _creatingAccount = true;
     });
 
-    final result =
-        await RepoFactory.authRepo().createAccountWithEmailAndPassword(
+    await RepoFactory.authRepo()
+        .createAccountWithEmailAndPassword(
       _emailController.text,
       _passwordController.text,
-    );
-
-    if (result.success && !Auth.instance.emailVerified) {
-      await RepoFactory.authRepo().sendVerificationEmail();
-    }
-
-    setState(() {
-      _result = result;
-      _creatingAccount = false;
+    )
+        .then((result) async {
+      if (!result.success) {
+        _resultBanner = showActionResultOverlayBanner(context, result);
+        setState(() {
+          _creatingAccount = false;
+        });
+      }
     });
   }
 
@@ -59,42 +61,65 @@ class _CreateAccountState extends State<CreateAccount> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    hideOverlayBanner(_resultBanner);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          const Text('Create account'),
-          const SocialAuth(),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                EmailFormField(controller: _emailController),
-                PasswordFormField(controller: _passwordController),
-                LoadingLabelButton(
-                  label: 'Create account',
-                  onPressed: () => executeFnIfFormValid(
-                    formKey: _formKey,
-                    fn: _createAccount,
+    return EnterAppScreen(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      icon: Icons.wallet_rounded,
+      title: Text(
+        'Create account',
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
+      content: Expanded(
+        flex: 3,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              CustomForm(
+                formKey: _formKey,
+                contents: [
+                  EmailFormField(controller: _emailController),
+                  PasswordFormField(controller: _passwordController),
+                  Hero(
+                    tag: signInBtnHeroTag,
+                    child: FilledButton(
+                      onPressed: () => executeFnIfFormValid(
+                        formKey: _formKey,
+                        fn: _createAccount,
+                      ),
+                      child: const Text('Create account'),
+                    )
+                        .addColorStyle(
+                          colorStyle: FilledButtonStyles.secondary(context),
+                        )
+                        .addBigStyle(
+                          constructor: FilledButton.new,
+                        )
+                        .loadingBtn(
+                          constructor: FilledButton.new,
+                          colorStyle: FilledButtonStyles.secondary(context),
+                          isLoading: _creatingAccount,
+                        ),
                   ),
-                  isLoading: _creatingAccount,
-                  constructor: ElevatedButton.new,
-                ),
-                ActionResultMessage(result: _result),
-              ],
-            ),
+                ],
+              ),
+              HeightSpacer.xs,
+              const SocialAuth(),
+              HeightSpacer.xxl,
+              const Text('Already have an account?'),
+              TextButton(
+                onPressed: () => context.goToSignIn(),
+                child: const Text('Sign in'),
+              ),
+            ],
           ),
-          const Text('Already have an account?'),
-          TextButton(
-            onPressed: () => context.navigateToSignIn(),
-            child: const Text('Sign in'),
-          ),
-        ],
+        ),
       ),
     );
   }

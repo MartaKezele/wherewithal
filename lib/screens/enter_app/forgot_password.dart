@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wherewithal/components/form/custom_form.dart';
+import 'package:wherewithal/components/wrappers/enter_app_screen.dart';
+import 'package:wherewithal/constants/spacers.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
 
-import '../../components/action_result_message.dart';
-import '../../components/buttons/loading_label_button.dart';
-import '../../components/form_fields/email_form_field.dart';
+import '../../components/form/form_fields/email_form_field.dart';
+import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../models/action_result.dart';
 import '../../utils/form.dart';
+import '../../utils/overlay_banner.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({
@@ -24,56 +27,73 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
-  ActionResult? _result;
   bool _sendingPasswordResetEmail = false;
+  OverlayEntry? _resultBanner;
 
   Future<void> _resetPassword() async {
     setState(() {
-      _result = null;
       _sendingPasswordResetEmail = true;
     });
 
-    final result = await RepoFactory.authRepo().sendPasswordResetEmail(_emailController.text);
-
-    setState(() {
-      _result = result;
-      _sendingPasswordResetEmail = false;
+    await RepoFactory.authRepo()
+        .sendPasswordResetEmail(_emailController.text)
+        .then((result) {
+      setState(() {
+        _sendingPasswordResetEmail = false;
+      });
+      _resultBanner = showActionResultOverlayBanner(context, result);
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    _emailController.text = _emailController.text.isNotEmpty
-        ? _emailController.text
-        : widget.email ?? '';
+  void dispose() {
+    _emailController.dispose();
+    hideOverlayBanner(_resultBanner);
+    super.dispose();
+  }
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
+  @override
+  Widget build(BuildContext context) {
+    return EnterAppScreen(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Forgot password',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+      ),
+      description: Text(
+        'Provide your email address and we will send you an email with instructions to reset your password',
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      content: Column(
         children: [
-          const Text('Forgot password'),
-          Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                EmailFormField(controller: _emailController),
-                LoadingLabelButton(
-                  label: 'Send',
-                  onPressed: () => executeFnIfFormValid(
-                    formKey: _formKey,
-                    fn: _resetPassword,
+          CustomForm(
+            formKey: _formKey,
+            contents: [
+              EmailFormField(controller: _emailController),
+              FilledButton(
+                onPressed: () => executeFnIfFormValid(
+                  formKey: _formKey,
+                  fn: _resetPassword,
+                ),
+                child: const Text('Send'),
+              ).addMediumStyle(constructor: FilledButton.new).loadingBtn(
+                    constructor: FilledButton.new,
+                    isLoading: _sendingPasswordResetEmail,
+                    colorStyle: FilledButtonStyles.primary(context),
                   ),
-                  isLoading: _sendingPasswordResetEmail,
-                  constructor: ElevatedButton.new,
-                ),
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: const Text('Go back'),
-                ),
-                ActionResultMessage(result: _result),
-              ],
-            ),
+            ],
+          ),
+          HeightSpacer.xs,
+          TextButton(
+            onPressed: () => context.pop(),
+            child: const Text('Go back'),
+          ).addMediumStyle(
+            constructor: TextButton.new,
           ),
         ],
       ),

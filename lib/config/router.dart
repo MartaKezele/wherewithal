@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 
 import '../change_notifiers/auth.dart';
+import '../dal/repo_factory.dart';
 import 'routes.dart';
 
 final router = GoRouter(
@@ -13,7 +14,7 @@ final router = GoRouter(
     TopLevelRoutes.googleReauth,
   ],
   redirect: (context, state) async {
-    final auth = Auth.instance;
+    final auth = AuthChangeNotifier.instance;
 
     if (auth.signedIn &&
         auth.emailVerified &&
@@ -25,6 +26,7 @@ final router = GoRouter(
     if (auth.signedIn &&
         !auth.emailVerified &&
         !state.location.startsWith(TopLevelRoutes.verifyEmail.path)) {
+      await RepoFactory.authRepo().sendVerificationEmail();
       return TopLevelRoutes.verifyEmail.path;
     }
 
@@ -35,5 +37,5 @@ final router = GoRouter(
 
     return null;
   },
-  refreshListenable: Auth.instance,
+  refreshListenable: AuthChangeNotifier.instance,
 );

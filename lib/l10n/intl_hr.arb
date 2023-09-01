@@ -1,0 +1,14 @@
+{
+  "@@last_modified": "2023-08-25T16:39:12.763507",
+  "@@locale": "hr",
+  "Personal finance tracker": "Praćenje osobnih financija",
+  "@Personal finance tracker": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Language": "Jezik",
+  "@Language": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

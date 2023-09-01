@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wherewithal/components/form/custom_form.dart';
+import 'package:wherewithal/components/wrappers/screen.dart';
+import 'package:wherewithal/constants/spacers.dart';
+import 'package:wherewithal/constants/styles/filled_button.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
 
 import '../../change_notifiers/auth.dart';
-import '../../components/action_result_message.dart';
-import '../../components/buttons/loading_label_button.dart';
-import '../../components/form_fields/password_form_field.dart';
+import '../../components/form/form_fields/password_form_field.dart';
 import '../../constants/query_param_keys.dart';
 import '../../dal/repo_factory.dart';
-import '../../models/action_result.dart';
+import '../../app_models/action_result.dart';
 import '../../utils/form.dart';
+import '../../utils/overlay_banner.dart';
 
 class PasswordReauth extends StatefulWidget {
   const PasswordReauth({
@@ -27,33 +32,41 @@ class _PasswordReauthState extends State<PasswordReauth> {
   final _passwordController = TextEditingController();
 
   bool _reauthenticating = false;
-  ActionResult? _result;
+  OverlayEntry? _resultBanner;
 
   Future<void> _reauthenticate() async {
     setState(() {
-      _result = null;
       _reauthenticating = true;
     });
 
-    if (Auth.instance.email == null) {
+    if (AuthChangeNotifier.instance.email == null) {
       setState(() {
-        _result = ActionResult(
-          success: false,
-          message: 'You\'re not signed in',
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          ActionResult(
+            success: false,
+            messageTitle: 'You\'re not signed in',
+          ),
         );
+
         _reauthenticating = false;
       });
       return;
     }
 
-    RepoFactory.authRepo()
+    await RepoFactory.authRepo()
         .reauthWithPassword(
-      Auth.instance.email!,
+      AuthChangeNotifier.instance.email!,
       _passwordController.text,
     )
         .then((result) {
       setState(() {
-        _result = result;
+        if (!result.success) {
+          _resultBanner = showActionResultOverlayBanner(
+            context,
+            result,
+          );
+        }
         _reauthenticating = false;
       });
 
@@ -71,35 +84,46 @@ class _PasswordReauthState extends State<PasswordReauth> {
   @override
   void dispose() {
     _passwordController.dispose();
+    hideOverlayBanner(_resultBanner);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Screen(
       appBar: AppBar(),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            const Text('Reauthenticate with password'),
-            PasswordFormField(
-              controller: _passwordController,
-            ),
-            LoadingLabelButton(
-              label: 'Confirm'.toUpperCase(),
-              onPressed: () => executeFnIfFormValid(
-                formKey: _formKey,
-                fn: _reauthenticate,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Reauthenticate with password',
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.start,
+          ),
+          HeightSpacer.md,
+          CustomForm(
+            formKey: _formKey,
+            contents: [
+              PasswordFormField(
+                controller: _passwordController,
               ),
-              isLoading: _reauthenticating,
-              constructor: TextButton.new,
-            ),
-            ActionResultMessage(
-              result: _result,
-            ),
-          ],
-        ),
+              FilledButton(
+                onPressed: () => executeFnIfFormValid(
+                  formKey: _formKey,
+                  fn: _reauthenticate,
+                ),
+                child: const Text('Confirm'),
+              )
+                  .addColorStyle(
+                      colorStyle: FilledButtonStyles.primary(context))
+                  .loadingBtn(
+                    constructor: FilledButton.new,
+                    isLoading: _reauthenticating,
+                    colorStyle: FilledButtonStyles.primary(context),
+                  ),
+            ],
+          ),
+        ],
       ),
     );
   }

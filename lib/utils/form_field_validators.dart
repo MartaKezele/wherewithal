@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../config/general.dart';
+import '../config/password.dart';
 
 String? emailValidator(String? email) {
   if (email == null || email.isEmpty) {

@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../change_notifiers/auth.dart';
 import '../constants/query_param_keys.dart';
-import '../models/named_go_route.dart';
+import '../app_models/named_go_route.dart';
 import '../screens/enter_app/create_account.dart';
 import '../screens/enter_app/forgot_password.dart';
 import '../screens/enter_app/sign_in.dart';
@@ -49,10 +49,12 @@ class TopLevelRoutes {
       final nextRouteName = state.queryParameters[QueryParamKeys.nextRouteName];
       if (nextRouteName == null) {
         return const ErrorScreen(
-          message: 'Reauth route didn\'t recieve next route query param.',
+          title: 'Reauth route didn\'t recieve next route query param.',
         );
       }
-      return PasswordReauth(nextRouteName: nextRouteName);
+      return PasswordReauth(
+        nextRouteName: nextRouteName,
+      );
     },
   );
 
@@ -62,7 +64,7 @@ class TopLevelRoutes {
       final nextRouteName = state.queryParameters[QueryParamKeys.nextRouteName];
       if (nextRouteName == null) {
         return const ErrorScreen(
-          message: 'Reauth route didn\'t recieve next route query param.',
+          title: 'Reauth route didn\'t recieve next route query param.',
         );
       }
       return GoogleReauth(nextRouteName: nextRouteName);
@@ -72,8 +74,10 @@ class TopLevelRoutes {
   static final error = GoRoute(
     path: '/error',
     builder: (context, state) {
-      final message = state.queryParameters[QueryParamKeys.errorMessage];
-      return ErrorScreen(message: message);
+      return ErrorScreen(
+        title: state.queryParameters[QueryParamKeys.errorTitle],
+        description: state.queryParameters[QueryParamKeys.errorDescription],
+      );
     },
   );
 }
@@ -191,16 +195,16 @@ class NamedChildRoutes {
     path: 'delete-account',
     builder: (context, state) => const DeleteAccount(),
     redirect: (context, state) {
-      final authProviders = Auth.instance.authProviders;
+      final authProviders = AuthChangeNotifier.instance.authProviders;
 
       if (authProviders.isEmpty) {
-        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorMessage}=There are no configured auth providers for account.';
+        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorTitle}=There are no configured auth providers for account.';
       }
 
       final redirectRoute = authProviderRedirectRoutes[authProviders.first];
 
       if (redirectRoute == null) {
-        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorMessage}=There is no redirect route for the specified auth provider.';
+        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorTitle}=There is no redirect route for the specified auth provider.';
       }
 
       return _redirectToReauth(

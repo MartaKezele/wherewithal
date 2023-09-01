@@ -1,4 +1,4 @@
-import '../models/action_result.dart';
+import '../app_models/action_result.dart';
 
 abstract class AuthRepo {
   Future<ActionResult> signInWithEmailAndPassword(

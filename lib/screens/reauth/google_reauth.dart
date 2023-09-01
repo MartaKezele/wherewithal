@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wherewithal/components/wrappers/screen.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
+import 'package:wherewithal/utils/overlay_banner.dart';
 
 import '../../change_notifiers/auth.dart';
-import '../../components/action_result_message.dart';
-import '../../components/buttons/loading_label_button.dart';
 import '../../constants/query_param_keys.dart';
+import '../../constants/spacers.dart';
+import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../models/action_result.dart';
+import '../../app_models/action_result.dart';
 
 class GoogleReauth extends StatefulWidget {
   const GoogleReauth({
@@ -22,29 +26,33 @@ class GoogleReauth extends StatefulWidget {
 
 class _GoogleReauthState extends State<GoogleReauth> {
   bool _reauthenticating = false;
-  ActionResult? _result;
+  OverlayEntry? _resultBanner;
+  bool _showRetryBtn = false;
 
   Future<void> _reauthenticate() async {
     setState(() {
-      _result = null;
       _reauthenticating = true;
+      _showRetryBtn = false;
     });
 
-    if (Auth.instance.email == null) {
+    if (AuthChangeNotifier.instance.email == null) {
       setState(() {
-        _result = ActionResult(
-          success: false,
-          message: 'You\'re not signed in.',
-        );
         _reauthenticating = false;
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          ActionResult(
+            success: false,
+            messageTitle: 'You\'re not signed in.',
+          ),
+        );
       });
       return;
     }
 
-    RepoFactory.authRepo().reauthWithGoogle().then((result) {
+    await RepoFactory.authRepo().reauthWithGoogle().then((result) {
       setState(() {
-        _result = result;
         _reauthenticating = false;
+        _showRetryBtn = !result.success;
       });
 
       if (result.success) {
@@ -54,6 +62,8 @@ class _GoogleReauthState extends State<GoogleReauth> {
             QueryParamKeys.hasReauthenticated: true.toString(),
           },
         );
+      } else {
+        _resultBanner = showActionResultOverlayBanner(context, result);
       }
     });
   }
@@ -65,27 +75,46 @@ class _GoogleReauthState extends State<GoogleReauth> {
   }
 
   @override
+  void dispose() {
+    hideOverlayBanner(_resultBanner);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Screen(
       appBar: AppBar(),
-      body: Column(
+      child: Column(
         children: [
-          const Text('Reauthenticate with google account'),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                _reauthenticating
+                    ? 'Reauthenticating with google account'
+                    : 'Reauthenticate with google account',
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.start,
+              ),
+            ],
+          ),
+          HeightSpacer.md,
           Visibility(
-            visible: _result == null,
+            visible: _reauthenticating == true,
             child: const CircularProgressIndicator(),
           ),
           Visibility(
-            visible: _result != null && !_result!.success,
-            child: LoadingLabelButton(
-              label: 'Retry',
+            visible: _showRetryBtn,
+            child: FilledButton(
               onPressed: _reauthenticate,
-              isLoading: _reauthenticating,
-              constructor: TextButton.new,
-            ),
-          ),
-          ActionResultMessage(
-            result: _result,
+              child: const Text('Retry'),
+            )
+                .addColorStyle(colorStyle: FilledButtonStyles.primary(context))
+                .loadingBtn(
+                  constructor: FilledButton.new,
+                  isLoading: _reauthenticating,
+                  colorStyle: FilledButtonStyles.primary(context),
+                ),
           ),
         ],
       ),

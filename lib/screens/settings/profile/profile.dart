@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wherewithal/components/form/custom_form.dart';
+import 'package:wherewithal/components/wrappers/screen.dart';
+import 'package:wherewithal/constants/spacers.dart';
+import 'package:wherewithal/constants/styles/filled_button.dart';
+import 'package:wherewithal/constants/styles/outlined_button.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart'
+    as button_style_button_extensions;
+import 'package:wherewithal/extensions/button/filled_button.dart';
+import 'package:wherewithal/extensions/button/outlined_button.dart';
 
 import '../../../change_notifiers/auth.dart';
-import '../../../components/action_result_message.dart';
-import '../../../components/buttons/loading_label_button.dart';
-import '../../../components/form_fields/email_form_field.dart';
+import '../../../components/auth_provider_card.dart';
+import '../../../components/form/form_fields/email_form_field.dart';
 import '../../../config/auth_provider.dart';
 import '../../../dal/repo_factory.dart';
-import '../../../models/action_result.dart';
 import '../../../utils/form.dart';
 import '../../../extensions/build_context.dart';
+import '../../../utils/overlay_banner.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -22,15 +30,14 @@ class _ProfileState extends State<Profile> {
   final _formKey = GlobalKey<FormState>();
   final _displayNameController = TextEditingController();
   final _emailController = TextEditingController(
-    text: Auth.instance.email ?? '',
+    text: AuthChangeNotifier.instance.email ?? '',
   );
 
   bool _savingChanges = false;
-  ActionResult? _result;
+  OverlayEntry? _resultBanner;
 
   Future<void> _saveChanges() async {
     setState(() {
-      _result = null;
       _savingChanges = true;
     });
 
@@ -38,30 +45,37 @@ class _ProfileState extends State<Profile> {
         .updateUserInfo(_displayNameController.text)
         .then((result) {
       setState(() {
-        _result = result;
+        _resultBanner = showActionResultOverlayBanner(context, result);
         _savingChanges = false;
       });
     });
   }
 
   @override
+  void dispose() {
+    hideOverlayBanner(_resultBanner);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Screen(
       appBar: AppBar(),
-      body: ChangeNotifierProvider.value(
-        value: Auth.instance,
-        child: Consumer<Auth>(
-          builder: (context, auth, child) {
+      child: ChangeNotifierProvider.value(
+        value: AuthChangeNotifier.instance,
+        child: Consumer<AuthChangeNotifier>(
+          builder: (_, auth, __) {
             _displayNameController.text = _displayNameController.text.isNotEmpty
                 ? _displayNameController.text
                 : auth.displayName ?? '';
 
-            return Column(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  CustomForm(
+                    formKey: _formKey,
+                    contents: [
                       EmailFormField(
                         controller: _emailController,
                         enabled: false,
@@ -72,67 +86,69 @@ class _ProfileState extends State<Profile> {
                           label: Text('Name'),
                         ),
                       ),
-                      LoadingLabelButton(
-                        label: 'Save',
+                      FilledButton(
                         onPressed: () => executeFnIfFormValid(
                           formKey: _formKey,
                           fn: _saveChanges,
                         ),
-                        isLoading: _savingChanges,
-                        constructor: ElevatedButton.new,
-                      ),
-                      ActionResultMessage(result: _result),
+                        child: const Text('Save'),
+                      )
+                          .addColorStyle(
+                            colorStyle: FilledButtonStyles.primary(context),
+                          )
+                          .loadingBtn(
+                            constructor: FilledButton.new,
+                            isLoading: _savingChanges,
+                            colorStyle: FilledButtonStyles.primary(context),
+                          ),
                     ],
                   ),
-                ),
-                const Text(
-                  'Sign in methods',
-                ),
-                Card(
-                  child: Column(
-                    children: [
-                      const Text('Google'),
-                      Visibility(
-                        visible:
-                            !auth.authProviders.contains(AuthProvider.google),
-                        child: TextButton(
-                          onPressed: () =>
-                              context.navigateToConfigureGoogleAuth(),
+                  HeightSpacer.xxl,
+                  Text(
+                    'Sign in methods',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  HeightSpacer.md,
+                  AuthProviderCard(
+                    title: 'Google',
+                    buttons: [
+                      if (!auth.authProviders.contains(AuthProvider.google))
+                        OutlinedButton(
+                          onPressed: () => context.pushConfigureGoogleAuth(),
                           child: const Text('Configure'),
-                        ),
-                      ),
+                        ).addColorStyle(
+                          colorStyle: OutlinedButtonStyles.primary(context),
+                        )
                     ],
                   ),
-                ),
-                Card(
-                  child: Column(
-                    children: [
-                      const Text('Password'),
-                      Visibility(
-                        visible:
-                            !auth.authProviders.contains(AuthProvider.password),
-                        child: TextButton(
-                          onPressed: () =>
-                              context.navigateToConfigurePasswordAuth(),
+                  AuthProviderCard(
+                    title: 'Password',
+                    buttons: [
+                      if (!auth.authProviders.contains(AuthProvider.password))
+                        OutlinedButton(
+                          onPressed: () => context.pushConfigurePasswordAuth(),
                           child: const Text('Configure'),
+                        ).addColorStyle(
+                          colorStyle: OutlinedButtonStyles.primary(context),
                         ),
-                      ),
-                      Visibility(
-                        visible:
-                            auth.authProviders.contains(AuthProvider.password),
-                        child: TextButton(
-                          onPressed: () => context.navigateToChangePassword(),
+                      if (auth.authProviders.contains(AuthProvider.password))
+                        OutlinedButton(
+                          onPressed: () => context.pushChangePassword(),
                           child: const Text('Change password'),
+                        ).addColorStyle(
+                          colorStyle: OutlinedButtonStyles.primary(context),
                         ),
-                      ),
                     ],
                   ),
-                ),
-                TextButton(
-                  onPressed: () => context.navigateToDeleteAccount(),
-                  child: const Text('Delete account'),
-                ),
-              ],
+                  HeightSpacer.md,
+                  FilledButton(
+                    onPressed: () => context.pushDeleteAccount(),
+                    child: const Text('Delete account'),
+                  ).addColorStyle(
+                    colorStyle: FilledButtonStyles.error(context),
+                  ),
+                ],
+              ),
             );
           },
         ),

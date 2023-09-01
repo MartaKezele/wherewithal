@@ -1,0 +1,14 @@
+{
+  "@@last_modified": "2023-08-25T16:39:12.763507",
+  "@@locale": "en",
+  "Personal finance tracker": "Personal finance tracker",
+  "@Personal finance tracker": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Language": "Language",
+  "@Language": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

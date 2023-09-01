@@ -1,0 +1,13 @@
+{
+  "@@last_modified": "2023-08-25T17:15:24.176426",
+  "Personal finance tracker": "Personal finance tracker",
+  "@Personal finance tracker": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Language": "Language",
+  "@Language": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

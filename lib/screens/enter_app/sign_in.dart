@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:wherewithal/components/form/custom_form.dart';
+import 'package:wherewithal/components/wrappers/enter_app_screen.dart';
+import 'package:wherewithal/constants/spacers.dart';
+import 'package:wherewithal/extensions/build_context.dart';
+import 'package:wherewithal/extensions/button/button_style_button.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
 
-import '../../change_notifiers/auth.dart';
-import '../../components/action_result_message.dart';
-import '../../components/buttons/loading_label_button.dart';
-import '../../components/form_fields/email_form_field.dart';
-import '../../components/form_fields/password_form_field.dart';
+import '../../components/form/form_fields/email_form_field.dart';
+import '../../components/form/form_fields/password_form_field.dart';
 import '../../components/social_auth.dart';
+import '../../constants/hero_tags.dart';
+import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../models/action_result.dart';
 import '../../utils/form.dart';
-import '../../extensions/build_context.dart';
+import '../../utils/overlay_banner.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -23,27 +27,26 @@ class _SignInState extends State<SignIn> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  ActionResult? _result;
   bool _signingIn = false;
+  OverlayEntry? _resultBanner;
 
   Future<void> _signIn() async {
     setState(() {
-      _result = null;
       _signingIn = true;
     });
 
-    final result = await RepoFactory.authRepo().signInWithEmailAndPassword(
+    await RepoFactory.authRepo()
+        .signInWithEmailAndPassword(
       _emailController.text,
       _passwordController.text,
-    );
-
-    if (result.success && !Auth.instance.emailVerified) {
-      await RepoFactory.authRepo().sendVerificationEmail();
-    }
-
-    setState(() {
-      _result = result;
-      _signingIn = false;
+    )
+        .then((result) async {
+      if (!result.success) {
+        _resultBanner = showActionResultOverlayBanner(context, result);
+        setState(() {
+          _signingIn = false;
+        });
+      }
     });
   }
 
@@ -58,53 +61,76 @@ class _SignInState extends State<SignIn> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    hideOverlayBanner(_resultBanner);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          const Text('Sign in'),
-          const SocialAuth(),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                EmailFormField(controller: _emailController),
-                PasswordFormField(controller: _passwordController),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => context.navigateToForgotPassword(
-                        _emailController.text,
+    return EnterAppScreen(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      icon: Icons.wallet_rounded,
+      title: Text(
+        'Sign in',
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
+      content: Expanded(
+        flex: 3,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              CustomForm(
+                formKey: _formKey,
+                contents: [
+                  EmailFormField(controller: _emailController),
+                  PasswordFormField(controller: _passwordController),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => context.pushForgotPassword(
+                          _emailController.text,
+                        ),
+                        child: const Text('Forgot password?'),
                       ),
-                      child: const Text('Forgot password?'),
-                    ),
-                  ],
-                ),
-                LoadingLabelButton(
-                  label: 'Sign in',
-                  onPressed: () => executeFnIfFormValid(
-                    formKey: _formKey,
-                    fn: _signIn,
+                    ],
                   ),
-                  isLoading: _signingIn,
-                  constructor: ElevatedButton.new,
-                ),
-                ActionResultMessage(result: _result),
-              ],
-            ),
+                  Hero(
+                    tag: signInBtnHeroTag,
+                    child: FilledButton(
+                      onPressed: () => executeFnIfFormValid(
+                        formKey: _formKey,
+                        fn: _signIn,
+                      ),
+                      child: const Text('Sign in'),
+                    )
+                        .addColorStyle(
+                          colorStyle: FilledButtonStyles.primary(context),
+                        )
+                        .addBigStyle(
+                          constructor: FilledButton.new,
+                        )
+                        .loadingBtn(
+                          constructor: FilledButton.new,
+                          colorStyle: FilledButtonStyles.primary(context),
+                          isLoading: _signingIn,
+                        ),
+                  ),
+                ],
+              ),
+              HeightSpacer.xs,
+              const SocialAuth(),
+              HeightSpacer.xxl,
+              const Text('Don\'t have an account?'),
+              TextButton(
+                onPressed: () => context.goToCreateAccount(),
+                child: const Text('Create account'),
+              ),
+            ],
           ),
-          const Text('Don\'t have an account?'),
-          TextButton(
-            onPressed: () => context.navigateToCreateAccount(),
-            child: const Text('Create account'),
-          ),
-        ],
+        ),
       ),
     );
   }

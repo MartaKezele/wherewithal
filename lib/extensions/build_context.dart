@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import '../config/routes.dart';
 import '../constants/query_param_keys.dart';
 
-extension NavigationContextExtension on BuildContext {
-  Future<T?> navigateToForgotPassword<T>(
+extension Navigation on BuildContext {
+  Future<T?> pushForgotPassword<T extends Object?>(
     String? email,
   ) async {
-    return await pushNamed(
+    return await pushNamed<T>(
       NamedChildRoutes.forgotPassword.nonNullableName,
       queryParameters: {
         QueryParamKeys.email: email,
@@ -16,20 +16,20 @@ extension NavigationContextExtension on BuildContext {
     );
   }
 
-  Future<T?> navigateToProfile<T>() async {
-    return await pushNamed(
+  Future<T?> pushProfile<T extends Object?>() async {
+    return await pushNamed<T>(
       NamedChildRoutes.profile.nonNullableName,
     );
   }
 
-  Future<T?> navigateToSettings<T>() async {
-    return await pushNamed(
+  Future<T?> pushSettings<T extends Object?>() async {
+    return await pushNamed<T>(
       NamedChildRoutes.settings.nonNullableName,
     );
   }
 
-  Future<T?> navigateToChangePassword<T>() async {
-    return await pushNamed(
+  Future<T?> pushChangePassword<T extends Object?>() async {
+    return await pushNamed<T>(
       NamedChildRoutes.changePassword.nonNullableName,
       queryParameters: {
         QueryParamKeys.shouldRedirect: true.toString(),
@@ -37,8 +37,8 @@ extension NavigationContextExtension on BuildContext {
     );
   }
 
-  Future<T?> navigateToConfigurePasswordAuth<T>() async {
-    return await pushNamed(
+  Future<T?> pushConfigurePasswordAuth<T extends Object?>() async {
+    return await pushNamed<T>(
       NamedChildRoutes.configurePasswordAuth.nonNullableName,
       queryParameters: {
         QueryParamKeys.shouldRedirect: true.toString(),
@@ -46,8 +46,8 @@ extension NavigationContextExtension on BuildContext {
     );
   }
 
-  Future<T?> navigateToConfigureGoogleAuth<T>() async {
-    return await pushNamed(
+  Future<T?> pushConfigureGoogleAuth<T extends Object?>() async {
+    return await pushNamed<T>(
       NamedChildRoutes.configureGoogleAuth.nonNullableName,
       queryParameters: {
         QueryParamKeys.shouldRedirect: true.toString(),
@@ -55,8 +55,8 @@ extension NavigationContextExtension on BuildContext {
     );
   }
 
-  Future<T?> navigateToDeleteAccount<T>() async {
-    return await pushNamed(
+  Future<T?> pushDeleteAccount<T extends Object?>() async {
+    return await pushNamed<T>(
       NamedChildRoutes.deleteAccount.nonNullableName,
       queryParameters: {
         QueryParamKeys.shouldRedirect: true.toString(),
@@ -64,15 +64,21 @@ extension NavigationContextExtension on BuildContext {
     );
   }
 
-  void navigateToCreateAccount() {
+  void goToCreateAccount() {
     goNamed(
       NamedChildRoutes.createAccount.nonNullableName,
     );
   }
 
-  void navigateToSignIn() {
+  void goToSignIn() {
     goNamed(
       NamedChildRoutes.signIn.nonNullableName,
+    );
+  }
+
+  void goToProfile() async {
+    return goNamed(
+      NamedChildRoutes.profile.nonNullableName,
     );
   }
 }
