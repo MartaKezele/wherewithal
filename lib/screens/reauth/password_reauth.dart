@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/components/form/custom_form.dart';
-import 'package:wherewithal/components/wrappers/screen.dart';
-import 'package:wherewithal/constants/spacers.dart';
-import 'package:wherewithal/constants/styles/filled_button.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
 
 import '../../change_notifiers/auth.dart';
+import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/password_form_field.dart';
+import '../../components/wrappers/screen.dart';
 import '../../constants/query_param_keys.dart';
+import '../../constants/spacers.dart';
+import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
 import '../../app_models/action_result.dart';
+import '../../utils/app_localizations.dart';
 import '../../utils/form.dart';
 import '../../utils/overlay_banner.dart';
+import '../../extensions/button/filled_button.dart';
+import '../../extensions/button/button_style_button.dart';
 
 class PasswordReauth extends StatefulWidget {
   const PasswordReauth({
@@ -35,17 +37,19 @@ class _PasswordReauthState extends State<PasswordReauth> {
   OverlayEntry? _resultBanner;
 
   Future<void> _reauthenticate() async {
+    final authChangeNotifier = GetIt.I<AuthChangeNotifier>();
+
     setState(() {
       _reauthenticating = true;
     });
 
-    if (AuthChangeNotifier.instance.email == null) {
+    if (authChangeNotifier.email == null) {
       setState(() {
         _resultBanner = showActionResultOverlayBanner(
           context,
           ActionResult(
             success: false,
-            messageTitle: 'You\'re not signed in',
+            messageTitle: AppLocalizations.of(context).notSignedIn,
           ),
         );
 
@@ -56,7 +60,7 @@ class _PasswordReauthState extends State<PasswordReauth> {
 
     await RepoFactory.authRepo()
         .reauthWithPassword(
-      AuthChangeNotifier.instance.email!,
+      authChangeNotifier.email!,
       _passwordController.text,
     )
         .then((result) {
@@ -90,13 +94,15 @@ class _PasswordReauthState extends State<PasswordReauth> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return Screen(
       appBar: AppBar(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Reauthenticate with password',
+            localizations.reauthenticateWithPassword,
             style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.start,
           ),
@@ -112,14 +118,15 @@ class _PasswordReauthState extends State<PasswordReauth> {
                   formKey: _formKey,
                   fn: _reauthenticate,
                 ),
-                child: const Text('Confirm'),
+                child: Text(localizations.confirm),
               )
                   .addColorStyle(
-                      colorStyle: FilledButtonStyles.primary(context))
+                    FilledButtonStyles.primary,
+                  )
                   .loadingBtn(
                     constructor: FilledButton.new,
                     isLoading: _reauthenticating,
-                    colorStyle: FilledButtonStyles.primary(context),
+                    colorStyle: FilledButtonStyles.primary,
                   ),
             ],
           ),

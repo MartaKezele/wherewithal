@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/app_models/color_style.dart';
+
+import '../../app_models/color_style.dart';
 
 extension Style on OutlinedButton {
   static const _borderWidth = 0.8;
   static const _disabledBorderOpacity = 0.15;
 
-  OutlinedButton addColorStyle({
-    required ColorStyle colorStyle,
-  }) {
+  OutlinedButton addColorStyle(
+    ColorStyle colorStyle,
+  ) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         foregroundColor: colorStyle.foregroundColor,

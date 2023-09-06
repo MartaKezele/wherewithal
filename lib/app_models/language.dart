@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Language {
-  final String _nativeName;
-  final Locale _locale;
+  final String nativeName;
+  final Locale locale;
 
   Language({
-    required String nativeName,
-    required Locale locale,
-  })  : _nativeName = nativeName,
-        _locale = locale;
-
-  String get nativeName => _nativeName;
-
-  Locale get locale => _locale;
+    required this.nativeName,
+    required this.locale,
+  });
 }
+  

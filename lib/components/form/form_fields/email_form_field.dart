@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils/app_localizations.dart';
 import '../../../utils/form_field_validators.dart';
 
 class EmailFormField extends StatefulWidget {
@@ -22,13 +23,13 @@ class _EmailFormFieldState extends State<EmailFormField> {
     return TextFormField(
       controller: widget.controller,
       enabled: widget.enabled,
-      decoration: const InputDecoration(
-        border: UnderlineInputBorder(),
-        label: Text('Email'),
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(),
+        label: Text(AppLocalizations.of(context).email),
       ),
       keyboardType: TextInputType.emailAddress,
       autocorrect: false,
-      validator: emailValidator,
+      validator: (email) => emailValidator(email),
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }

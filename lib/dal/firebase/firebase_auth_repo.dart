@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../config/auth_provider.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
+import '../../utils/app_localizations.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 
@@ -25,10 +26,12 @@ class FirebaseAuthRepo implements AuthRepo {
   Future<ActionResult> _reauth(
     AuthCredential credential,
   ) async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     if (FirebaseAuth.instance.currentUser == null) {
       return ActionResult(
         success: false,
-        messageTitle: 'You\'re not signed in',
+        messageTitle: localizations.notSignedIn,
       );
     }
 
@@ -38,7 +41,7 @@ class FirebaseAuthRepo implements AuthRepo {
 
       return ActionResult(
         success: true,
-        messageTitle: 'Successfully reauthenticated',
+        messageTitle: localizations.reauthenticated,
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -50,15 +53,19 @@ class FirebaseAuthRepo implements AuthRepo {
   Future<ActionResult> _linkAccountWithCredential(
     AuthCredential credential,
   ) async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       if (FirebaseAuth.instance.currentUser == null) {
         return ActionResult(
-            success: false, messageTitle: 'You\'re not signed in');
+          success: false,
+          messageTitle: localizations.notSignedIn,
+        );
       }
       await FirebaseAuth.instance.currentUser!.linkWithCredential(credential);
       return ActionResult(
         success: true,
-        messageTitle: 'Successfully linked account with credentials',
+        messageTitle: localizations.linkedAccountWithCredentials,
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -72,6 +79,8 @@ class FirebaseAuthRepo implements AuthRepo {
     String email,
     String password,
   ) async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -80,7 +89,7 @@ class FirebaseAuthRepo implements AuthRepo {
 
       return ActionResult(
         success: true,
-        messageTitle: 'Successfully signed in',
+        messageTitle: localizations.signedIn,
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -94,6 +103,8 @@ class FirebaseAuthRepo implements AuthRepo {
     String email,
     String password,
   ) async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -101,7 +112,7 @@ class FirebaseAuthRepo implements AuthRepo {
       );
       return ActionResult(
         success: true,
-        messageTitle: 'Successfuly created account',
+        messageTitle: localizations.createdAccount,
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -112,31 +123,33 @@ class FirebaseAuthRepo implements AuthRepo {
 
   @override
   Future<ActionResult> sendVerificationEmail() async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
       if (user == null) {
         return ActionResult(
           success: false,
-          messageTitle: 'Verification email could not be sent',
+          messageTitle: localizations.sendingVerificationEmailErrorTitle,
           messageDescription:
-              'Verification email could not be sent because you\'re not signed in/your credentials are not valid.',
+              localizations.sendingVerificationEmailInvalidCredentials,
         );
       }
 
       if (user.emailVerified) {
         return ActionResult(
           success: false,
-          messageTitle: 'Could not send verification email because email is already verified.',
+          messageTitle:
+              localizations.sendingVerificationEmailEmailAlreadyVerified,
         );
       }
 
       await user.sendEmailVerification();
       return ActionResult(
         success: true,
-        messageTitle: 'A verification email has been sent',
-        messageDescription:
-            'Click on the link in the email to verify your email address.',
+        messageTitle: localizations.verificationEmailSent,
+        messageDescription: localizations.verifyEmailInstructions,
       );
     } catch (_) {
       return genericFailureResult;
@@ -147,13 +160,15 @@ class FirebaseAuthRepo implements AuthRepo {
   Future<ActionResult> sendPasswordResetEmail(
     String email,
   ) async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       return ActionResult(
-          success: true,
-          messageTitle: 'Password reset email was sent, check your inbox',
-          messageDescription:
-              'Didn\'t receive the email? Check your spam folder.');
+        success: true,
+        messageTitle: localizations.passwordResetEmailSent,
+        messageDescription: localizations.didntReceiveEmail,
+      );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
     } catch (_) {
@@ -163,12 +178,14 @@ class FirebaseAuthRepo implements AuthRepo {
 
   @override
   Future<ActionResult> signOut() async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
       return ActionResult(
         success: true,
-        messageTitle: 'Successfully signed out',
+        messageTitle: localizations.signedOut,
       );
     } catch (_) {
       return genericFailureResult;
@@ -177,6 +194,7 @@ class FirebaseAuthRepo implements AuthRepo {
 
   @override
   Future<ActionResult> continueWithGoogle() async {
+    final localizations = AppLocalizations.ofCurrentContext();
     GoogleSignInAccount? googleUser;
 
     try {
@@ -188,7 +206,7 @@ class FirebaseAuthRepo implements AuthRepo {
       if (googleUser == null) {
         return ActionResult(
           success: false,
-          messageTitle: 'Sign in process was aborted',
+          messageTitle: localizations.signInProcessAborted,
           show: false,
         );
       }
@@ -203,18 +221,19 @@ class FirebaseAuthRepo implements AuthRepo {
 
       return ActionResult(
         success: true,
-        messageTitle: 'Successfully signed in',
+        messageTitle: localizations.signedIn,
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         final result = await fetchAuthProvidersForEmail(googleUser!.email);
         return ActionResult(
-            success: result.success,
-            messageTitle: result.success
-                ? 'Account with the given email isn\'t configured to sign in with google'
-                : result.messageTitle,
-            messageDescription:
-                'Sign in using one of the following methods: ${result.data?.join(', ')}. Once signed in you can configure sign in with google account in the profile section.');
+          success: result.success,
+          messageTitle: result.success
+              ? localizations.accountIsntConfiguredWithGoogle
+              : result.messageTitle,
+          messageDescription:
+              localizations.signInUsingMethods(result.data?.join(', ')),
+        );
       }
       return handleFirebaseAuthException(e);
     } catch (_) {
@@ -227,6 +246,8 @@ class FirebaseAuthRepo implements AuthRepo {
     String email,
   ) async {
     try {
+      final localizations = AppLocalizations.ofCurrentContext();
+
       final signInMethods =
           await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
 
@@ -238,12 +259,12 @@ class FirebaseAuthRepo implements AuthRepo {
       if (signInMethods.isEmpty) {
         return ActionResult(
           success: false,
-          messageTitle: 'Account could not be found',
+          messageTitle: localizations.accountNotFound,
         );
       }
       return ActionResult(
         success: true,
-        messageTitle: 'Successfuly fetched sign in methods',
+        messageTitle: localizations.fetchedSignInMethods,
         data: authProviders,
       );
     } on FirebaseAuthException catch (e) {
@@ -255,10 +276,15 @@ class FirebaseAuthRepo implements AuthRepo {
 
   @override
   Future<ActionResult> reauthWithGoogle() async {
+    final localizations = AppLocalizations.ofCurrentContext();
     final credential = await _googleAuthCredential();
+
     if (credential == null) {
       return ActionResult(
-          success: false, messageTitle: 'Proccess aborted', show: false);
+        success: false,
+        messageTitle: localizations.proccessAborted,
+        show: false,
+      );
     }
 
     return _reauth(credential);
@@ -275,10 +301,15 @@ class FirebaseAuthRepo implements AuthRepo {
 
   @override
   Future<ActionResult> linkWithGoogleCredential() async {
+    final localizations = AppLocalizations.ofCurrentContext();
     final credential = await _googleAuthCredential();
+
     if (credential == null) {
       return ActionResult(
-          success: false, messageTitle: 'Proccess aborted', show: false);
+        success: false,
+        messageTitle: localizations.proccessAborted,
+        show: false,
+      );
     }
     return await _linkAccountWithCredential(credential);
   }

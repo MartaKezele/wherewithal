@@ -2,11 +2,11 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-import 'package:wherewithal/utils/prefs.dart';
+import 'package:get_it/get_it.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 
-import 'app_models/currency.dart';
-import 'app_models/language.dart';
+
+import 'change_notifiers/auth.dart';
 import 'change_notifiers/currency.dart';
 import 'change_notifiers/date_format.dart';
 import 'change_notifiers/language.dart';
@@ -17,6 +17,7 @@ import 'config/shared_prefs_keys.dart';
 import 'constants/themes/themes.dart';
 import 'firebase_options.dart';
 import 'utils/app_localizations.dart';
+import 'utils/prefs.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,12 +52,24 @@ Future<void> main() async {
       )
       .language;
 
+  final getIt = GetIt.instance;
+
+  getIt.registerSingleton<CurrencyChangeNotifier>(
+    CurrencyChangeNotifier(currency),
+  );
+  getIt.registerSingleton<LanguageChangeNotifier>(
+    LanguageChangeNotifier(language),
+  );
+  getIt.registerSingleton<DateFormatChangeNotifier>(
+    DateFormatChangeNotifier(dateFormatPattern),
+  );
+  getIt.registerSingleton<AuthChangeNotifier>(
+    AuthChangeNotifier.instance,
+  );
+
   runApp(
     WherewithalApp(
       adaptiveThemeMode: adaptiveThemeMode,
-      language: language,
-      dateFormatPattern: dateFormatPattern,
-      currency: currency,
     ),
   );
 }
@@ -65,15 +78,9 @@ class WherewithalApp extends StatelessWidget {
   const WherewithalApp({
     super.key,
     this.adaptiveThemeMode,
-    this.language,
-    this.dateFormatPattern,
-    this.currency,
   });
 
   final AdaptiveThemeMode? adaptiveThemeMode;
-  final Language? language;
-  final String? dateFormatPattern;
-  final Currency? currency;
 
   @override
   Widget build(BuildContext context) {
@@ -81,50 +88,48 @@ class WherewithalApp extends StatelessWidget {
       light: lightColorTheme(context),
       dark: darkColorTheme(context),
       initial: adaptiveThemeMode ?? AdaptiveThemeMode.system,
-      builder: (ThemeData theme, ThemeData darkTheme) {
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (_) => LanguageChangeNotifier(language),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => DateFormatChangeNotifier(dateFormatPattern),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => CurrencyChangeNotifier(currency),
-            ),
+      builder: (ThemeData lightTheme, ThemeData darkTheme) {
+        return App(
+          lightTheme: lightTheme,
+          darkTheme: darkTheme,
+        );
+      },
+    );
+  }
+}
+
+class App extends StatelessWidget with GetItMixin {
+  App({
+    super.key,
+    this.lightTheme,
+    this.darkTheme,
+  });
+
+  final ThemeData? lightTheme;
+  final ThemeData? darkTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = watchOnly(
+      (LanguageChangeNotifier changeNotifier) =>
+          changeNotifier.language?.locale,
+    );
+
+    return ValueListenableBuilder(
+      valueListenable: AdaptiveTheme.of(context).modeChangeNotifier,
+      builder: (_, mode, __) {
+        return MaterialApp.router(
+          routerConfig: router,
+          locale: locale,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeMode[mode],
+          localizationsDelegates: const [
+            AppLocalizationsDelegate(),
+            ...GlobalMaterialLocalizations.delegates,
+            GlobalWidgetsLocalizations.delegate,
           ],
-          child: Consumer3<LanguageChangeNotifier, DateFormatChangeNotifier,
-              CurrencyChangeNotifier>(
-            builder: (
-              context,
-              appLocaleChangeNotifier,
-              dateFormatChangeNotifier,
-              currencyChangeNotifier,
-              _,
-            ) {
-              return ValueListenableBuilder(
-                valueListenable: AdaptiveTheme.of(context).modeChangeNotifier,
-                builder: (context, mode, _) {
-                  return MaterialApp.router(
-                    routerConfig: router,
-                    locale: appLocaleChangeNotifier.language?.locale,
-                    title: 'Wherewithal',
-                    theme: lightColorTheme(context),
-                    darkTheme: darkColorTheme(context),
-                    themeMode: themeMode[mode],
-                    localizationsDelegates: const [
-                      AppLocalizationsDelegate(),
-                      ...GlobalMaterialLocalizations.delegates,
-                      GlobalWidgetsLocalizations.delegate,
-                    ],
-                    supportedLocales:
-                        countries.map((country) => country.language.locale),
-                  );
-                },
-              );
-            },
-          ),
+          supportedLocales: countries.map((country) => country.language.locale),
         );
       },
     );

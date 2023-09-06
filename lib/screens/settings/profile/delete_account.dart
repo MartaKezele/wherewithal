@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/components/wrappers/screen.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
 
+import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
+import '../../../utils/app_localizations.dart';
 import '../../../utils/overlay_banner.dart';
+import '../../../extensions/button/button_style_button.dart';
+import '../../../extensions/button/filled_button.dart';
 
 class DeleteAccount extends StatefulWidget {
   const DeleteAccount({super.key});
@@ -45,25 +46,28 @@ class _DeleteAccountState extends State<DeleteAccount> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Screen(
       appBar: AppBar(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Delete account',
+            localizations.deleteAccount,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           HeightSpacer.md,
           FilledButton(
             onPressed: _deleteAccount,
-            child: const Text('Delete'),
+            child: Text(localizations.delete),
           )
-              .addColorStyle(colorStyle: FilledButtonStyles.primary(context))
+              .addColorStyle(
+                FilledButtonStyles.primary,
+              )
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _deletingAccount,
-                colorStyle: FilledButtonStyles.primary(context),
+                colorStyle: FilledButtonStyles.primary,
               ),
         ],
       ),

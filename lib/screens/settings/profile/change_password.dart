@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/components/wrappers/screen.dart';
-import 'package:wherewithal/extensions/build_context.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
 
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/password_form_field.dart';
+import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
+import '../../../utils/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../utils/overlay_banner.dart';
+import '../../../extensions/build_context.dart';
+import '../../../extensions/button/filled_button.dart';
+import '../../../extensions/button/button_style_button.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -58,13 +59,15 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return Screen(
       appBar: AppBar(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Change password',
+            localizations.changePassword,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           HeightSpacer.md,
@@ -79,14 +82,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                   formKey: _formKey,
                   fn: _changePassword,
                 ),
-                child: const Text('Confirm'),
+                child: Text(localizations.confirm),
               )
                   .addColorStyle(
-                      colorStyle: FilledButtonStyles.primary(context))
+                    FilledButtonStyles.primary,
+                  )
                   .loadingBtn(
                     constructor: FilledButton.new,
                     isLoading: _changingPassword,
-                    colorStyle: FilledButtonStyles.primary(context),
+                    colorStyle: FilledButtonStyles.primary,
                   ),
             ],
           ),

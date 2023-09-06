@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/components/wrappers/screen.dart';
-import 'package:wherewithal/constants/spacers.dart';
 
 import '../../constants/hero_tags.dart';
+import '../../constants/spacers.dart';
+import '../wrappers/screen.dart';
 
 class EnterAppScreen extends StatefulWidget {
   const EnterAppScreen({

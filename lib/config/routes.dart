@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../change_notifiers/auth.dart';
@@ -18,6 +19,7 @@ import '../screens/settings/profile/configure_password_auth.dart';
 import '../screens/settings/profile/delete_account.dart';
 import '../screens/settings/profile/profile.dart';
 import '../screens/settings/settings.dart';
+import '../utils/app_localizations.dart';
 import 'auth_provider.dart';
 
 class TopLevelRoutes {
@@ -47,14 +49,8 @@ class TopLevelRoutes {
     path: '/password-reauth',
     builder: (context, state) {
       final nextRouteName = state.queryParameters[QueryParamKeys.nextRouteName];
-      if (nextRouteName == null) {
-        return const ErrorScreen(
-          title: 'Reauth route didn\'t recieve next route query param.',
-        );
-      }
-      return PasswordReauth(
-        nextRouteName: nextRouteName,
-      );
+      assert(nextRouteName != null);
+      return PasswordReauth(nextRouteName: nextRouteName!);
     },
   );
 
@@ -62,12 +58,8 @@ class TopLevelRoutes {
     path: '/google-reauth',
     builder: (context, state) {
       final nextRouteName = state.queryParameters[QueryParamKeys.nextRouteName];
-      if (nextRouteName == null) {
-        return const ErrorScreen(
-          title: 'Reauth route didn\'t recieve next route query param.',
-        );
-      }
-      return GoogleReauth(nextRouteName: nextRouteName);
+      assert(nextRouteName != null);
+      return GoogleReauth(nextRouteName: nextRouteName!);
     },
   );
 
@@ -133,7 +125,7 @@ class NamedChildRoutes {
   static final settings = NamedGoRoute(
     nonNullableName: 'settings',
     path: 'settings',
-    builder: (context, state) => const Settings(),
+    builder: (context, state) => Settings(),
     routes: [
       profile,
     ],
@@ -142,7 +134,7 @@ class NamedChildRoutes {
   static final profile = NamedGoRoute(
     nonNullableName: 'profile',
     path: 'profile',
-    builder: (context, state) => const Profile(),
+    builder: (context, state) => Profile(),
     routes: [
       changePassword,
       configurePasswordAuth,
@@ -180,7 +172,7 @@ class NamedChildRoutes {
   static final configureGoogleAuth = NamedGoRoute(
     nonNullableName: _configureGoogleAuthName,
     path: 'configure-google-auth',
-    builder: (context, state) => const ConfigureGoogleAuth(),
+    builder: (context, state) => ConfigureGoogleAuth(),
     redirect: (context, state) {
       return _redirectToReauth(
         state,
@@ -195,21 +187,20 @@ class NamedChildRoutes {
     path: 'delete-account',
     builder: (context, state) => const DeleteAccount(),
     redirect: (context, state) {
-      final authProviders = AuthChangeNotifier.instance.authProviders;
+      final localizations = AppLocalizations.of(context);
+      final authProviders = GetIt.I<AuthChangeNotifier>().authProviders;
 
       if (authProviders.isEmpty) {
-        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorTitle}=There are no configured auth providers for account.';
+        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorTitle}=${localizations.noConfiguredAuthProviders}';
       }
 
       final redirectRoute = authProviderRedirectRoutes[authProviders.first];
 
-      if (redirectRoute == null) {
-        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorTitle}=There is no redirect route for the specified auth provider.';
-      }
+      assert(redirectRoute != null);
 
       return _redirectToReauth(
         state,
-        redirectRoute,
+        redirectRoute!,
         _deleteAccountName,
       );
     },

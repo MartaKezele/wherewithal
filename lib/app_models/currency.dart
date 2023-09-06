@@ -1,31 +1,23 @@
 class Currency {
-  final String _nativeName;
-  final String _code;
-  final String _symbol;
+  final String nativeName;
+  final String code;
+  final String symbol;
   String? flagAssetPath;
 
   Currency({
-    required String nativeName,
-    required String code,
-    required String symbol,
+    required this.nativeName,
+    required this.code,
+    required this.symbol,
     this.flagAssetPath,
-  })  : _nativeName = nativeName,
-        _code = code,
-        _symbol = symbol;
-
-  String get nativeName => _nativeName;
-
-  String get code => _code;
-
-  String get symbol => _symbol;
+  });
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Currency &&
           runtimeType == other.runtimeType &&
-          _code == other._code;
+          code == other.code;
 
   @override
-  int get hashCode => _code.hashCode;
+  int get hashCode => code.hashCode;
 }

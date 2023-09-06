@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../app_models/color_style.dart';
+import '../config/router.dart';
 
 ColorStyle currentThemeColorStyle({
-  required BuildContext context,
   required ColorStyle darkColorStyle,
   required ColorStyle lightColorStyle,
 }) {
-  return Theme.of(context).brightness == Brightness.dark
+  assert(navigatorKey.currentContext != null);
+  return Theme.of(navigatorKey.currentContext!).brightness == Brightness.dark
       ? darkColorStyle
       : lightColorStyle;
 }

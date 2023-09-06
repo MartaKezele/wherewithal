@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/hero_tags.dart';
-import 'package:wherewithal/constants/styles/outlined_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../constants/hero_tags.dart';
+import '../constants/styles/outlined_button.dart';
 import '../dal/repo_factory.dart';
 import '../extensions/button/button_style_button.dart';
 import '../extensions/button/outlined_button.dart';
+import '../utils/app_localizations.dart';
 import '../utils/overlay_banner.dart';
 
 class SocialAuth extends StatefulWidget {
@@ -47,20 +48,22 @@ class _SocialAuthState extends State<SocialAuth> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return Column(
       children: [
         Hero(
           tag: socialAuthHeroTag,
           child: OutlinedButton(
             onPressed: _loading ? null : _continueWithGoogle,
-            child: const Text('Continue with google'),
+            child: Text(localizations.continueWithGoogle),
           )
-              .addColorStyle(colorStyle: OutlinedButtonStyles.primary(context))
+              .addColorStyle(OutlinedButtonStyles.primary)
               .addBigStyle(constructor: OutlinedButton.new)
               .loadingBtn(
                 constructor: OutlinedButton.new,
                 isLoading: _loading,
-                colorStyle: OutlinedButtonStyles.primary(context),
+                colorStyle: OutlinedButtonStyles.primary,
                 icon: _googleIcon,
               ),
         ),

@@ -2,17 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
+import '../../utils/app_localizations.dart';
 import '../user_repo.dart';
 import 'helpers.dart';
 
 class FirebaseUserRepo implements UserRepo {
   @override
   Future<ActionResult> updateUserInfo(String? displayName) async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       if (FirebaseAuth.instance.currentUser == null) {
         return ActionResult(
           success: false,
-          messageTitle: 'User not signed in.',
+          messageTitle: localizations.notSignedIn,
         );
       }
 
@@ -20,7 +23,7 @@ class FirebaseUserRepo implements UserRepo {
 
       return ActionResult(
         success: true,
-        messageTitle: 'Updated your information.',
+        messageTitle: localizations.updatedYourInfo,
       );
     } catch (_) {
       return genericFailureResult;
@@ -29,11 +32,13 @@ class FirebaseUserRepo implements UserRepo {
 
   @override
   Future<ActionResult> updatePassword(String newPassword) async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
       return ActionResult(
         success: true,
-        messageTitle: 'Changed password.',
+        messageTitle: localizations.changePassword,
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -44,11 +49,13 @@ class FirebaseUserRepo implements UserRepo {
 
   @override
   Future<ActionResult> deleteAccount() async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       if (FirebaseAuth.instance.currentUser == null) {
         return ActionResult(
           success: false,
-          messageTitle: 'You\'re not signed in.',
+          messageTitle: localizations.notSignedIn,
         );
       }
 
@@ -56,7 +63,7 @@ class FirebaseUserRepo implements UserRepo {
 
       return ActionResult(
         success: true,
-        messageTitle: 'Deleted account.',
+        messageTitle: localizations.deletedAccount,
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);
@@ -67,17 +74,19 @@ class FirebaseUserRepo implements UserRepo {
 
   @override
   Future<ActionResult> reloadUser() async {
+    final localizations = AppLocalizations.ofCurrentContext();
+
     try {
       if (FirebaseAuth.instance.currentUser == null) {
         return ActionResult(
           success: false,
-          messageTitle: 'You\'re not signed in',
+          messageTitle: localizations.notSignedIn,
         );
       }
       await FirebaseAuth.instance.currentUser!.reload();
       return ActionResult(
         success: true,
-        messageTitle: 'Successfully reloaded user.',
+        messageTitle: localizations.reloadedUser,
       );
     } catch (_) {
       return genericFailureResult;

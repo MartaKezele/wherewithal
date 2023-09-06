@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../config/password.dart';
+import '../../../utils/app_localizations.dart';
 import '../../../utils/form_field_validators.dart';
 
 class PasswordFormField extends StatefulWidget {
@@ -19,12 +21,14 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
-        label: const Text('Password'),
-        hintText: 'Minimum 6 characters',
+        label: Text(localizations.password),
+        hintText: localizations.minCharacters(minPasswordCharacters),
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText
@@ -41,7 +45,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       keyboardType: TextInputType.visiblePassword,
       obscureText: _obscureText,
       autocorrect: false,
-      validator: passwordValidator,
+      validator: (password) => passwordValidator(password),
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/components/form/custom_form.dart';
-import 'package:wherewithal/components/wrappers/enter_app_screen.dart';
-import 'package:wherewithal/constants/spacers.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
 
+import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
+import '../../components/wrappers/enter_app_screen.dart';
+import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
+import '../../utils/app_localizations.dart';
 import '../../utils/form.dart';
 import '../../utils/overlay_banner.dart';
+import '../../extensions/button/button_style_button.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({
@@ -54,6 +55,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return EnterAppScreen(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -61,12 +64,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       title: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          'Forgot password',
+          localizations.forgotPassword,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
       description: Text(
-        'Provide your email address and we will send you an email with instructions to reset your password',
+        localizations.forgotPasswordInstructions,
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       content: Column(
@@ -80,18 +83,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   formKey: _formKey,
                   fn: _resetPassword,
                 ),
-                child: const Text('Send'),
-              ).addMediumStyle(constructor: FilledButton.new).loadingBtn(
+                child: Text(localizations.send),
+              )
+                  .addMediumStyle(
+                    constructor: FilledButton.new,
+                  )
+                  .loadingBtn(
                     constructor: FilledButton.new,
                     isLoading: _sendingPasswordResetEmail,
-                    colorStyle: FilledButtonStyles.primary(context),
+                    colorStyle: FilledButtonStyles.primary,
                   ),
             ],
           ),
           HeightSpacer.xs,
           TextButton(
             onPressed: () => context.pop(),
-            child: const Text('Go back'),
+            child: Text(localizations.goBack),
           ).addMediumStyle(
             constructor: TextButton.new,
           ),

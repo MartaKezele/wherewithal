@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:wherewithal/components/dialogs/radio_dialog.dart';
 
 import '../../app_models/currency.dart';
 import '../../change_notifiers/currency.dart';
 import '../../config/countries.dart';
 import '../../constants/themes/flag.dart';
+import '../../utils/app_localizations.dart';
+import '../../components/dialogs/radio_dialog.dart';
 import 'parts/radio_tile_option.dart';
 
 Future<void> currencyDialog(
   BuildContext context,
 ) async {
-  final currencyChangeNotifier = Provider.of<CurrencyChangeNotifier>(
-    context,
-    listen: false,
-  );
+  final localizations = AppLocalizations.of(context);
+
+  final currencyChangeNotifier = GetIt.I<CurrencyChangeNotifier>();
 
   final currencies = countries
       .map((country) {
@@ -36,7 +36,7 @@ Future<void> currencyDialog(
       subtitle: '${currency.code} (${currency.symbol})',
       secondary: SvgPicture.asset(
         currency.flagAssetPath ?? '',
-        semanticsLabel: 'flag image',
+        semanticsLabel: localizations.flagImage,
         height: flagImageHeight,
         width: flagImageWidth,
       ),
@@ -48,7 +48,7 @@ Future<void> currencyDialog(
 
   final selectedCurrency = await showRadioDialog<Currency?>(
     context: context,
-    title: 'Currency',
+    title: localizations.currency,
     options: currencyRadioTiles,
   );
 

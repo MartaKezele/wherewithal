@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/app_models/color_style.dart';
+
+import '../../app_models/color_style.dart';
 
 extension Style on TextButton {
-  TextButton addColorStyle({
-    required ColorStyle colorStyle,
-  }) {
+  TextButton addColorStyle(
+    ColorStyle colorStyle,
+  ) {
     return TextButton(
       style: TextButton.styleFrom(
         foregroundColor: colorStyle.foregroundColor,

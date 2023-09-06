@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/constants/styles/text_button.dart';
-import 'package:wherewithal/extensions/button/text_button.dart';
+
+import '../../../constants/styles/text_button.dart';
+import '../../../utils/app_localizations.dart';
+import '../../../extensions/button/text_button.dart';
 
 class CancelButton extends StatelessWidget {
   const CancelButton({Key? key}) : super(key: key);
@@ -12,7 +14,7 @@ class CancelButton extends StatelessWidget {
       onPressed: () {
         context.pop();
       },
-      child: const Text('Cancel'),
-    ).addColorStyle(colorStyle: TextButtonStyles.surface(context));
+      child: Text(AppLocalizations.of(context).cancel),
+    ).addColorStyle(TextButtonStyles.surface);
   }
 }

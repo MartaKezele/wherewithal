@@ -1,26 +1,21 @@
 import 'package:intl/intl.dart';
 
 class CustomDateFormat {
-  final String _name;
-  final DateFormat _format;
+  final String name;
+  final DateFormat format;
 
   CustomDateFormat({
-    required String name,
-    required DateFormat format,
-  })  : _name = name,
-        _format = format;
-
-  DateFormat get format => _format;
-
-  String get name => _name;
+    required this.name,
+    required this.format,
+  });
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is CustomDateFormat &&
           runtimeType == other.runtimeType &&
-          _name == other._name;
+          name == other.name;
 
   @override
-  int get hashCode => _name.hashCode;
+  int get hashCode => name.hashCode;
 }

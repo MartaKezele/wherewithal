@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
-import 'package:wherewithal/change_notifiers/currency.dart';
-import 'package:wherewithal/change_notifiers/date_format.dart';
-import 'package:wherewithal/change_notifiers/language.dart';
-import 'package:wherewithal/components/dialogs/currency_dialog.dart';
-import 'package:wherewithal/components/dialogs/date_format_dialog.dart';
-import 'package:wherewithal/components/dialogs/language_dialog.dart';
-import 'package:wherewithal/components/dialogs/theme_mode_dialog.dart';
-import 'package:wherewithal/constants/themes/list_tile.dart';
-import 'package:wherewithal/utils/app_localizations.dart';
 
+import '../../change_notifiers/currency.dart';
+import '../../change_notifiers/date_format.dart';
+import '../../change_notifiers/language.dart';
+import '../../components/dialogs/currency_dialog.dart';
+import '../../components/dialogs/date_format_dialog.dart';
+import '../../components/dialogs/language_dialog.dart';
+import '../../components/dialogs/theme_mode_dialog.dart';
 import '../../constants/padding_size.dart';
+import '../../constants/themes/list_tile.dart';
 import '../../dal/repo_factory.dart';
 import '../../extensions/build_context.dart';
+import '../../utils/app_localizations.dart';
 import '../../utils/theme_mode.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+class Settings extends StatefulWidget with GetItStatefulWidgetMixin {
+  Settings({super.key});
 
   @override
   State<Settings> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends State<Settings> with GetItStateMixin {
   final Future<String> appVersion =
       PackageInfo.fromPlatform().then((packageInfo) => packageInfo.version);
 
@@ -43,18 +43,23 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    final languageChangeNotifier = context.watch<LanguageChangeNotifier>();
-    final dateFormatChangeNotifier = context.watch<DateFormatChangeNotifier>();
-    final currencyChangeNotifier = context.watch<CurrencyChangeNotifier>();
+    final localizations = AppLocalizations.of(context);
 
-    final String? language = languageChangeNotifier.language?.nativeName;
+    final String? language = watchOnly(
+      (LanguageChangeNotifier changeNotifier) =>
+          changeNotifier.language?.nativeName,
+    );
 
-    final String? date =
-        dateFormatChangeNotifier.dateFormat(context)?.format(DateTime.now());
+    final String? date = watchOnly(
+      (DateFormatChangeNotifier changeNotifier) =>
+          changeNotifier.dateFormat()?.format(DateTime.now()),
+    );
 
-    final String? currency = currencyChangeNotifier.currency != null
-        ? '${currencyChangeNotifier.currency?.code} (${currencyChangeNotifier.currency?.symbol})'
-        : null;
+    final String? currency = watchOnly(
+      (CurrencyChangeNotifier changeNotifier) => changeNotifier.currency != null
+          ? '${changeNotifier.currency?.code} (${changeNotifier.currency?.symbol})'
+          : null,
+    );
 
     return Scaffold(
       appBar: AppBar(),
@@ -62,43 +67,43 @@ class _SettingsState extends State<Settings> {
         children: [
           ListTile(
             leading: const Icon(Icons.person_outline_rounded),
-            title: const Text('Profile'),
+            title: Text(localizations.profile),
             trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () => context.pushProfile(),
           ),
           ListTile(
             leading: const Icon(Icons.language_outlined),
-            title: Text(AppLocalizations.of(context).language),
+            title: Text(localizations.language),
             subtitle: language != null ? Text(language) : null,
             onTap: () => languageDialog(context),
           ),
           ListTile(
             leading: const Icon(Icons.calendar_month_outlined),
-            title: const Text('Date format'),
+            title: Text(localizations.dateFormat),
             subtitle: date != null ? Text(date) : null,
             onTap: () => dateFormatDialog(context),
           ),
           ListTile(
             leading: const Icon(Icons.currency_pound_outlined),
-            title: const Text('Currency'),
+            title: Text(localizations.currency),
             subtitle: currency != null ? Text(currency) : null,
             onTap: () => currencyDialog(context),
           ),
           ListTile(
             leading: const Icon(Icons.dark_mode_outlined),
-            title: const Text('Theme mode'),
-            subtitle: Text(themeModeName(context: context)),
+            title: Text(localizations.themeMode),
+            subtitle: Text(themeModeName()),
             onTap: () => themeModeDialog(context),
           ),
           ListTile(
             leading: const Icon(Icons.notifications_active_outlined),
-            title: const Text('Notifications'),
+            title: Text(localizations.notifications),
             trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () => print('notifications'),
           ),
           ListTile(
             leading: const Icon(Icons.info_outline_rounded),
-            title: const Text('Version'),
+            title: Text(localizations.version),
             subtitle: FutureBuilder(
               future: appVersion,
               builder: (context, snapshot) {
@@ -106,7 +111,7 @@ class _SettingsState extends State<Settings> {
                   return Text(snapshot.data!);
                 } else if (snapshot.hasError) {
                   return Text(
-                    'Error fetching data',
+                    localizations.errorFetchingData,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.error,
                     ),
@@ -143,9 +148,9 @@ class _SettingsState extends State<Settings> {
                     ),
                   )
                 : const Icon(Icons.logout_outlined),
-            title: const Text(
-              'Sign out',
-              style: TextStyle(
+            title: Text(
+              localizations.signOut,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),

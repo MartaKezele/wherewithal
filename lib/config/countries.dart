@@ -38,7 +38,7 @@ final Country _croatia = Country(
 
 final Country defaultCountry = _unitedStates;
 
-var countries = [
+final countries = [
   _unitedStates,
   _croatia,
 ];

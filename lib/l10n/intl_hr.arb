@@ -1,6 +1,11 @@
 {
-  "@@last_modified": "2023-08-25T16:39:12.763507",
-  "@@locale": "hr",
+  "@@last_modified": "2023-09-06T19:55:00.212470",
+  "Wherewithal": "Wherewithal",
+  "@Wherewithal": {
+    "description": "App name (not to be translated in latin alphabets)",
+    "type": "text",
+    "placeholders": {}
+  },
   "Personal finance tracker": "Praćenje osobnih financija",
   "@Personal finance tracker": {
     "type": "text",
@@ -10,5 +15,478 @@
   "@Language": {
     "type": "text",
     "placeholders": {}
+  },
+  "Dark": "Dark",
+  "@Dark": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Light": "Light",
+  "@Light": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "System": "System",
+  "@System": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Password": "Password",
+  "@Password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Email": "Email",
+  "@Email": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Profile": "Profile",
+  "@Profile": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Date format": "Date format",
+  "@Date format": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Currency": "Currency",
+  "@Currency": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Theme mode": "Theme mode",
+  "@Theme mode": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Notifications": "Notifications",
+  "@Notifications": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Version": "Version",
+  "@Version": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Name": "Name",
+  "@Name": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Sign in methods": "Sign in methods",
+  "@Sign in methods": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Google": "Google",
+  "@Google": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Track your expenses, gain insights and plan for the future to take charge of your finances": "Track your expenses, gain insights and plan for the future to take charge of your finances",
+  "@Track your expenses, gain insights and plan for the future to take charge of your finances": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Don't see the email? Check your spam folder.": "Don't see the email? Check your spam folder.",
+  "@Don't see the email? Check your spam folder.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Don't have an account?": "Don't have an account?",
+  "@Don't have an account?": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Forgot password": "Forgot password",
+  "@Forgot password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Send": "Send",
+  "@Send": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Go back": "Go back",
+  "@Go back": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Already have an account?": "Already have an account?",
+  "@Already have an account?": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Verify email": "Verify email",
+  "@Verify email": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Continue": "Continue",
+  "@Continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Cancel": "Cancel",
+  "@Cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Resend verification email": "Resend verification email",
+  "@Resend verification email": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Configure password": "Configure password",
+  "@Configure password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Confirm": "Confirm",
+  "@Confirm": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Link google account": "Link google account",
+  "@Link google account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Reauthenticate with password": "Reauthenticate with password",
+  "@Reauthenticate with password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Retry": "Retry",
+  "@Retry": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Reauthenticating with google account": "Reauthenticating with google account",
+  "@Reauthenticating with google account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Reauthenticate with google account": "Reauthenticate with google account",
+  "@Reauthenticate with google account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Sign in": "Sign in",
+  "@Sign in": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Create account": "Create account",
+  "@Create account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Sign out": "Sign out",
+  "@Sign out": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Configure": "Configure",
+  "@Configure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Save": "Save",
+  "@Save": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Change password": "Change password",
+  "@Change password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Delete account": "Delete account",
+  "@Delete account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Delete": "Delete",
+  "@Delete": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Provide your email address and we will send you an email with instructions to reset your password": "Provide your email address and we will send you an email with instructions to reset your password",
+  "@Provide your email address and we will send you an email with instructions to reset your password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Follow the instructions in the verification email or click on the resend button.": "Follow the instructions in the verification email or click on the resend button.",
+  "@Follow the instructions in the verification email or click on the resend button.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "A verification email has been sent to your email address, follow the instructions in the email to verify account.": "A verification email has been sent to your email address, follow the instructions in the email to verify account.",
+  "@A verification email has been sent to your email address, follow the instructions in the email to verify account.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Email verified": "Email verified",
+  "@Email verified": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Email not verified": "Email not verified",
+  "@Email not verified": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Please try again later.": "Please try again later.",
+  "@Please try again later.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Email is required.": "Email is required.",
+  "@Email is required.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Password is required.": "Password is required.",
+  "@Password is required.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Error fetching data": "Error fetching data",
+  "@Error fetching data": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Something unexpected happened. Please try again later.": "Something unexpected happened. Please try again later.",
+  "@Something unexpected happened. Please try again later.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "You're not signed in.": "You're not signed in.",
+  "@You're not signed in.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Email address is not valid.": "Email address is not valid.",
+  "@Email address is not valid.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Account associated with the given email has been disabled.": "Account associated with the given email has been disabled.",
+  "@Account associated with the given email has been disabled.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "There is no account associated with the given email.": "There is no account associated with the given email.",
+  "@There is no account associated with the given email.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "The password is invalid.": "The password is invalid.",
+  "@The password is invalid.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "A network error has occured. Please check your internet connection and try again.": "A network error has occured. Please check your internet connection and try again.",
+  "@A network error has occured. Please check your internet connection and try again.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "An account with the given email address already exists.": "An account with the given email address already exists.",
+  "@An account with the given email address already exists.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "The credential is malformed or has expired.": "The credential is malformed or has expired.",
+  "@The credential is malformed or has expired.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "We don't support this sign in method yet. Try using another sign in method.": "We don't support this sign in method yet. Try using another sign in method.",
+  "@We don't support this sign in method yet. Try using another sign in method.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "The credential given does not correspond to the user.": "The credential given does not correspond to the user.",
+  "@The credential given does not correspond to the user.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "The authentication provider is already linked to the account.": "The authentication provider is already linked to the account.",
+  "@The authentication provider is already linked to the account.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "The account associated with the credential already exists, or is already linked to a user.": "The account associated with the credential already exists, or is already linked to a user.",
+  "@The account associated with the credential already exists, or is already linked to a user.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "You must reauthenticate to continue.": "You must reauthenticate to continue.",
+  "@You must reauthenticate to continue.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "You've made too many requests in a short amount of time.": "You've made too many requests in a short amount of time.",
+  "@You've made too many requests in a short amount of time.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Updated your information.": "Updated your information.",
+  "@Updated your information.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Changed password.": "Changed password.",
+  "@Changed password.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Deleted account.": "Deleted account.",
+  "@Deleted account.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Successfully reloaded user.": "Successfully reloaded user.",
+  "@Successfully reloaded user.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Successfully reauthenticated": "Successfully reauthenticated",
+  "@Successfully reauthenticated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Successfully linked account with credentials": "Successfully linked account with credentials",
+  "@Successfully linked account with credentials": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Successfully signed in": "Successfully signed in",
+  "@Successfully signed in": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Successfuly created account": "Successfuly created account",
+  "@Successfuly created account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Verification email could not be sent": "Verification email could not be sent",
+  "@Verification email could not be sent": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Verification email could not be sent because you're not signed in/your credentials are not valid.": "Verification email could not be sent because you're not signed in/your credentials are not valid.",
+  "@Verification email could not be sent because you're not signed in/your credentials are not valid.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Could not send verification email because email is already verified.": "Could not send verification email because email is already verified.",
+  "@Could not send verification email because email is already verified.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "A verification email has been sent.": "A verification email has been sent.",
+  "@A verification email has been sent.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Click on the link in the email to verify your email address.": "Click on the link in the email to verify your email address.",
+  "@Click on the link in the email to verify your email address.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Password reset email was sent, check your inbox.": "Password reset email was sent, check your inbox.",
+  "@Password reset email was sent, check your inbox.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Didn't receive the email? Check your spam folder.": "Didn't receive the email? Check your spam folder.",
+  "@Didn't receive the email? Check your spam folder.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Successfully signed out": "Successfully signed out",
+  "@Successfully signed out": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Sign in process was aborted.": "Sign in process was aborted.",
+  "@Sign in process was aborted.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Account with the given email isn't configured to sign in with google.": "Account with the given email isn't configured to sign in with google.",
+  "@Account with the given email isn't configured to sign in with google.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Account could not be found.": "Account could not be found.",
+  "@Account could not be found.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Successfuly fetched sign in methods": "Successfuly fetched sign in methods",
+  "@Successfuly fetched sign in methods": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Proccess aborted": "Proccess aborted",
+  "@Proccess aborted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "There are no configured auth providers for account.": "There are no configured auth providers for account.",
+  "@There are no configured auth providers for account.": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Continue with google": "Continue with google",
+  "@Continue with google": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Close": "Close",
+  "@Close": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Flag image": "Flag image",
+  "@Flag image": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInUsingMethods": "Sign in using one of the following methods: {methods}. Once signed in you can configure sign in with google account in the profile section.",
+  "@signInUsingMethods": {
+    "type": "text",
+    "placeholders": {
+      "methods": {}
+    }
+  },
+  "weakPasswordErrorMsg": "The password must contain at least {minCharacters} characters.",
+  "@weakPasswordErrorMsg": {
+    "type": "text",
+    "placeholders": {
+      "minCharacters": {}
+    }
+  },
+  "passwordCharactersRestrictionMsg": "The password must contain at least {min} characters.",
+  "@passwordCharactersRestrictionMsg": {
+    "type": "text",
+    "placeholders": {
+      "min": {}
+    }
+  },
+  "minCharacters": "Minimum {howMany} characters.",
+  "@minCharacters": {
+    "type": "text",
+    "placeholders": {
+      "howMany": {}
+    }
   }
 }

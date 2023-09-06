@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/styles/opacity.dart';
 
 import '../../app_models/color_style.dart';
 import '../../config/color_schemes/dark.dart';
 import '../../config/color_schemes/light.dart';
 import '../../utils/style.dart';
+import 'opacity.dart';
 
 class FilledButtonStyles {
   static final _darkPrimary = ColorStyle(
@@ -131,49 +131,33 @@ class FilledButtonStyles {
         lightColorScheme.onTertiaryContainer.withOpacity(overlayOpacity),
   );
 
-  static ColorStyle primary(BuildContext context) {
-    return currentThemeColorStyle(
-      context: context,
-      darkColorStyle: _darkPrimary,
-      lightColorStyle: _lightPrimary,
-    );
-  }
+  static ColorStyle get primary => currentThemeColorStyle(
+        darkColorStyle: _darkPrimary,
+        lightColorStyle: _lightPrimary,
+      );
 
-  static ColorStyle secondary(BuildContext context) {
-    return currentThemeColorStyle(
-      context: context,
-      darkColorStyle: _darkSecondary,
-      lightColorStyle: _lightSecondary,
-    );
-  }
+  static ColorStyle get secondary => currentThemeColorStyle(
+        darkColorStyle: _darkSecondary,
+        lightColorStyle: _lightSecondary,
+      );
 
-  static ColorStyle inverseSurface(BuildContext context) {
-    return currentThemeColorStyle(
-      context: context,
-      darkColorStyle: _darkInverseSurface,
-      lightColorStyle: _lightInverseSurface,
-    );
-  }  static ColorStyle surface(BuildContext context) {
-    return currentThemeColorStyle(
-      context: context,
-      darkColorStyle: _darkSurface,
-      lightColorStyle: _lightSurface,
-    );
-  }
+  static ColorStyle get inverseSurface => currentThemeColorStyle(
+        darkColorStyle: _darkInverseSurface,
+        lightColorStyle: _lightInverseSurface,
+      );
 
-  static ColorStyle error(BuildContext context) {
-    return currentThemeColorStyle(
-      context: context,
-      darkColorStyle: _darkError,
-      lightColorStyle: _lightError,
-    );
-  }
+  static ColorStyle get surface => currentThemeColorStyle(
+        darkColorStyle: _darkSurface,
+        lightColorStyle: _lightSurface,
+      );
 
-  static ColorStyle success(BuildContext context) {
-    return currentThemeColorStyle(
-      context: context,
-      darkColorStyle: _darkSuccess,
-      lightColorStyle: _lightSuccess,
-    );
-  }
+  static ColorStyle get error => currentThemeColorStyle(
+        darkColorStyle: _darkError,
+        lightColorStyle: _lightError,
+      );
+
+  static ColorStyle get success => currentThemeColorStyle(
+        darkColorStyle: _darkSuccess,
+        lightColorStyle: _lightSuccess,
+      );
 }

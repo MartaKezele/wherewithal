@@ -1,6 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/themes/text.dart';
 
 import '../../config/color_schemes/dark.dart';
 import '../../config/color_schemes/light.dart';
@@ -9,6 +8,7 @@ import 'bottom_navigation_bar.dart';
 import 'button.dart';
 import 'floating_action_button.dart';
 import 'list_tile.dart';
+import 'text.dart';
 
 const themeMode = {
   AdaptiveThemeMode.light: ThemeMode.light,

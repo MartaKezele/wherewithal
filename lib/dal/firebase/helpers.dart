@@ -3,48 +3,44 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../config/password.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
+import '../../utils/app_localizations.dart';
 
 ActionResult handleFirebaseAuthException(FirebaseAuthException e) {
   String messageTitle;
   String? messageDescription;
+
+  final localizations = AppLocalizations.ofCurrentContext();
+
   switch (e.code) {
     case 'invalid-email':
-      messageTitle = 'Email address is not valid';
+      messageTitle = localizations.invalidEmailErrorMsg;
     case 'user-disabled':
-      messageTitle =
-          'Account associated with the given email has been disabled';
+      messageTitle = localizations.userDisabledErrorMsg;
     case 'user-not-found':
-      messageTitle = 'There is no account associated with the given email';
+      messageTitle = localizations.userNotFoundErrorMsg;
     case 'wrong-password':
-      messageTitle = 'The password is invalid';
+      messageTitle = localizations.wrondPasswordErrorMsg;
     case 'network-request-failed':
-      messageTitle =
-          'A network error has occured. Please check your internet connection and try again';
+      messageTitle = localizations.networkRequestFailedErrorMsg;
     case 'email-already-in-use':
-      messageTitle = 'An account with the given email address already exists';
+      messageTitle = localizations.emailAlreadyInUseErrorMsg;
     case 'weak-password':
-      messageTitle =
-          'The password must contain at least $minPasswordCharacters characters';
+      messageTitle = localizations.weakPasswordErrorMsg(minPasswordCharacters);
     case 'invalid-credential':
-      messageTitle = 'The credential is malformed or has expired';
+      messageTitle = localizations.invalidEmailErrorMsg;
     case 'operation-not-allowed':
-      messageTitle =
-          'We don\'t support this sign in method yet. Try using another sign in method';
+      messageTitle = localizations.operationNotAllowedErrorMsg;
     case 'user-mismatch':
-      messageTitle = 'The credential given does not correspond to the user';
-    case 'provider-already-linked':
-      messageTitle =
-          'The authentication provider is already linked to the account';
+      messageTitle = localizations.userMismatchErrorMsg;
     case 'credential-already-in-use':
-      messageTitle =
-          'The account associated with the credential already exists, or is already linked to a user';
+      messageTitle = localizations.credentialAlreadyInUseErrorMsg;
     case 'invalid-password':
-      messageTitle = 'The password is invalid';
+      messageTitle = localizations.invalidPasswordErrorMsg;
     case 'requires-recent-login':
-      messageTitle = 'You must reauthenticate to continue';
+      messageTitle = localizations.requiresRecentLoginErrorMsg;
     case 'too-many-requests':
-      messageTitle = 'You\'ve made too many requests in a short amount of time';
-      messageDescription = 'Please try again later.';
+      messageTitle = localizations.tooManyRequestsErrorMsg;
+      messageDescription = localizations.tryAgainLater;
     default:
       return genericFailureResult;
   }

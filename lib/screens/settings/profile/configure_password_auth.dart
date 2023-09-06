@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/components/wrappers/screen.dart';
-import 'package:wherewithal/extensions/build_context.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../change_notifiers/auth.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/password_form_field.dart';
+import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
 import '../../../app_models/action_result.dart';
+import '../../../utils/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../utils/overlay_banner.dart';
+import '../../../extensions/build_context.dart';
+import '../../../extensions/button/filled_button.dart';
+import '../../../extensions/button/button_style_button.dart';
 
 class ConfigurePasswordAuth extends StatefulWidget {
   const ConfigurePasswordAuth({super.key});
@@ -29,18 +31,20 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
   OverlayEntry? _resultBanner;
 
   Future<void> _linkPasswordAuth() async {
+    final authChangeNotifier = GetIt.I<AuthChangeNotifier>();
+
     setState(() {
       _linkingAuth = true;
     });
 
-    if (AuthChangeNotifier.instance.email == null) {
+    if (authChangeNotifier.email == null) {
       setState(() {
         _linkingAuth = false;
         _resultBanner = showActionResultOverlayBanner(
           context,
           ActionResult(
             success: false,
-            messageTitle: 'You\'re not signed in.',
+            messageTitle: AppLocalizations.of(context).notSignedIn,
           ),
         );
       });
@@ -49,7 +53,7 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
 
     await RepoFactory.authRepo()
         .linkWithPasswordCredential(
-      AuthChangeNotifier.instance.email!,
+      authChangeNotifier.email!,
       _passwordController.text,
     )
         .then((result) {
@@ -74,13 +78,15 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return Screen(
       appBar: AppBar(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Configure password',
+            localizations.configurePassword,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           HeightSpacer.md,
@@ -95,14 +101,15 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
                   formKey: _formKey,
                   fn: _linkPasswordAuth,
                 ),
-                child: const Text('Confirm'),
+                child: Text(localizations.confirm),
               )
                   .addColorStyle(
-                      colorStyle: FilledButtonStyles.primary(context))
+                    FilledButtonStyles.primary,
+                  )
                   .loadingBtn(
                     constructor: FilledButton.new,
                     isLoading: _linkingAuth,
-                    colorStyle: FilledButtonStyles.primary(context),
+                    colorStyle: FilledButtonStyles.primary,
                   ),
             ],
           ),

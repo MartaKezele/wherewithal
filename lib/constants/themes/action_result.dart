@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 
 import '../../app_models/color_style.dart';
+import '../../config/router.dart';
 import '../styles/text_button.dart';
 
 ColorStyle textBtnActionResultColorStyle({
-  required BuildContext context,
   required bool resultSuccess,
 }) =>
-    resultSuccess
-        ? TextButtonStyles.success(context)
-        : TextButtonStyles.error(context);
+    resultSuccess ? TextButtonStyles.success : TextButtonStyles.error;
 
 Color actionResultContainerColor({
-  required BuildContext context,
   required bool resultSuccess,
-}) =>
-    resultSuccess
-        ? Theme.of(context).colorScheme.tertiaryContainer
-        : Theme.of(context).colorScheme.errorContainer;
+}) {
+  assert(navigatorKey.currentContext != null);
+  return resultSuccess
+      ? Theme.of(navigatorKey.currentContext!).colorScheme.tertiaryContainer
+      : Theme.of(navigatorKey.currentContext!).colorScheme.errorContainer;
+}
 
 Color actionResultTextColor({
-  required BuildContext context,
   required bool resultSuccess,
-}) =>
-    resultSuccess
-        ? Theme.of(context).colorScheme.onTertiaryContainer
-        : Theme.of(context).colorScheme.onErrorContainer;
+}) {
+  assert(navigatorKey.currentContext != null);
+  return resultSuccess
+      ? Theme.of(navigatorKey.currentContext!).colorScheme.onTertiaryContainer
+      : Theme.of(navigatorKey.currentContext!).colorScheme.onErrorContainer;
+}

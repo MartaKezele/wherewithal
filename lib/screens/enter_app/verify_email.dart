@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/components/wrappers/enter_app_screen.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
-import 'package:wherewithal/extensions/button/outlined_button.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../app_models/action_result.dart';
 import '../../change_notifiers/auth.dart';
+import '../../components/wrappers/enter_app_screen.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../constants/styles/outlined_button.dart';
 import '../../dal/repo_factory.dart';
+import '../../utils/app_localizations.dart';
 import '../../utils/overlay_banner.dart';
+import '../../extensions/button/filled_button.dart';
+import '../../extensions/button/outlined_button.dart';
+import '../../extensions/button/button_style_button.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({super.key});
@@ -26,13 +28,16 @@ class _VerifyEmailState extends State<VerifyEmail> {
   OverlayEntry? _resultBanner;
 
   void emailVerifiedChangeListener() {
-    final emailVerified = AuthChangeNotifier.instance.emailVerified;
+    final localizations = AppLocalizations.of(context);
+
+    final emailVerified = GetIt.I<AuthChangeNotifier>().emailVerified;
     final emailVerifiedResult = ActionResult(
       success: emailVerified,
-      messageTitle: emailVerified ? 'Email verified' : 'Email not verified',
-      messageDescription: emailVerified
-          ? null
-          : 'Follow the instructions in the verification email or click on the resend button.',
+      messageTitle: emailVerified
+          ? localizations.emailVerified
+          : localizations.emailNotVerified,
+      messageDescription:
+          emailVerified ? null : localizations.verificationScreenInstructions,
     );
 
     setState(() {
@@ -52,7 +57,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
       _reloadingUser = true;
     });
 
-    AuthChangeNotifier.instance.addListener(emailVerifiedChangeListener);
+    GetIt.I<AuthChangeNotifier>().addListener(emailVerifiedChangeListener);
 
     await RepoFactory.userRepo().reloadUser().then((result) {
       if (!result.success) {
@@ -104,29 +109,31 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   void dispose() {
-    AuthChangeNotifier.instance.removeListener(emailVerifiedChangeListener);
+    GetIt.I<AuthChangeNotifier>().removeListener(emailVerifiedChangeListener);
     hideOverlayBanner(_resultBanner);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return EnterAppScreen(
       icon: Icons.verified_user_rounded,
       title: Text(
-        'Verify email',
+        localizations.verifyEmail,
         style: Theme.of(context).textTheme.headlineMedium,
       ),
       description: Column(
         children: [
           Text(
-            'A verification email has been sent to your email address, follow the instructions in the email to verify account.',
+            localizations.verificationEmailSentMsg,
             style: Theme.of(context).textTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
           HeightSpacer.xxs,
           Text(
-            'Don\'t see the email? Check your spam folder.',
+            localizations.dontSeeEmailMsg,
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
@@ -136,39 +143,38 @@ class _VerifyEmailState extends State<VerifyEmail> {
         children: [
           FilledButton(
             onPressed: _reloadUser,
-            child: const Text('Continue'),
+            child: Text(localizations.continueMsg),
           )
-              .addColorStyle(colorStyle: FilledButtonStyles.primary(context))
+              .addColorStyle(FilledButtonStyles.primary)
               .addBigStyle(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _reloadingUser,
-                colorStyle: FilledButtonStyles.primary(context),
+                colorStyle: FilledButtonStyles.primary,
               ),
           HeightSpacer.xs,
           FilledButton(
             onPressed: _resendVerificationEmail,
-            child: const Text('Resend verification email'),
+            child: Text(localizations.resendVerificationEmail),
           )
-              .addColorStyle(colorStyle: FilledButtonStyles.secondary(context))
+              .addColorStyle(FilledButtonStyles.secondary)
               .addBigStyle(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _resendingVerificationEmail,
-                colorStyle: FilledButtonStyles.secondary(context),
+                colorStyle: FilledButtonStyles.secondary,
               ),
           HeightSpacer.xs,
           OutlinedButton(
             onPressed: _signOut,
-            child: const Text('Cancel'),
+            child: Text(localizations.cancel),
           )
-              .addColorStyle(
-                  colorStyle: OutlinedButtonStyles.inverseSurface(context))
+              .addColorStyle(OutlinedButtonStyles.inverseSurface)
               .addBigStyle(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: OutlinedButton.new,
                 isLoading: _signingOut,
-                colorStyle: OutlinedButtonStyles.inverseSurface(context),
+                colorStyle: OutlinedButtonStyles.inverseSurface,
               ),
         ],
       ),

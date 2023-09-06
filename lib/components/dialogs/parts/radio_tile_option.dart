@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/styles/opacity.dart';
 
 import '../../../constants/padding_size.dart';
+import '../../../constants/styles/opacity.dart';
 
 class RadioTileDialogOption<T> extends StatelessWidget {
   const RadioTileDialogOption({

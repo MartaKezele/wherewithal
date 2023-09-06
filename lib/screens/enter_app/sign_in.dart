@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/components/form/custom_form.dart';
-import 'package:wherewithal/components/wrappers/enter_app_screen.dart';
-import 'package:wherewithal/constants/spacers.dart';
-import 'package:wherewithal/extensions/build_context.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
 
+import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
 import '../../components/form/form_fields/password_form_field.dart';
 import '../../components/social_auth.dart';
+import '../../components/wrappers/enter_app_screen.dart';
 import '../../constants/hero_tags.dart';
+import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
+import '../../utils/app_localizations.dart';
 import '../../utils/form.dart';
 import '../../utils/overlay_banner.dart';
+import '../../extensions/build_context.dart';
+import '../../extensions/button/filled_button.dart';
+import '../../extensions/button/button_style_button.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -67,13 +68,15 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return EnterAppScreen(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
       icon: Icons.wallet_rounded,
       title: Text(
-        'Sign in',
+        localizations.signIn,
         style: Theme.of(context).textTheme.headlineMedium,
       ),
       content: Expanded(
@@ -93,7 +96,7 @@ class _SignInState extends State<SignIn> {
                         onPressed: () => context.pushForgotPassword(
                           _emailController.text,
                         ),
-                        child: const Text('Forgot password?'),
+                        child: Text('${localizations.forgotPassword}?'),
                       ),
                     ],
                   ),
@@ -104,17 +107,13 @@ class _SignInState extends State<SignIn> {
                         formKey: _formKey,
                         fn: _signIn,
                       ),
-                      child: const Text('Sign in'),
+                      child: Text(localizations.signIn),
                     )
-                        .addColorStyle(
-                          colorStyle: FilledButtonStyles.primary(context),
-                        )
-                        .addBigStyle(
-                          constructor: FilledButton.new,
-                        )
+                        .addColorStyle(FilledButtonStyles.primary)
+                        .addBigStyle(constructor: FilledButton.new)
                         .loadingBtn(
                           constructor: FilledButton.new,
-                          colorStyle: FilledButtonStyles.primary(context),
+                          colorStyle: FilledButtonStyles.primary,
                           isLoading: _signingIn,
                         ),
                   ),
@@ -123,10 +122,10 @@ class _SignInState extends State<SignIn> {
               HeightSpacer.xs,
               const SocialAuth(),
               HeightSpacer.xxl,
-              const Text('Don\'t have an account?'),
+              Text(localizations.dontHaveAccount),
               TextButton(
                 onPressed: () => context.goToCreateAccount(),
-                child: const Text('Create account'),
+                child: Text(localizations.createAccount),
               ),
             ],
           ),

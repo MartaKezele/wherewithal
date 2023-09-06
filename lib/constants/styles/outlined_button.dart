@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../../app_models/color_style.dart';
 import '../../config/color_schemes/dark.dart';
 import '../../config/color_schemes/light.dart';
@@ -97,49 +95,43 @@ class OutlinedButtonStyles {
         lightColorScheme.onTertiaryContainer.withOpacity(overlayOpacity),
   );
 
-  static ColorStyle primary(BuildContext context) {
+  static ColorStyle get primary {
     return currentThemeColorStyle(
-      context: context,
       darkColorStyle: _darkPrimary,
       lightColorStyle: _lightPrimary,
     );
   }
 
-  static ColorStyle secondary(BuildContext context) {
+  static ColorStyle get secondary {
     return currentThemeColorStyle(
-      context: context,
       darkColorStyle: _darkSecondary,
       lightColorStyle: _lightSecondary,
     );
   }
 
-  static ColorStyle inverseSurface(BuildContext context) {
+  static ColorStyle get inverseSurface {
     return currentThemeColorStyle(
-      context: context,
       darkColorStyle: _darkInverseSurface,
       lightColorStyle: _lightInverseSurface,
     );
   }
 
-  static ColorStyle surface(BuildContext context) {
+  static ColorStyle get surface {
     return currentThemeColorStyle(
-      context: context,
       darkColorStyle: _darkSurface,
       lightColorStyle: _lightSurface,
     );
   }
 
-  static ColorStyle error(BuildContext context) {
+  static ColorStyle get error {
     return currentThemeColorStyle(
-      context: context,
       darkColorStyle: _darkError,
       lightColorStyle: _lightError,
     );
   }
 
-  static ColorStyle success(BuildContext context) {
+  static ColorStyle get success {
     return currentThemeColorStyle(
-      context: context,
       darkColorStyle: _darkSuccess,
       lightColorStyle: _lightSuccess,
     );

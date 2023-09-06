@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:wherewithal/components/dialogs/parts/radio_tile_option.dart';
-import 'package:wherewithal/components/dialogs/radio_dialog.dart';
 
 import '../../app_models/language.dart';
 import '../../change_notifiers/language.dart';
 import '../../config/countries.dart';
 import '../../constants/themes/flag.dart';
+import '../../utils/app_localizations.dart';
+import 'parts/radio_tile_option.dart';
+import 'radio_dialog.dart';
 
 Future<void> languageDialog(BuildContext context) async {
-  final languageChangeNotifier = Provider.of<LanguageChangeNotifier>(
-    context,
-    listen: false,
-  );
+  final localizations = AppLocalizations.of(context);
+
+  final languageChangeNotifier = GetIt.I<LanguageChangeNotifier>();
 
   countries
       .sort((a, b) => a.language.nativeName.compareTo(b.language.nativeName));
@@ -26,7 +26,8 @@ Future<void> languageDialog(BuildContext context) async {
             title: country.language.nativeName,
             secondary: SvgPicture.asset(
               country.flagAssetPath,
-              semanticsLabel: '${country.language.nativeName} flag image',
+              semanticsLabel:
+                  '${localizations.flagImage} - ${country.language.nativeName}',
               height: flagImageHeight,
               width: flagImageWidth,
             ),
@@ -38,7 +39,7 @@ Future<void> languageDialog(BuildContext context) async {
 
   final selectedLanguage = await showRadioDialog<Language>(
     context: context,
-    title: 'Language',
+    title: localizations.language,
     options: languageRadioTiles,
   );
 

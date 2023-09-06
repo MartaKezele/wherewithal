@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/spacers.dart';
+
+import '../../constants/spacers.dart';
 
 class CustomForm extends StatelessWidget {
   const CustomForm({

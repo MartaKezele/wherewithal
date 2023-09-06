@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/padding_size.dart';
 
 import '../app_models/action_result.dart';
+import '../constants/padding_size.dart';
 
 class ActionResultMessage extends StatelessWidget {
   const ActionResultMessage({

@@ -1,8 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../change_notifiers/auth.dart';
 import '../dal/repo_factory.dart';
 import 'routes.dart';
+
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   initialLocation: TopLevelRoutes.home.path,
@@ -14,7 +18,7 @@ final router = GoRouter(
     TopLevelRoutes.googleReauth,
   ],
   redirect: (context, state) async {
-    final auth = AuthChangeNotifier.instance;
+    final auth = GetIt.I<AuthChangeNotifier>();
 
     if (auth.signedIn &&
         auth.emailVerified &&
@@ -37,5 +41,6 @@ final router = GoRouter(
 
     return null;
   },
-  refreshListenable: AuthChangeNotifier.instance,
+  refreshListenable: GetIt.I<AuthChangeNotifier>(),
+  navigatorKey: navigatorKey,
 );

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/app_models/color_style.dart';
-import 'package:wherewithal/constants/themes/action_result.dart';
-import 'package:wherewithal/constants/themes/container.dart';
-import 'package:wherewithal/constants/themes/overlay_banner.dart';
-import 'package:wherewithal/extensions/button/text_button.dart';
 
 import '../app_models/action_result.dart';
+import '../app_models/color_style.dart';
 import '../constants/padding_size.dart';
 import '../constants/spacers.dart';
+import '../constants/themes/action_result.dart';
+import '../constants/themes/container.dart';
+import '../constants/themes/overlay_banner.dart';
+import '../utils/app_localizations.dart';
+import '../extensions/button/text_button.dart';
 
 class ActionResultOverlayBanner extends StatefulWidget {
   const ActionResultOverlayBanner({
@@ -72,18 +73,17 @@ class _ActionResultOverlayBannerState extends State<ActionResultOverlayBanner>
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     final ColorStyle buttonColorStyle = textBtnActionResultColorStyle(
-      context: context,
       resultSuccess: widget.result.success,
     );
 
     final Color containerColor = actionResultContainerColor(
-      context: context,
       resultSuccess: widget.result.success,
     );
 
     final Color textColor = actionResultTextColor(
-      context: context,
       resultSuccess: widget.result.success,
     );
 
@@ -177,10 +177,8 @@ class _ActionResultOverlayBannerState extends State<ActionResultOverlayBanner>
                       HeightSpacer.sm,
                       TextButton(
                         onPressed: _playExitAnimation,
-                        child: Text('Close'.toUpperCase()),
-                      ).addColorStyle(
-                        colorStyle: buttonColorStyle,
-                      )
+                        child: Text(localizations.close.toUpperCase()),
+                      ).addColorStyle(buttonColorStyle)
                     ],
                   ),
                 ),

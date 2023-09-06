@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/components/wrappers/screen.dart';
-import 'package:wherewithal/extensions/button/button_style_button.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
-import 'package:wherewithal/utils/overlay_banner.dart';
 
 import '../../change_notifiers/auth.dart';
+import '../../components/wrappers/screen.dart';
 import '../../constants/query_param_keys.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
 import '../../app_models/action_result.dart';
+import '../../utils/app_localizations.dart';
+import '../../utils/overlay_banner.dart';
+import '../../extensions/button/filled_button.dart';
+import '../../extensions/button/button_style_button.dart';
 
 class GoogleReauth extends StatefulWidget {
   const GoogleReauth({
@@ -35,14 +37,14 @@ class _GoogleReauthState extends State<GoogleReauth> {
       _showRetryBtn = false;
     });
 
-    if (AuthChangeNotifier.instance.email == null) {
+    if (GetIt.I<AuthChangeNotifier>().email == null) {
       setState(() {
         _reauthenticating = false;
         _resultBanner = showActionResultOverlayBanner(
           context,
           ActionResult(
             success: false,
-            messageTitle: 'You\'re not signed in.',
+            messageTitle: AppLocalizations.of(context).notSignedIn,
           ),
         );
       });
@@ -82,6 +84,8 @@ class _GoogleReauthState extends State<GoogleReauth> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return Screen(
       appBar: AppBar(),
       child: Column(
@@ -91,8 +95,8 @@ class _GoogleReauthState extends State<GoogleReauth> {
             children: [
               Text(
                 _reauthenticating
-                    ? 'Reauthenticating with google account'
-                    : 'Reauthenticate with google account',
+                    ? localizations.reauthenticatingWithGoogle
+                    : localizations.reauthenticateWithGoogle,
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.start,
               ),
@@ -107,13 +111,11 @@ class _GoogleReauthState extends State<GoogleReauth> {
             visible: _showRetryBtn,
             child: FilledButton(
               onPressed: _reauthenticate,
-              child: const Text('Retry'),
-            )
-                .addColorStyle(colorStyle: FilledButtonStyles.primary(context))
-                .loadingBtn(
+              child: Text(localizations.retry),
+            ).addColorStyle(FilledButtonStyles.primary).loadingBtn(
                   constructor: FilledButton.new,
                   isLoading: _reauthenticating,
-                  colorStyle: FilledButtonStyles.primary(context),
+                  colorStyle: FilledButtonStyles.primary,
                 ),
           ),
         ],

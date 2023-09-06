@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../config/shared_prefs_keys.dart';
 import '../utils/prefs.dart';
@@ -11,12 +11,10 @@ class DateFormatChangeNotifier extends ChangeNotifier {
 
   String? _dateFormatPattern;
 
-  DateFormat? dateFormat(BuildContext context) {
-    var languageChangeNotifier = Provider.of<LanguageChangeNotifier>(
-      context,
-      listen: false,
-    );
-    var localeString = languageChangeNotifier.language?.locale != null
+  DateFormat? dateFormat() {
+    final languageChangeNotifier = GetIt.I<LanguageChangeNotifier>();
+
+    final localeString = languageChangeNotifier.language?.locale != null
         ? '${languageChangeNotifier.language?.locale.languageCode}_${languageChangeNotifier.language?.locale.countryCode}'
         : null;
 

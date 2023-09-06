@@ -1,13 +1,19 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:flutter/material.dart';
 
-String themeModeName({required BuildContext context, AdaptiveThemeMode? mode}) {
-  switch (mode ?? AdaptiveTheme.of(context).mode) {
+import '../config/router.dart';
+import 'app_localizations.dart';
+
+String themeModeName({AdaptiveThemeMode? mode}) {
+  if (mode == null) {
+    assert(navigatorKey.currentContext != null);
+  }
+
+  switch (mode ?? AdaptiveTheme.of(navigatorKey.currentContext!).mode) {
     case AdaptiveThemeMode.dark:
-      return 'Dark';
+      return AppLocalizations.ofCurrentContext().dark;
     case AdaptiveThemeMode.light:
-      return 'Light';
+      return AppLocalizations.ofCurrentContext().light;
     case AdaptiveThemeMode.system:
-      return 'System';
+      return AppLocalizations.ofCurrentContext().system;
   }
 }

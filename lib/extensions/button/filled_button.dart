@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/app_models/color_style.dart';
+
+import '../../app_models/color_style.dart';
 
 extension Style on FilledButton {
-  FilledButton addColorStyle({
-    required ColorStyle colorStyle,
-  }) {
+  FilledButton addColorStyle(ColorStyle colorStyle) {
     return FilledButton(
       style: FilledButton.styleFrom(
         backgroundColor: colorStyle.backgroundColor,

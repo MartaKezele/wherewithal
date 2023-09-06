@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:wherewithal/components/dialogs/parts/radio_tile_option.dart';
-import 'package:wherewithal/components/dialogs/radio_dialog.dart';
 
 import '../../change_notifiers/date_format.dart';
 import '../../config/date_format_patterns.dart';
+import '../../utils/app_localizations.dart';
+import 'parts/radio_tile_option.dart';
+import 'radio_dialog.dart';
 
 Future<void> dateFormatDialog(
   BuildContext context,
 ) async {
+  final localizations = AppLocalizations.of(context);
+
   final locale = Localizations.localeOf(context);
 
-  final dateFormatChangeNotifier = Provider.of<DateFormatChangeNotifier>(
-    context,
-    listen: false,
-  );
+  final dateFormatChangeNotifier = GetIt.I<DateFormatChangeNotifier>();
 
   final dateFormatRadioTiles = dateFormatPatterns.map((pattern) {
     final localeString = '${locale.languageCode}_${locale.countryCode}';
@@ -24,7 +24,7 @@ Future<void> dateFormatDialog(
 
     return RadioTileDialogOption<String?>(
       value: pattern,
-      groupValue: dateFormatChangeNotifier.dateFormat(context)?.pattern,
+      groupValue: dateFormatChangeNotifier.dateFormat()?.pattern,
       title: dateFormat.format(DateTime.now()),
       onChanged: (String? value) {
         context.pop(value);
@@ -34,7 +34,7 @@ Future<void> dateFormatDialog(
 
   final selectedDateFormatPattern = await showRadioDialog<String?>(
     context: context,
-    title: 'Date format',
+    title: localizations.dateFormat,
     options: dateFormatRadioTiles,
   );
 
