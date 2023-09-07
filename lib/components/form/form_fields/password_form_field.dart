@@ -29,6 +29,9 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
         border: const UnderlineInputBorder(),
         label: Text(localizations.password),
         hintText: localizations.minCharacters(minPasswordCharacters),
+        hintStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText

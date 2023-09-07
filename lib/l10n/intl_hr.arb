@@ -1,17 +1,17 @@
 {
-  "@@last_modified": "2023-09-06T19:55:00.212470",
+  "@@last_modified": "2023-09-06T20:58:12.727284",
   "Wherewithal": "Wherewithal",
   "@Wherewithal": {
     "description": "App name (not to be translated in latin alphabets)",
     "type": "text",
     "placeholders": {}
   },
-  "Personal finance tracker": "Praćenje osobnih financija",
+  "Personal finance tracker": "Personal finance tracker",
   "@Personal finance tracker": {
     "type": "text",
     "placeholders": {}
   },
-  "Language": "Jezik",
+  "Language": "Language",
   "@Language": {
     "type": "text",
     "placeholders": {}
@@ -91,8 +91,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "Don't see the email? Check your spam folder.": "Don't see the email? Check your spam folder.",
-  "@Don't see the email? Check your spam folder.": {
+  "Don't see the email? Check your spam folder": "Don't see the email? Check your spam folder",
+  "@Don't see the email? Check your spam folder": {
     "type": "text",
     "placeholders": {}
   },
@@ -221,8 +221,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "Follow the instructions in the verification email or click on the resend button.": "Follow the instructions in the verification email or click on the resend button.",
-  "@Follow the instructions in the verification email or click on the resend button.": {
+  "Follow the instructions in the verification email or click on the resend button": "Follow the instructions in the verification email or click on the resend button",
+  "@Follow the instructions in the verification email or click on the resend button": {
     "type": "text",
     "placeholders": {}
   },
@@ -241,18 +241,23 @@
     "type": "text",
     "placeholders": {}
   },
-  "Please try again later.": "Please try again later.",
-  "@Please try again later.": {
+  "Please try again later": "Please try again later",
+  "@Please try again later": {
     "type": "text",
     "placeholders": {}
   },
-  "Email is required.": "Email is required.",
-  "@Email is required.": {
+  "Email is required": "Email is required",
+  "@Email is required": {
     "type": "text",
     "placeholders": {}
   },
-  "Password is required.": "Password is required.",
-  "@Password is required.": {
+  "Email format is incorrect": "Email format is incorrect",
+  "@Email format is incorrect": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Password is required": "Password is required",
+  "@Password is required": {
     "type": "text",
     "placeholders": {}
   },
@@ -266,28 +271,28 @@
     "type": "text",
     "placeholders": {}
   },
-  "You're not signed in.": "You're not signed in.",
-  "@You're not signed in.": {
+  "You're not signed in": "You're not signed in",
+  "@You're not signed in": {
     "type": "text",
     "placeholders": {}
   },
-  "Email address is not valid.": "Email address is not valid.",
-  "@Email address is not valid.": {
+  "Email address is not valid": "Email address is not valid",
+  "@Email address is not valid": {
     "type": "text",
     "placeholders": {}
   },
-  "Account associated with the given email has been disabled.": "Account associated with the given email has been disabled.",
-  "@Account associated with the given email has been disabled.": {
+  "Account associated with the given email has been disabled": "Account associated with the given email has been disabled",
+  "@Account associated with the given email has been disabled": {
     "type": "text",
     "placeholders": {}
   },
-  "There is no account associated with the given email.": "There is no account associated with the given email.",
-  "@There is no account associated with the given email.": {
+  "There is no account associated with the given email": "There is no account associated with the given email",
+  "@There is no account associated with the given email": {
     "type": "text",
     "placeholders": {}
   },
-  "The password is invalid.": "The password is invalid.",
-  "@The password is invalid.": {
+  "The password is invalid": "The password is invalid",
+  "@The password is invalid": {
     "type": "text",
     "placeholders": {}
   },
@@ -296,13 +301,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "An account with the given email address already exists.": "An account with the given email address already exists.",
-  "@An account with the given email address already exists.": {
+  "An account with the given email address already exists": "An account with the given email address already exists",
+  "@An account with the given email address already exists": {
     "type": "text",
     "placeholders": {}
   },
-  "The credential is malformed or has expired.": "The credential is malformed or has expired.",
-  "@The credential is malformed or has expired.": {
+  "The credential is malformed or has expired": "The credential is malformed or has expired",
+  "@The credential is malformed or has expired": {
     "type": "text",
     "placeholders": {}
   },
@@ -311,13 +316,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "The credential given does not correspond to the user.": "The credential given does not correspond to the user.",
-  "@The credential given does not correspond to the user.": {
+  "The credential given does not correspond to the user": "The credential given does not correspond to the user",
+  "@The credential given does not correspond to the user": {
     "type": "text",
     "placeholders": {}
   },
-  "The authentication provider is already linked to the account.": "The authentication provider is already linked to the account.",
-  "@The authentication provider is already linked to the account.": {
+  "The authentication provider is already linked to the account": "The authentication provider is already linked to the account",
+  "@The authentication provider is already linked to the account": {
     "type": "text",
     "placeholders": {}
   },
@@ -326,33 +331,33 @@
     "type": "text",
     "placeholders": {}
   },
-  "You must reauthenticate to continue.": "You must reauthenticate to continue.",
-  "@You must reauthenticate to continue.": {
+  "You must reauthenticate to continue": "You must reauthenticate to continue",
+  "@You must reauthenticate to continue": {
     "type": "text",
     "placeholders": {}
   },
-  "You've made too many requests in a short amount of time.": "You've made too many requests in a short amount of time.",
-  "@You've made too many requests in a short amount of time.": {
+  "You've made too many requests in a short amount of time": "You've made too many requests in a short amount of time",
+  "@You've made too many requests in a short amount of time": {
     "type": "text",
     "placeholders": {}
   },
-  "Updated your information.": "Updated your information.",
-  "@Updated your information.": {
+  "Updated your information": "Updated your information",
+  "@Updated your information": {
     "type": "text",
     "placeholders": {}
   },
-  "Changed password.": "Changed password.",
-  "@Changed password.": {
+  "Changed password": "Changed password",
+  "@Changed password": {
     "type": "text",
     "placeholders": {}
   },
-  "Deleted account.": "Deleted account.",
-  "@Deleted account.": {
+  "Deleted account": "Deleted account",
+  "@Deleted account": {
     "type": "text",
     "placeholders": {}
   },
-  "Successfully reloaded user.": "Successfully reloaded user.",
-  "@Successfully reloaded user.": {
+  "Successfully reloaded user": "Successfully reloaded user",
+  "@Successfully reloaded user": {
     "type": "text",
     "placeholders": {}
   },
@@ -386,18 +391,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "Could not send verification email because email is already verified.": "Could not send verification email because email is already verified.",
-  "@Could not send verification email because email is already verified.": {
+  "Could not send verification email because email is already verified": "Could not send verification email because email is already verified",
+  "@Could not send verification email because email is already verified": {
     "type": "text",
     "placeholders": {}
   },
-  "A verification email has been sent.": "A verification email has been sent.",
-  "@A verification email has been sent.": {
+  "A verification email has been sent": "A verification email has been sent",
+  "@A verification email has been sent": {
     "type": "text",
     "placeholders": {}
   },
-  "Click on the link in the email to verify your email address.": "Click on the link in the email to verify your email address.",
-  "@Click on the link in the email to verify your email address.": {
+  "Click on the link in the email to verify your email address": "Click on the link in the email to verify your email address",
+  "@Click on the link in the email to verify your email address": {
     "type": "text",
     "placeholders": {}
   },
@@ -416,18 +421,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "Sign in process was aborted.": "Sign in process was aborted.",
-  "@Sign in process was aborted.": {
+  "Sign in process was aborted": "Sign in process was aborted",
+  "@Sign in process was aborted": {
     "type": "text",
     "placeholders": {}
   },
-  "Account with the given email isn't configured to sign in with google.": "Account with the given email isn't configured to sign in with google.",
-  "@Account with the given email isn't configured to sign in with google.": {
+  "Account with the given email isn't configured to sign in with google": "Account with the given email isn't configured to sign in with google",
+  "@Account with the given email isn't configured to sign in with google": {
     "type": "text",
     "placeholders": {}
   },
-  "Account could not be found.": "Account could not be found.",
-  "@Account could not be found.": {
+  "Account could not be found": "Account could not be found",
+  "@Account could not be found": {
     "type": "text",
     "placeholders": {}
   },
@@ -441,8 +446,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "There are no configured auth providers for account.": "There are no configured auth providers for account.",
-  "@There are no configured auth providers for account.": {
+  "There are no configured auth providers for account": "There are no configured auth providers for account",
+  "@There are no configured auth providers for account": {
     "type": "text",
     "placeholders": {}
   },
@@ -468,21 +473,21 @@
       "methods": {}
     }
   },
-  "weakPasswordErrorMsg": "The password must contain at least {minCharacters} characters.",
+  "weakPasswordErrorMsg": "The password must contain at least {minCharacters} characters",
   "@weakPasswordErrorMsg": {
     "type": "text",
     "placeholders": {
       "minCharacters": {}
     }
   },
-  "passwordCharactersRestrictionMsg": "The password must contain at least {min} characters.",
+  "passwordCharactersRestrictionMsg": "The password must contain at least {min} characters",
   "@passwordCharactersRestrictionMsg": {
     "type": "text",
     "placeholders": {
       "min": {}
     }
   },
-  "minCharacters": "Minimum {howMany} characters.",
+  "minCharacters": "Minimum {howMany} characters",
   "@minCharacters": {
     "type": "text",
     "placeholders": {

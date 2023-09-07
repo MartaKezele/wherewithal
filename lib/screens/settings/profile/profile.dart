@@ -33,9 +33,18 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
   final _emailController = TextEditingController(
     text: AuthChangeNotifier.instance.email ?? '',
   );
+  late final ValueNotifier<String> _nameValueNotifier;
 
+  bool _nameFieldDirty = false;
   bool _savingChanges = false;
   OverlayEntry? _resultBanner;
+
+  void _nameFieldListener() {
+    if (!_nameFieldDirty) {
+      _nameFieldDirty = !_nameFieldDirty;
+    }
+    _nameValueNotifier.value = _displayNameController.text;
+  }
 
   Future<void> _saveChanges() async {
     setState(() {
@@ -50,6 +59,13 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
         _savingChanges = false;
       });
     });
+  }
+
+  @override
+  void initState() {
+    _displayNameController.addListener(_nameFieldListener);
+    _nameValueNotifier = ValueNotifier<String>(_displayNameController.text);
+    super.initState();
   }
 
   @override
@@ -70,9 +86,8 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
       (AuthChangeNotifier changeNotifier) => changeNotifier.authProviders,
     );
 
-    _displayNameController.text = _displayNameController.text.isNotEmpty
-        ? _displayNameController.text
-        : displayName ?? '';
+    _displayNameController.text =
+        _nameFieldDirty ? _displayNameController.text : displayName ?? '';
 
     return Screen(
       appBar: AppBar(),
@@ -93,21 +108,29 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
                     label: Text(localizations.name),
                   ),
                 ),
-                FilledButton(
-                  onPressed: () => executeFnIfFormValid(
-                    formKey: _formKey,
-                    fn: _saveChanges,
-                  ),
-                  child: Text(localizations.save),
-                )
-                    .addColorStyle(
-                      FilledButtonStyles.primary,
+                ValueListenableBuilder(
+                  valueListenable: _nameValueNotifier,
+                  builder: (context, name, _) {
+                    return FilledButton(
+                      onPressed: name == displayName ||
+                              (name == '' && displayName == null)
+                          ? null
+                          : () => executeFnIfFormValid(
+                                formKey: _formKey,
+                                fn: _saveChanges,
+                              ),
+                      child: Text(localizations.save),
                     )
-                    .loadingBtn(
-                      constructor: FilledButton.new,
-                      isLoading: _savingChanges,
-                      colorStyle: FilledButtonStyles.primary,
-                    ),
+                        .addColorStyle(
+                          FilledButtonStyles.primary,
+                        )
+                        .loadingBtn(
+                          constructor: FilledButton.new,
+                          isLoading: _savingChanges,
+                          colorStyle: FilledButtonStyles.primary,
+                        );
+                  },
+                ),
               ],
             ),
             HeightSpacer.xxl,

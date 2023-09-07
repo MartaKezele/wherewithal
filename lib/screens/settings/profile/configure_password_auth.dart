@@ -11,6 +11,7 @@ import '../../../dal/repo_factory.dart';
 import '../../../app_models/action_result.dart';
 import '../../../utils/app_localizations.dart';
 import '../../../utils/form.dart';
+import '../../../utils/form_field_validators.dart';
 import '../../../utils/overlay_banner.dart';
 import '../../../extensions/build_context.dart';
 import '../../../extensions/button/filled_button.dart';
@@ -26,9 +27,14 @@ class ConfigurePasswordAuth extends StatefulWidget {
 class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
+  late final ValueNotifier<String> _passwordValueNotifier;
 
   bool _linkingAuth = false;
   OverlayEntry? _resultBanner;
+
+  void _passwordListener() {
+    _passwordValueNotifier.value = _passwordController.text;
+  }
 
   Future<void> _linkPasswordAuth() async {
     final authChangeNotifier = GetIt.I<AuthChangeNotifier>();
@@ -70,6 +76,13 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
   }
 
   @override
+  void initState() {
+    _passwordController.addListener(_passwordListener);
+    _passwordValueNotifier = ValueNotifier<String>(_passwordController.text);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _passwordController.dispose();
     hideOverlayBanner(_resultBanner);
@@ -96,21 +109,28 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
               PasswordFormField(
                 controller: _passwordController,
               ),
-              FilledButton(
-                onPressed: () => executeFnIfFormValid(
-                  formKey: _formKey,
-                  fn: _linkPasswordAuth,
-                ),
-                child: Text(localizations.confirm),
-              )
-                  .addColorStyle(
-                    FilledButtonStyles.primary,
+              ValueListenableBuilder(
+                valueListenable: _passwordValueNotifier,
+                builder: (context, password, _) {
+                  return FilledButton(
+                    onPressed: !passwordValid(password).success
+                        ? null
+                        : () => executeFnIfFormValid(
+                              formKey: _formKey,
+                              fn: _linkPasswordAuth,
+                            ),
+                    child: Text(localizations.confirm),
                   )
-                  .loadingBtn(
-                    constructor: FilledButton.new,
-                    isLoading: _linkingAuth,
-                    colorStyle: FilledButtonStyles.primary,
-                  ),
+                      .addColorStyle(
+                        FilledButtonStyles.primary,
+                      )
+                      .loadingBtn(
+                        constructor: FilledButton.new,
+                        isLoading: _linkingAuth,
+                        colorStyle: FilledButtonStyles.primary,
+                      );
+                },
+              ),
             ],
           ),
         ],

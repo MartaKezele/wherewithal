@@ -29,7 +29,7 @@ class Welcome extends StatelessWidget {
       ),
       description: Text(
         localizations.appPossibilitiesDescription,
-        style: Theme.of(context).textTheme.bodyMedium,
+        style: Theme.of(context).textTheme.titleMedium,
       ),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

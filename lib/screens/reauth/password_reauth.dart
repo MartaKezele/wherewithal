@@ -13,6 +13,7 @@ import '../../dal/repo_factory.dart';
 import '../../app_models/action_result.dart';
 import '../../utils/app_localizations.dart';
 import '../../utils/form.dart';
+import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/button_style_button.dart';
@@ -32,9 +33,14 @@ class PasswordReauth extends StatefulWidget {
 class _PasswordReauthState extends State<PasswordReauth> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
+  late final ValueNotifier<String> _passwordValueNotifier;
 
   bool _reauthenticating = false;
   OverlayEntry? _resultBanner;
+
+  void _passwordListener() {
+    _passwordValueNotifier.value = _passwordController.text;
+  }
 
   Future<void> _reauthenticate() async {
     final authChangeNotifier = GetIt.I<AuthChangeNotifier>();
@@ -86,6 +92,13 @@ class _PasswordReauthState extends State<PasswordReauth> {
   }
 
   @override
+  void initState() {
+    _passwordController.addListener(_passwordListener);
+    _passwordValueNotifier = ValueNotifier<String>(_passwordController.text);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _passwordController.dispose();
     hideOverlayBanner(_resultBanner);
@@ -113,21 +126,28 @@ class _PasswordReauthState extends State<PasswordReauth> {
               PasswordFormField(
                 controller: _passwordController,
               ),
-              FilledButton(
-                onPressed: () => executeFnIfFormValid(
-                  formKey: _formKey,
-                  fn: _reauthenticate,
-                ),
-                child: Text(localizations.confirm),
-              )
-                  .addColorStyle(
-                    FilledButtonStyles.primary,
+              ValueListenableBuilder(
+                valueListenable: _passwordValueNotifier,
+                builder: (context, password, _) {
+                  return FilledButton(
+                    onPressed: !passwordValid(password).success
+                        ? null
+                        : () => executeFnIfFormValid(
+                              formKey: _formKey,
+                              fn: _reauthenticate,
+                            ),
+                    child: Text(localizations.confirm),
                   )
-                  .loadingBtn(
-                    constructor: FilledButton.new,
-                    isLoading: _reauthenticating,
-                    colorStyle: FilledButtonStyles.primary,
-                  ),
+                      .addColorStyle(
+                        FilledButtonStyles.primary,
+                      )
+                      .loadingBtn(
+                        constructor: FilledButton.new,
+                        isLoading: _reauthenticating,
+                        colorStyle: FilledButtonStyles.primary,
+                      );
+                },
+              ),
             ],
           ),
         ],

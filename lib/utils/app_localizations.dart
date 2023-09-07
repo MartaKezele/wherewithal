@@ -163,7 +163,7 @@ class AppLocalizations {
 
   String get dontSeeEmailMsg {
     return Intl.message(
-      'Don\'t see the email? Check your spam folder.',
+      'Don\'t see the email? Check your spam folder',
       locale: localeName,
     );
   }
@@ -345,7 +345,7 @@ class AppLocalizations {
 
   String get verificationScreenInstructions {
     return Intl.message(
-      'Follow the instructions in the verification email or click on the resend button.',
+      'Follow the instructions in the verification email or click on the resend button',
       locale: localeName,
     );
   }
@@ -373,21 +373,28 @@ class AppLocalizations {
 
   String get tryAgainLater {
     return Intl.message(
-      'Please try again later.',
+      'Please try again later',
       locale: localeName,
     );
   }
 
   String get emailIsRequired {
     return Intl.message(
-      'Email is required.',
+      'Email is required',
+      locale: localeName,
+    );
+  }
+
+  String get emailFormatIncorrect {
+    return Intl.message(
+      'Email format is incorrect',
       locale: localeName,
     );
   }
 
   String get passwordIsRequired {
     return Intl.message(
-      'Password is required.',
+      'Password is required',
       locale: localeName,
     );
   }
@@ -408,35 +415,35 @@ class AppLocalizations {
 
   String get notSignedIn {
     return Intl.message(
-      'You\'re not signed in.',
+      'You\'re not signed in',
       locale: localeName,
     );
   }
 
   String get invalidEmailErrorMsg {
     return Intl.message(
-      'Email address is not valid.',
+      'Email address is not valid',
       locale: localeName,
     );
   }
 
   String get userDisabledErrorMsg {
     return Intl.message(
-      'Account associated with the given email has been disabled.',
+      'Account associated with the given email has been disabled',
       locale: localeName,
     );
   }
 
   String get userNotFoundErrorMsg {
     return Intl.message(
-      'There is no account associated with the given email.',
+      'There is no account associated with the given email',
       locale: localeName,
     );
   }
 
   String get wrondPasswordErrorMsg {
     return Intl.message(
-      'The password is invalid.',
+      'The password is invalid',
       locale: localeName,
     );
   }
@@ -450,14 +457,14 @@ class AppLocalizations {
 
   String get emailAlreadyInUseErrorMsg {
     return Intl.message(
-      'An account with the given email address already exists.',
+      'An account with the given email address already exists',
       locale: localeName,
     );
   }
 
   String get invalidCredentialErrorMsg {
     return Intl.message(
-      'The credential is malformed or has expired.',
+      'The credential is malformed or has expired',
       locale: localeName,
     );
   }
@@ -471,14 +478,14 @@ class AppLocalizations {
 
   String get userMismatchErrorMsg {
     return Intl.message(
-      'The credential given does not correspond to the user.',
+      'The credential given does not correspond to the user',
       locale: localeName,
     );
   }
 
   String get providerAlreadyLinkedErrorMsg {
     return Intl.message(
-      'The authentication provider is already linked to the account.',
+      'The authentication provider is already linked to the account',
       locale: localeName,
     );
   }
@@ -492,49 +499,49 @@ class AppLocalizations {
 
   String get invalidPasswordErrorMsg {
     return Intl.message(
-      'The password is invalid.',
+      'The password is invalid',
       locale: localeName,
     );
   }
 
   String get requiresRecentLoginErrorMsg {
     return Intl.message(
-      'You must reauthenticate to continue.',
+      'You must reauthenticate to continue',
       locale: localeName,
     );
   }
 
   String get tooManyRequestsErrorMsg {
     return Intl.message(
-      'You\'ve made too many requests in a short amount of time.',
+      'You\'ve made too many requests in a short amount of time',
       locale: localeName,
     );
   }
 
   String get updatedYourInfo {
     return Intl.message(
-      'Updated your information.',
+      'Updated your information',
       locale: localeName,
     );
   }
 
   String get changedPassword {
     return Intl.message(
-      'Changed password.',
+      'Changed password',
       locale: localeName,
     );
   }
 
   String get deletedAccount {
     return Intl.message(
-      'Deleted account.',
+      'Deleted account',
       locale: localeName,
     );
   }
 
   String get reloadedUser {
     return Intl.message(
-      'Successfully reloaded user.',
+      'Successfully reloaded user',
       locale: localeName,
     );
   }
@@ -583,21 +590,21 @@ class AppLocalizations {
 
   String get sendingVerificationEmailEmailAlreadyVerified {
     return Intl.message(
-      'Could not send verification email because email is already verified.',
+      'Could not send verification email because email is already verified',
       locale: localeName,
     );
   }
 
   String get verificationEmailSent {
     return Intl.message(
-      'A verification email has been sent.',
+      'A verification email has been sent',
       locale: localeName,
     );
   }
 
   String get verifyEmailInstructions {
     return Intl.message(
-      'Click on the link in the email to verify your email address.',
+      'Click on the link in the email to verify your email address',
       locale: localeName,
     );
   }
@@ -625,21 +632,21 @@ class AppLocalizations {
 
   String get signInProcessAborted {
     return Intl.message(
-      'Sign in process was aborted.',
+      'Sign in process was aborted',
       locale: localeName,
     );
   }
 
   String get accountIsntConfiguredWithGoogle {
     return Intl.message(
-      'Account with the given email isn\'t configured to sign in with google.',
+      'Account with the given email isn\'t configured to sign in with google',
       locale: localeName,
     );
   }
 
   String get accountNotFound {
     return Intl.message(
-      'Account could not be found.',
+      'Account could not be found',
       locale: localeName,
     );
   }
@@ -660,7 +667,7 @@ class AppLocalizations {
 
   String get noConfiguredAuthProviders {
     return Intl.message(
-      'There are no configured auth providers for account.',
+      'There are no configured auth providers for account',
       locale: localeName,
     );
   }
@@ -697,7 +704,7 @@ class AppLocalizations {
 
   String weakPasswordErrorMsg(int minCharacters) {
     return Intl.message(
-      'The password must contain at least $minCharacters characters.',
+      'The password must contain at least $minCharacters characters',
       locale: localeName,
       name: 'weakPasswordErrorMsg',
       args: [minCharacters],
@@ -706,7 +713,7 @@ class AppLocalizations {
 
   String passwordCharactersRestrictionMsg(int min) {
     return Intl.message(
-      'The password must contain at least $min characters.',
+      'The password must contain at least $min characters',
       locale: localeName,
       name: 'passwordCharactersRestrictionMsg',
       args: [min],
@@ -715,7 +722,7 @@ class AppLocalizations {
 
   String minCharacters(int howMany) {
     return Intl.message(
-      'Minimum $howMany characters.',
+      'Minimum $howMany characters',
       locale: localeName,
       name: 'minCharacters',
       args: [howMany],

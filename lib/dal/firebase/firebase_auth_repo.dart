@@ -199,8 +199,6 @@ class FirebaseAuthRepo implements AuthRepo {
 
     try {
       final googleSignIn = GoogleSignIn();
-
-      await googleSignIn.signOut();
       googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {

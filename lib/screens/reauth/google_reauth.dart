@@ -93,12 +93,14 @@ class _GoogleReauthState extends State<GoogleReauth> {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text(
-                _reauthenticating
-                    ? localizations.reauthenticatingWithGoogle
-                    : localizations.reauthenticateWithGoogle,
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.start,
+              Flexible(
+                child: Text(
+                  _reauthenticating
+                      ? localizations.reauthenticatingWithGoogle
+                      : localizations.reauthenticateWithGoogle,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.start,
+                ),
               ),
             ],
           ),
