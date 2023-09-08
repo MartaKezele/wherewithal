@@ -59,7 +59,7 @@ class _SocialAuthState extends State<SocialAuth> {
             child: Text(localizations.continueWithGoogle),
           )
               .addColorStyle(OutlinedButtonStyles.inverseSurface)
-              .addBigStyle(constructor: OutlinedButton.new)
+              .addBigHeight(constructor: OutlinedButton.new)
               .loadingBtn(
                 constructor: OutlinedButton.new,
                 isLoading: _loading,

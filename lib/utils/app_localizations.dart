@@ -693,6 +693,62 @@ class AppLocalizations {
     );
   }
 
+  String get insights {
+    return Intl.message(
+      'Insights',
+      locale: localeName,
+    );
+  }
+
+  String get recurringTransactions {
+    return Intl.message(
+      'Recurring transactions',
+      locale: localeName,
+    );
+  }
+
+  String get categories {
+    return Intl.message(
+      'Categories',
+      locale: localeName,
+    );
+  }
+
+  String get budget {
+    return Intl.message(
+      'Budget',
+      locale: localeName,
+    );
+  }
+
+  String get add {
+    return Intl.message(
+      'Add',
+      locale: localeName,
+    );
+  }
+
+  String get expense {
+    return Intl.message(
+      'Expense',
+      locale: localeName,
+    );
+  }
+
+  String get income {
+    return Intl.message(
+      'Income',
+      locale: localeName,
+    );
+  }
+
+  String get category {
+    return Intl.message(
+      'Category',
+      locale: localeName,
+    );
+  }
+
   String signInUsingMethods(String methods) {
     return Intl.message(
       'Sign in using one of the following methods: $methods. Once signed in you can configure sign in with google account in the profile section.',

@@ -138,7 +138,7 @@ class _SignInState extends State<SignIn> {
                           child: Text(localizations.signIn),
                         )
                             .addColorStyle(FilledButtonStyles.primary)
-                            .addBigStyle(constructor: FilledButton.new)
+                            .addBigHeight(constructor: FilledButton.new)
                             .loadingBtn(
                               constructor: FilledButton.new,
                               colorStyle: FilledButtonStyles.primary,

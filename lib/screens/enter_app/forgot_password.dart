@@ -104,7 +104,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             ),
                     child: Text(localizations.send),
                   )
-                      .addMediumStyle(
+                      .addMediumHeight(
                         constructor: FilledButton.new,
                       )
                       .loadingBtn(
@@ -120,7 +120,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           TextButton(
             onPressed: () => context.pop(),
             child: Text(localizations.goBack),
-          ).addMediumStyle(
+          ).addMediumHeight(
             constructor: TextButton.new,
           ),
         ],

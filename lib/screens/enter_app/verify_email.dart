@@ -146,7 +146,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
             child: Text(localizations.continueMsg),
           )
               .addColorStyle(FilledButtonStyles.primary)
-              .addBigStyle(constructor: FilledButton.new)
+              .addBigHeight(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _reloadingUser,
@@ -158,7 +158,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
             child: Text(localizations.resendVerificationEmail),
           )
               .addColorStyle(FilledButtonStyles.secondary)
-              .addBigStyle(constructor: FilledButton.new)
+              .addBigHeight(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _resendingVerificationEmail,
@@ -170,7 +170,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
             child: Text(localizations.cancel),
           )
               .addColorStyle(OutlinedButtonStyles.inverseSurface)
-              .addBigStyle(constructor: FilledButton.new)
+              .addBigHeight(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: OutlinedButton.new,
                 isLoading: _signingOut,

@@ -99,7 +99,9 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
             leading: const Icon(Icons.notifications_active_outlined),
             title: Text(localizations.notifications),
             trailing: const Icon(Icons.chevron_right_rounded),
-            onTap: () => print('notifications'),
+            onTap: () {
+              // TODO implement notifications screen
+            },
           ),
           ListTile(
             leading: const Icon(Icons.info_outline_rounded),

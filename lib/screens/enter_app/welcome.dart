@@ -41,7 +41,7 @@ class Welcome extends StatelessWidget {
               child: Text(localizations.signIn),
             )
                 .addColorStyle(FilledButtonStyles.primary)
-                .addBigStyle(constructor: FilledButton.new),
+                .addBigHeight(constructor: FilledButton.new),
           ),
           HeightSpacer.xs,
           Hero(
@@ -51,7 +51,7 @@ class Welcome extends StatelessWidget {
               child: Text(localizations.createAccount),
             )
                 .addColorStyle(FilledButtonStyles.secondary)
-                .addBigStyle(constructor: FilledButton.new),
+                .addBigHeight(constructor: FilledButton.new),
           ),
           HeightSpacer.xs,
           const SocialAuth(),

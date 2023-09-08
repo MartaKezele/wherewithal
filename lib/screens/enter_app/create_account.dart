@@ -127,7 +127,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           child: Text(localizations.createAccount),
                         )
                             .addColorStyle(FilledButtonStyles.secondary)
-                            .addBigStyle(constructor: FilledButton.new)
+                            .addBigHeight(constructor: FilledButton.new)
                             .loadingBtn(
                               constructor: FilledButton.new,
                               colorStyle: FilledButtonStyles.secondary,
