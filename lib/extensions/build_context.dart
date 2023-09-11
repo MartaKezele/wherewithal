@@ -22,6 +22,12 @@ extension Navigation on BuildContext {
     );
   }
 
+  Future<T?> pushNotifications<T extends Object?>() async {
+    return await pushNamed<T>(
+      NamedChildRoutes.notifications.nonNullableName,
+    );
+  }
+
   Future<T?> pushSettings<T extends Object?>() async {
     return await pushNamed<T>(
       NamedChildRoutes.settings.nonNullableName,

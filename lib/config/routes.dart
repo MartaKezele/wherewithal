@@ -13,6 +13,7 @@ import '../screens/error_screen.dart';
 import '../screens/home.dart';
 import '../screens/reauth/google_reauth.dart';
 import '../screens/reauth/password_reauth.dart';
+import '../screens/settings/notifications.dart';
 import '../screens/settings/profile/change_password.dart';
 import '../screens/settings/profile/configure_google_auth.dart';
 import '../screens/settings/profile/configure_password_auth.dart';
@@ -128,6 +129,7 @@ class NamedChildRoutes {
     builder: (context, state) => Settings(),
     routes: [
       profile,
+      notifications,
     ],
   );
 
@@ -141,6 +143,12 @@ class NamedChildRoutes {
       configureGoogleAuth,
       deleteAccount,
     ],
+  );
+
+  static final notifications = NamedGoRoute(
+    nonNullableName: 'notifications',
+    path: 'notifications',
+    builder: (context, state) => const Notifications(),
   );
 
   static final changePassword = NamedGoRoute(
