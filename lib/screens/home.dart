@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../app_models/bottom_nav_item.dart';
 import '../components/add_bottom_sheet.dart';
 import '../config/bottom_nav.dart';
 import '../extensions/build_context.dart';
-import '../utils/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 import '../constants/themes/container.dart';
 
 class Home extends StatefulWidget {
@@ -15,8 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   int _bottomNavIndex = 0;
-
-  final _bottomNav = bottomNav();
+  late List<BottomNavItem> _bottomNav;
   late String _appBarTitle;
 
   void onFabPressed() {
@@ -37,6 +37,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   didChangeDependencies() {
     WidgetsBinding.instance.addObserver(this);
+    _bottomNav = bottomNav();
     _appBarTitle = _bottomNav[_bottomNavIndex].label;
     super.didChangeDependencies();
   }

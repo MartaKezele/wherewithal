@@ -8,7 +8,7 @@ class Notifications extends StatelessWidget {
   Widget build(BuildContext context) {
     return Screen(
       appBar: AppBar(),
-      child: const Placeholder(
+      body: const Placeholder(
         child: Text('Notifications'),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../utils/form_field_validators.dart';
 
 class EmailFormField extends StatefulWidget {

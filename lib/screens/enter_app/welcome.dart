@@ -8,7 +8,7 @@ import '../../constants/styles/filled_button.dart';
 import '../../extensions/build_context.dart';
 import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/button_style_button.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({super.key});
@@ -40,8 +40,8 @@ class Welcome extends StatelessWidget {
               onPressed: () => context.goToSignIn(),
               child: Text(localizations.signIn),
             )
-                .addColorStyle(FilledButtonStyles.primary)
-                .addBigHeight(constructor: FilledButton.new),
+                .colorStyle(FilledButtonStyles.enterAppPrimary)
+                .bigHeight(constructor: FilledButton.new),
           ),
           HeightSpacer.xs,
           Hero(
@@ -50,8 +50,8 @@ class Welcome extends StatelessWidget {
               onPressed: () => context.goToCreateAccount(),
               child: Text(localizations.createAccount),
             )
-                .addColorStyle(FilledButtonStyles.secondary)
-                .addBigHeight(constructor: FilledButton.new),
+                .colorStyle(FilledButtonStyles.enterAppSecondary)
+                .bigHeight(constructor: FilledButton.new),
           ),
           HeightSpacer.xs,
           const SocialAuth(),

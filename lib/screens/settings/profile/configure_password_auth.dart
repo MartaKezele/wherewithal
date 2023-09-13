@@ -9,7 +9,7 @@ import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
 import '../../../app_models/action_result.dart';
-import '../../../utils/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../utils/form_field_validators.dart';
 import '../../../utils/overlay_banner.dart';
@@ -95,7 +95,7 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
 
     return Screen(
       appBar: AppBar(),
-      child: Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -121,13 +121,13 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
                             ),
                     child: Text(localizations.confirm),
                   )
-                      .addColorStyle(
-                        FilledButtonStyles.primary,
+                      .colorStyle(
+                        FilledButtonStyles.primaryContainer,
                       )
                       .loadingBtn(
                         constructor: FilledButton.new,
                         isLoading: _linkingAuth,
-                        colorStyle: FilledButtonStyles.primary,
+                        colorStyle: FilledButtonStyles.primaryContainer,
                       );
                 },
               ),

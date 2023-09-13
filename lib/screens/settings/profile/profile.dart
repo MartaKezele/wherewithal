@@ -11,7 +11,7 @@ import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../constants/styles/outlined_button.dart';
 import '../../../dal/repo_factory.dart';
-import '../../../utils/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../extensions/build_context.dart';
 import '../../../utils/overlay_banner.dart';
@@ -91,7 +91,7 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
 
     return Screen(
       appBar: AppBar(),
-      child: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -121,13 +121,13 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
                               ),
                       child: Text(localizations.save),
                     )
-                        .addColorStyle(
-                          FilledButtonStyles.primary,
+                        .colorStyle(
+                          FilledButtonStyles.primaryContainer,
                         )
                         .loadingBtn(
                           constructor: FilledButton.new,
                           isLoading: _savingChanges,
-                          colorStyle: FilledButtonStyles.primary,
+                          colorStyle: FilledButtonStyles.primaryContainer,
                         );
                   },
                 ),
@@ -146,7 +146,7 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
                   OutlinedButton(
                     onPressed: () => context.pushConfigureGoogleAuth(),
                     child: Text(localizations.configure),
-                  ).addColorStyle(OutlinedButtonStyles.primary)
+                  ).colorStyle(OutlinedButtonStyles.primary)
               ],
             ),
             AuthProviderCard(
@@ -156,19 +156,19 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
                   OutlinedButton(
                     onPressed: () => context.pushConfigurePasswordAuth(),
                     child: Text(localizations.configure),
-                  ).addColorStyle(OutlinedButtonStyles.primary),
+                  ).colorStyle(OutlinedButtonStyles.primary),
                 if (authProviders.contains(AuthProvider.password))
                   OutlinedButton(
                     onPressed: () => context.pushChangePassword(),
                     child: Text(localizations.changePassword),
-                  ).addColorStyle(OutlinedButtonStyles.primary),
+                  ).colorStyle(OutlinedButtonStyles.primary),
               ],
             ),
             HeightSpacer.md,
             FilledButton(
               onPressed: () => context.pushDeleteAccount(),
               child: Text(localizations.deleteAccount),
-            ).addColorStyle(
+            ).colorStyle(
               FilledButtonStyles.error,
             ),
           ],

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../config/password.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 ActionResult handleFirebaseAuthException(FirebaseAuthException e) {
   String messageTitle;

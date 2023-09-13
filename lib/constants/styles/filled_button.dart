@@ -7,7 +7,7 @@ import '../../utils/style.dart';
 import 'opacity.dart';
 
 class FilledButtonStyles {
-  static final _darkPrimary = ColorStyle(
+  static final _darkPrimaryContainer = ColorStyle(
     foregroundColor: darkColorScheme.onPrimaryContainer,
     disabledForegroundColor: darkColorScheme.onPrimaryContainer
         .withOpacity(disabledForegroundOpacity),
@@ -18,7 +18,17 @@ class FilledButtonStyles {
         darkColorScheme.onPrimaryContainer.withOpacity(overlayOpacity),
   );
 
-  static final _darkSecondary = ColorStyle(
+  static final _darkPrimary = ColorStyle(
+    foregroundColor: darkColorScheme.primary,
+    disabledForegroundColor:
+        darkColorScheme.primary.withOpacity(disabledForegroundOpacity),
+    backgroundColor: darkColorScheme.onPrimary,
+    disabledBackgroundColor:
+        darkColorScheme.onPrimary.withOpacity(darkDisabledBackgroundOpacity2),
+    overlayColor: darkColorScheme.primary.withOpacity(overlayOpacity),
+  );
+
+  static final _darkSecondaryContainer = ColorStyle(
     foregroundColor: darkColorScheme.onSecondaryContainer,
     disabledForegroundColor: darkColorScheme.onSecondaryContainer
         .withOpacity(disabledForegroundOpacity),
@@ -29,15 +39,26 @@ class FilledButtonStyles {
         darkColorScheme.onSecondaryContainer.withOpacity(overlayOpacity),
   );
 
-  static final _darkInverseSurface = ColorStyle(
-    foregroundColor: darkColorScheme.onInverseSurface,
-    disabledForegroundColor: darkColorScheme.onInverseSurface
-        .withOpacity(inverseSurfaceDisabledForegroundOpacity),
-    backgroundColor: darkColorScheme.inverseSurface,
+  static final _darkSecondary = ColorStyle(
+    foregroundColor: darkColorScheme.secondary,
+    disabledForegroundColor:
+        darkColorScheme.secondary.withOpacity(disabledForegroundOpacity),
+    backgroundColor: darkColorScheme.onSecondary,
     disabledBackgroundColor:
-        darkColorScheme.inverseSurface.withOpacity(disabledBackgroundOpacity),
-    overlayColor: Colors.white.withOpacity(inverseSurfaceOverlayOpacity),
+        darkColorScheme.onSecondary.withOpacity(darkDisabledBackgroundOpacity2),
+    overlayColor: darkColorScheme.secondary.withOpacity(overlayOpacity),
   );
+
+  static final _darkInverseSurface = ColorStyle(
+    foregroundColor: darkColorScheme.inverseSurface,
+    disabledForegroundColor: darkColorScheme.inverseSurface
+        .withOpacity(inverseSurfaceDisabledForegroundOpacity),
+    backgroundColor: darkColorScheme.onInverseSurface,
+    disabledBackgroundColor:
+        darkColorScheme.onInverseSurface.withOpacity(disabledBackgroundOpacity),
+    overlayColor: darkColorScheme.inverseSurface.withOpacity(overlayOpacity),
+  );
+
   static final _darkSurface = ColorStyle(
     foregroundColor: darkColorScheme.onSurface,
     disabledForegroundColor:
@@ -75,7 +96,7 @@ class FilledButtonStyles {
         lightColorScheme.primary.withOpacity(disabledForegroundOpacity),
     backgroundColor: lightColorScheme.primary,
     disabledBackgroundColor:
-        lightColorScheme.primary.withOpacity(disabledBackgroundOpacity),
+        lightColorScheme.primary.withOpacity(lightDisabledBackgroundOpacity2),
     overlayColor:
         lightColorScheme.onPrimaryContainer.withOpacity(overlayOpacity),
   );
@@ -86,24 +107,47 @@ class FilledButtonStyles {
         lightColorScheme.secondary.withOpacity(disabledForegroundOpacity),
     backgroundColor: lightColorScheme.secondary,
     disabledBackgroundColor:
-        lightColorScheme.secondary.withOpacity(disabledBackgroundOpacity),
+        lightColorScheme.secondary.withOpacity(lightDisabledBackgroundOpacity2),
+    overlayColor:
+        lightColorScheme.onSecondaryContainer.withOpacity(overlayOpacity),
+  );
+
+  static final _lightPrimaryContainer = ColorStyle(
+    foregroundColor: lightColorScheme.onPrimaryContainer,
+    disabledForegroundColor: lightColorScheme.onPrimaryContainer
+        .withOpacity(disabledForegroundOpacity),
+    backgroundColor: lightColorScheme.primaryContainer,
+    disabledBackgroundColor: lightColorScheme.primaryContainer
+        .withOpacity(disabledBackgroundOpacity),
+    overlayColor:
+        lightColorScheme.onPrimaryContainer.withOpacity(overlayOpacity),
+  );
+
+  static final _lightSecondaryContainer = ColorStyle(
+    foregroundColor: lightColorScheme.onSecondaryContainer,
+    disabledForegroundColor: lightColorScheme.onSecondaryContainer
+        .withOpacity(disabledForegroundOpacity),
+    backgroundColor: lightColorScheme.secondaryContainer,
+    disabledBackgroundColor: lightColorScheme.secondaryContainer
+        .withOpacity(disabledBackgroundOpacity),
     overlayColor:
         lightColorScheme.onSecondaryContainer.withOpacity(overlayOpacity),
   );
 
   static final _lightInverseSurface = ColorStyle(
-    foregroundColor: lightColorScheme.onInverseSurface,
+    foregroundColor: lightColorScheme.inverseSurface,
     disabledForegroundColor:
         lightColorScheme.inverseSurface.withOpacity(disabledForegroundOpacity),
-    backgroundColor: lightColorScheme.inverseSurface,
-    disabledBackgroundColor:
-        lightColorScheme.inverseSurface.withOpacity(disabledBackgroundOpacity),
-    overlayColor: Colors.black.withOpacity(inverseSurfaceOverlayOpacity),
+    backgroundColor: lightColorScheme.onInverseSurface,
+    disabledBackgroundColor: lightColorScheme.onInverseSurface
+        .withOpacity(disabledBackgroundOpacity),
+    overlayColor: lightColorScheme.inverseSurface.withOpacity(overlayOpacity),
   );
+
   static final _lightSurface = ColorStyle(
     foregroundColor: lightColorScheme.onSurface,
     disabledForegroundColor:
-        lightColorScheme.surface.withOpacity(disabledForegroundOpacity),
+        lightColorScheme.onSurface.withOpacity(disabledForegroundOpacity),
     backgroundColor: lightColorScheme.surface,
     disabledBackgroundColor:
         lightColorScheme.surface.withOpacity(disabledBackgroundOpacity),
@@ -111,25 +155,35 @@ class FilledButtonStyles {
   );
 
   static final _lightError = ColorStyle(
-    foregroundColor: lightColorScheme.onError,
-    disabledForegroundColor:
-        lightColorScheme.error.withOpacity(disabledForegroundOpacity),
-    backgroundColor: lightColorScheme.error,
+    foregroundColor: lightColorScheme.onErrorContainer,
+    disabledForegroundColor: lightColorScheme.onErrorContainer
+        .withOpacity(disabledForegroundOpacity),
+    backgroundColor: lightColorScheme.errorContainer,
     disabledBackgroundColor:
-        lightColorScheme.error.withOpacity(disabledBackgroundOpacity),
+        lightColorScheme.errorContainer.withOpacity(disabledBackgroundOpacity),
     overlayColor: lightColorScheme.onErrorContainer.withOpacity(overlayOpacity),
   );
 
   static final _lightSuccess = ColorStyle(
-    foregroundColor: lightColorScheme.onTertiary,
-    disabledForegroundColor:
-        lightColorScheme.tertiary.withOpacity(disabledForegroundOpacity),
-    backgroundColor: lightColorScheme.tertiary,
-    disabledBackgroundColor:
-        lightColorScheme.tertiary.withOpacity(disabledBackgroundOpacity),
+    foregroundColor: lightColorScheme.onTertiaryContainer,
+    disabledForegroundColor: lightColorScheme.onTertiaryContainer
+        .withOpacity(disabledForegroundOpacity),
+    backgroundColor: lightColorScheme.tertiaryContainer,
+    disabledBackgroundColor: lightColorScheme.tertiaryContainer
+        .withOpacity(disabledBackgroundOpacity),
     overlayColor:
         lightColorScheme.onTertiaryContainer.withOpacity(overlayOpacity),
   );
+
+  static ColorStyle get primaryContainer => currentThemeColorStyle(
+        darkColorStyle: _darkPrimaryContainer,
+        lightColorStyle: _lightPrimaryContainer,
+      );
+
+  static ColorStyle get secondaryContainer => currentThemeColorStyle(
+        darkColorStyle: _darkSecondaryContainer,
+        lightColorStyle: _lightSecondaryContainer,
+      );
 
   static ColorStyle get primary => currentThemeColorStyle(
         darkColorStyle: _darkPrimary,
@@ -159,5 +213,15 @@ class FilledButtonStyles {
   static ColorStyle get success => currentThemeColorStyle(
         darkColorStyle: _darkSuccess,
         lightColorStyle: _lightSuccess,
+      );
+
+  static ColorStyle get enterAppPrimary => currentThemeColorStyle(
+        darkColorStyle: _darkPrimaryContainer,
+        lightColorStyle: _lightPrimary,
+      );
+
+  static ColorStyle get enterAppSecondary => currentThemeColorStyle(
+        darkColorStyle: _darkSecondaryContainer,
+        lightColorStyle: _lightSecondary,
       );
 }

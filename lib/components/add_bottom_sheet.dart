@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/styles/filled_button.dart';
 import '../constants/themes/container.dart';
-import '../utils/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 import '../extensions/button/filled_button.dart';
 import '../extensions/button/button_style_button.dart';
 
@@ -16,13 +16,17 @@ class AddBottomSheet extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: FilledButton.icon(
+          child: FilledButton(
             onPressed: () {
               // TODO add new expense
             },
-            icon: const Icon(Icons.remove_rounded),
-            label: Text(localizations.expense),
-          ).addColorStyle(FilledButtonStyles.error).addBottomSheetStyle(
+            child: Text(localizations.expense),
+          )
+              .iconOnTop(
+                icon: Icons.remove_rounded,
+                colorStyle: FilledButtonStyles.error,
+              )
+              .bottomSheetStyle(
                 constructor: FilledButton.new,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -34,13 +38,17 @@ class AddBottomSheet extends StatelessWidget {
               ),
         ),
         Expanded(
-          child: FilledButton.icon(
+          child: FilledButton(
             onPressed: () {
               // TODO add new income
             },
-            icon: const Icon(Icons.add_rounded),
-            label: Text(localizations.income),
-          ).addColorStyle(FilledButtonStyles.success).addBottomSheetStyle(
+            child: Text(localizations.income),
+          )
+              .iconOnTop(
+                icon: Icons.add_rounded,
+                colorStyle: FilledButtonStyles.success,
+              )
+              .bottomSheetStyle(
                 constructor: FilledButton.new,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
@@ -50,13 +58,17 @@ class AddBottomSheet extends StatelessWidget {
               ),
         ),
         Expanded(
-          child: FilledButton.icon(
+          child: FilledButton(
             onPressed: () {
               // TODO add new category
             },
-            icon: const Icon(Icons.category_rounded),
-            label: Text(localizations.category),
-          ).addColorStyle(FilledButtonStyles.secondary).addBottomSheetStyle(
+            child: Text(localizations.category),
+          )
+              .iconOnTop(
+                icon: Icons.category_rounded,
+                colorStyle: FilledButtonStyles.secondaryContainer,
+              )
+              .bottomSheetStyle(
                 constructor: FilledButton.new,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(

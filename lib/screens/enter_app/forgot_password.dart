@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
 
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
@@ -7,7 +8,7 @@ import '../../components/wrappers/enter_app_screen.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
 import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
@@ -104,13 +105,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             ),
                     child: Text(localizations.send),
                   )
-                      .addMediumHeight(
+                      .colorStyle(FilledButtonStyles.enterAppPrimary)
+                      .mediumHeight(
                         constructor: FilledButton.new,
                       )
                       .loadingBtn(
                         constructor: FilledButton.new,
                         isLoading: _sendingPasswordResetEmail,
-                        colorStyle: FilledButtonStyles.primary,
+                        colorStyle: FilledButtonStyles.enterAppPrimary,
                       );
                 },
               ),
@@ -120,7 +122,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           TextButton(
             onPressed: () => context.pop(),
             child: Text(localizations.goBack),
-          ).addMediumHeight(
+          ).mediumHeight(
             constructor: TextButton.new,
           ),
         ],

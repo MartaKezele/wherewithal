@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wherewithal/extensions/button/filled_button.dart';
 
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
@@ -10,12 +11,11 @@ import '../../constants/hero_tags.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
 import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/build_context.dart';
-import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/button_style_button.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -126,11 +126,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                   ),
                           child: Text(localizations.createAccount),
                         )
-                            .addColorStyle(FilledButtonStyles.secondary)
-                            .addBigHeight(constructor: FilledButton.new)
+                            .colorStyle(FilledButtonStyles.enterAppSecondary)
+                            .bigHeight(constructor: FilledButton.new)
                             .loadingBtn(
                               constructor: FilledButton.new,
-                              colorStyle: FilledButtonStyles.secondary,
+                              colorStyle: FilledButtonStyles.enterAppSecondary,
                               isLoading: _creatingAccount,
                             );
                       },

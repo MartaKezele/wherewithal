@@ -6,11 +6,11 @@ class Screen extends StatelessWidget {
   const Screen({
     super.key,
     this.appBar,
-    required this.child,
+    required this.body,
   });
 
   final AppBar? appBar;
-  final Widget child;
+  final Widget body;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class Screen extends StatelessWidget {
       appBar: appBar ?? AppBar(toolbarHeight: 0),
       body: Padding(
         padding: const EdgeInsets.all(PaddingSize.md),
-        child: child,
+        child: body,
       ),
     );
   }

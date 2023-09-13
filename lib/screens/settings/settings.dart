@@ -13,7 +13,7 @@ import '../../constants/padding_size.dart';
 import '../../constants/themes/list_tile.dart';
 import '../../dal/repo_factory.dart';
 import '../../extensions/build_context.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utils/theme_mode.dart';
 
 class Settings extends StatefulWidget with GetItStatefulWidgetMixin {

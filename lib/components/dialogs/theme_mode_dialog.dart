@@ -2,7 +2,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utils/theme_mode.dart';
 import 'parts/radio_tile_option.dart';
 import 'radio_dialog.dart';

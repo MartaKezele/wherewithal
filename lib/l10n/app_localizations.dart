@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../config/countries.dart';
 import '../config/router.dart';
-import '../l10n/messages_all.dart';
+import 'messages_all.dart';
 
 class AppLocalizations {
   AppLocalizations.fromLocale(this.localeName);
@@ -749,6 +749,141 @@ class AppLocalizations {
     );
   }
 
+  String get days {
+    return Intl.message(
+      'days',
+      locale: localeName,
+    );
+  }
+
+  String get weeks {
+    return Intl.message(
+      'weeks',
+      locale: localeName,
+    );
+  }
+
+  String get months {
+    return Intl.message(
+      'months',
+      locale: localeName,
+    );
+  }
+
+  String get years {
+    return Intl.message(
+      'years',
+      locale: localeName,
+    );
+  }
+
+  String get monday {
+    return Intl.message(
+      'Monday',
+      locale: localeName,
+    );
+  }
+
+  String get tuesday {
+    return Intl.message(
+      'Tuesday',
+      locale: localeName,
+    );
+  }
+
+  String get wednesday {
+    return Intl.message(
+      'Wednesday',
+      locale: localeName,
+    );
+  }
+
+  String get thursday {
+    return Intl.message(
+      'Thursday',
+      locale: localeName,
+    );
+  }
+
+  String get friday {
+    return Intl.message(
+      'Friday',
+      locale: localeName,
+    );
+  }
+
+  String get saturday {
+    return Intl.message(
+      'Saturday',
+      locale: localeName,
+    );
+  }
+
+  String get sunday {
+    return Intl.message(
+      'Sunday',
+      locale: localeName,
+    );
+  }
+
+  String get onMonday {
+    return Intl.message(
+      'on Monday',
+      locale: localeName,
+    );
+  }
+
+  String get onTuesday {
+    return Intl.message(
+      'on Tuesday',
+      locale: localeName,
+    );
+  }
+
+  String get onWednesday {
+    return Intl.message(
+      'on Wednesday',
+      locale: localeName,
+    );
+  }
+
+  String get onThursday {
+    return Intl.message(
+      'on Thursday',
+      locale: localeName,
+    );
+  }
+
+  String get onFriday {
+    return Intl.message(
+      'on Friday',
+      locale: localeName,
+    );
+  }
+
+  String get onSaturday {
+    return Intl.message(
+      'on Saturday',
+      locale: localeName,
+    );
+  }
+
+  String get onSunday {
+    return Intl.message(
+      'on Sunday',
+      locale: localeName,
+    );
+  }
+
+  String onDay(int day) {
+    return Intl.message(
+      'on day $day',
+      locale: localeName,
+      name: 'onDay',
+      args: [day],
+    );
+  }
+
   String signInUsingMethods(String methods) {
     return Intl.message(
       'Sign in using one of the following methods: $methods. Once signed in you can configure sign in with google account in the profile section.',
@@ -783,6 +918,38 @@ class AppLocalizations {
       name: 'minCharacters',
       args: [howMany],
     );
+  }
+
+  String repeatsEveryXDays(int howMany) {
+    return Intl.plural(howMany,
+        zero: 'Doesn\'t repeat',
+        one: 'Repeats every day',
+        other: 'Repeats every $howMany days',
+        locale: localeName);
+  }
+
+  String repeatsEveryXWeeks(int howMany) {
+    return Intl.plural(howMany,
+        zero: 'Doesn\'t repeat',
+        one: 'Repeats every week',
+        other: 'Repeats every $howMany weeks',
+        locale: localeName);
+  }
+
+  String repeatsEveryXMonths(int howMany) {
+    return Intl.plural(howMany,
+        zero: 'Doesn\'t repeat',
+        one: 'Repeats every month',
+        other: 'Repeats every $howMany months',
+        locale: localeName);
+  }
+
+  String repeatsEveryXYears(int howMany) {
+    return Intl.plural(howMany,
+        zero: 'Doesn\'t repeat',
+        one: 'Repeats every year',
+        other: 'Repeats every $howMany years',
+        locale: localeName);
   }
 }
 

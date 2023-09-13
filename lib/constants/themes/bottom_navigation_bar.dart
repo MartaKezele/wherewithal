@@ -20,5 +20,5 @@ final darkBottomNavigationBarThemeData =
     _bottomNavigationBarThemeData.copyWith(
   backgroundColor: darkColorScheme.primaryContainer,
   selectedItemColor: darkColorScheme.onPrimaryContainer,
-  unselectedItemColor: darkColorScheme.outline,
+  unselectedItemColor: darkColorScheme.onSurface,
 );

@@ -8,7 +8,7 @@ import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../constants/styles/outlined_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/outlined_button.dart';
@@ -145,32 +145,32 @@ class _VerifyEmailState extends State<VerifyEmail> {
             onPressed: _reloadUser,
             child: Text(localizations.continueMsg),
           )
-              .addColorStyle(FilledButtonStyles.primary)
-              .addBigHeight(constructor: FilledButton.new)
+              .colorStyle(FilledButtonStyles.enterAppPrimary)
+              .bigHeight(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _reloadingUser,
-                colorStyle: FilledButtonStyles.primary,
+                colorStyle: FilledButtonStyles.enterAppPrimary,
               ),
           HeightSpacer.xs,
           FilledButton(
             onPressed: _resendVerificationEmail,
             child: Text(localizations.resendVerificationEmail),
           )
-              .addColorStyle(FilledButtonStyles.secondary)
-              .addBigHeight(constructor: FilledButton.new)
+              .colorStyle(FilledButtonStyles.enterAppSecondary)
+              .bigHeight(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _resendingVerificationEmail,
-                colorStyle: FilledButtonStyles.secondary,
+                colorStyle: FilledButtonStyles.enterAppSecondary,
               ),
           HeightSpacer.xs,
           OutlinedButton(
             onPressed: _signOut,
             child: Text(localizations.cancel),
           )
-              .addColorStyle(OutlinedButtonStyles.inverseSurface)
-              .addBigHeight(constructor: FilledButton.new)
+              .colorStyle(FilledButtonStyles.inverseSurface)
+              .bigHeight(constructor: FilledButton.new)
               .loadingBtn(
                 constructor: OutlinedButton.new,
                 isLoading: _signingOut,

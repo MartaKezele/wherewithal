@@ -4,7 +4,7 @@ import 'package:wherewithal/app_models/validation_result.dart';
 
 import '../config/password.dart';
 import '../constants/regex.dart';
-import 'app_localizations.dart';
+import '../l10n/app_localizations.dart';
 
 ValidationResult passwordValid(String? password) {
   final localizations = AppLocalizations.ofCurrentContext();

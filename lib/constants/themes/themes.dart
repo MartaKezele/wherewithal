@@ -8,6 +8,7 @@ import 'bottom_navigation_bar.dart';
 import 'button.dart';
 import 'floating_action_button.dart';
 import 'list_tile.dart';
+import 'tab_bar.dart';
 import 'text.dart';
 
 const themeMode = {
@@ -32,6 +33,7 @@ ThemeData lightColorTheme(BuildContext context) => _themeData.copyWith(
       filledButtonTheme: filledButtonTheme,
       outlinedButtonTheme: outlinedButtonTheme,
       textButtonTheme: textButtonTheme,
+      tabBarTheme: lightTabBarTheme,
     );
 
 ThemeData darkColorTheme(BuildContext context) => _themeData.copyWith(
@@ -45,4 +47,5 @@ ThemeData darkColorTheme(BuildContext context) => _themeData.copyWith(
       filledButtonTheme: filledButtonTheme,
       outlinedButtonTheme: outlinedButtonTheme,
       textButtonTheme: textButtonTheme,
+      tabBarTheme: darkTabBarTheme,
     );

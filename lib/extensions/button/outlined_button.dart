@@ -6,7 +6,7 @@ extension Style on OutlinedButton {
   static const _borderWidth = 0.8;
   static const _disabledBorderOpacity = 0.15;
 
-  OutlinedButton addColorStyle(
+  OutlinedButton colorStyle(
     ColorStyle colorStyle,
   ) {
     return OutlinedButton(

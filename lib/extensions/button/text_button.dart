@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app_models/color_style.dart';
 
 extension Style on TextButton {
-  TextButton addColorStyle(
+  TextButton colorStyle(
     ColorStyle colorStyle,
   ) {
     return TextButton(

@@ -10,7 +10,7 @@ import '../../constants/hero_tags.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
 import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
@@ -137,11 +137,11 @@ class _SignInState extends State<SignIn> {
                                   ),
                           child: Text(localizations.signIn),
                         )
-                            .addColorStyle(FilledButtonStyles.primary)
-                            .addBigHeight(constructor: FilledButton.new)
+                            .colorStyle(FilledButtonStyles.enterAppPrimary)
+                            .bigHeight(constructor: FilledButton.new)
                             .loadingBtn(
                               constructor: FilledButton.new,
-                              colorStyle: FilledButtonStyles.primary,
+                              colorStyle: FilledButtonStyles.enterAppPrimary,
                               isLoading: _signingIn,
                             );
                       },

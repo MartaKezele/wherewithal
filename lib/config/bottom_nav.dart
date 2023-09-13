@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:wherewithal/components/sections/recurring_transactions.dart';
+import 'package:wherewithal/config/router.dart';
 
 import '../app_models/bottom_nav_item.dart';
 import '../components/sections/budget.dart';
 import '../components/sections/categories.dart';
 import '../components/sections/insights.dart';
-import '../components/sections/recurring_transactions.dart';
-import '../utils/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 
 List<BottomNavItem> bottomNav() {
-  final localizations = AppLocalizations.ofCurrentContext();
+  assert(navigatorKey.currentContext != null);
+  final localizations = AppLocalizations.of(navigatorKey.currentContext!);
 
   return [
     BottomNavItem(
@@ -18,7 +20,7 @@ List<BottomNavItem> bottomNav() {
       screen: const Insights(),
     ),
     BottomNavItem(
-      icon: Icons.attach_money_rounded,
+      icon: Icons.event_repeat_rounded,
       label: localizations.recurringTransactions,
       tooltip: localizations.recurringTransactions,
       screen: const RecurringTransactions(),

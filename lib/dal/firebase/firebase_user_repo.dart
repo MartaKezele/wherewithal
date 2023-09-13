@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../user_repo.dart';
 import 'helpers.dart';
 
@@ -38,7 +38,7 @@ class FirebaseUserRepo implements UserRepo {
       await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
       return ActionResult(
         success: true,
-        messageTitle: localizations.changePassword,
+        messageTitle: localizations.changedPassword,
       );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e);

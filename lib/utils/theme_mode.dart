@@ -1,7 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 
 import '../config/router.dart';
-import 'app_localizations.dart';
+import '../l10n/app_localizations.dart';
 
 String themeModeName({AdaptiveThemeMode? mode}) {
   if (mode == null) {

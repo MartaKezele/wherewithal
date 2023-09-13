@@ -16,7 +16,7 @@ import 'config/router.dart';
 import 'config/shared_prefs_keys.dart';
 import 'constants/themes/themes.dart';
 import 'firebase_options.dart';
-import 'utils/app_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'utils/prefs.dart';
 
 Future<void> main() async {

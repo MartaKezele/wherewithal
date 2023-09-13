@@ -7,7 +7,7 @@ import '../../../config/auth_provider.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
-import '../../../utils/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../utils/overlay_banner.dart';
 import '../../../extensions/build_context.dart';
 import '../../../extensions/button/filled_button.dart';
@@ -59,7 +59,7 @@ class _ConfigureGoogleAuthState extends State<ConfigureGoogleAuth>
 
     return Screen(
       appBar: AppBar(),
-      child: Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
@@ -74,13 +74,13 @@ class _ConfigureGoogleAuthState extends State<ConfigureGoogleAuth>
                 : _linkGoogleAccount,
             child: Text(localizations.confirm),
           )
-              .addColorStyle(
-                FilledButtonStyles.primary,
+              .colorStyle(
+                FilledButtonStyles.primaryContainer,
               )
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _linkingAuth,
-                colorStyle: FilledButtonStyles.primary,
+                colorStyle: FilledButtonStyles.primaryContainer,
               ),
         ],
       ),

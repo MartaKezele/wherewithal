@@ -4,7 +4,7 @@ import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../dal/repo_factory.dart';
-import '../../../utils/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../utils/overlay_banner.dart';
 import '../../../extensions/button/button_style_button.dart';
 import '../../../extensions/button/filled_button.dart';
@@ -49,7 +49,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
     final localizations = AppLocalizations.of(context);
     return Screen(
       appBar: AppBar(),
-      child: Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -61,13 +61,13 @@ class _DeleteAccountState extends State<DeleteAccount> {
             onPressed: _deleteAccount,
             child: Text(localizations.delete),
           )
-              .addColorStyle(
-                FilledButtonStyles.primary,
+              .colorStyle(
+                FilledButtonStyles.error,
               )
               .loadingBtn(
                 constructor: FilledButton.new,
                 isLoading: _deletingAccount,
-                colorStyle: FilledButtonStyles.primary,
+                colorStyle: FilledButtonStyles.error,
               ),
         ],
       ),

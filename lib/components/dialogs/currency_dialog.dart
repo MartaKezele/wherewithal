@@ -7,7 +7,7 @@ import '../../app_models/currency.dart';
 import '../../change_notifiers/currency.dart';
 import '../../config/countries.dart';
 import '../../constants/themes/flag.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../components/dialogs/radio_dialog.dart';
 import 'parts/radio_tile_option.dart';
 

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../change_notifiers/date_format.dart';
 import '../../config/date_format_patterns.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import 'parts/radio_tile_option.dart';
 import 'radio_dialog.dart';
 

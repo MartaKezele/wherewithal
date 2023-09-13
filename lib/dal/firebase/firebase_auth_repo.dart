@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../config/auth_provider.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 

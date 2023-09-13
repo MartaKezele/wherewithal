@@ -54,7 +54,7 @@ class _EnterAppScreenState extends State<EnterAppScreen>
   Widget build(BuildContext context) {
     return Screen(
       appBar: widget.appBar,
-      child: Column(
+      body: Column(
         children: [
           if (widget.icon != null)
             Expanded(

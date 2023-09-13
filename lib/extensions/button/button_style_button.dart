@@ -47,41 +47,41 @@ extension Loading on ButtonStyleButton {
   }
 }
 
-extension Padding on ButtonStyleButton {
+extension Styles on ButtonStyleButton {
   static const _bigHeight = 65.0;
   static const _mediumHeight = 50.0;
   static const _bottomSheetHeight = 160.0;
 
-  ButtonStyleButton addBigHeight({
+  ButtonStyleButton bigHeight({
     required ButtonConstructor constructor,
   }) {
-    return _addHeightAndShape(
+    return _heightAndShape(
       constructor: constructor,
       height: _bigHeight,
     );
   }
 
-  ButtonStyleButton addMediumHeight({
+  ButtonStyleButton mediumHeight({
     required ButtonConstructor constructor,
   }) {
-    return _addHeightAndShape(
+    return _heightAndShape(
       constructor: constructor,
       height: _mediumHeight,
     );
   }
 
-  ButtonStyleButton addBottomSheetStyle({
+  ButtonStyleButton bottomSheetStyle({
     required ButtonConstructor constructor,
     required OutlinedBorder shape,
   }) {
-    return _addHeightAndShape(
+    return _heightAndShape(
       constructor: constructor,
       height: _bottomSheetHeight,
       shape: shape,
     );
   }
 
-  ButtonStyleButton _addHeightAndShape({
+  ButtonStyleButton _heightAndShape({
     required ButtonConstructor constructor,
     required double height,
     OutlinedBorder shape = containerShape,

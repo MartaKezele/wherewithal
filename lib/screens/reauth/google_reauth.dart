@@ -9,7 +9,7 @@ import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../dal/repo_factory.dart';
 import '../../app_models/action_result.dart';
-import '../../utils/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/button_style_button.dart';
@@ -88,7 +88,7 @@ class _GoogleReauthState extends State<GoogleReauth> {
 
     return Screen(
       appBar: AppBar(),
-      child: Column(
+      body: Column(
         children: [
           Row(
             mainAxisSize: MainAxisSize.max,
@@ -114,10 +114,10 @@ class _GoogleReauthState extends State<GoogleReauth> {
             child: FilledButton(
               onPressed: _reauthenticate,
               child: Text(localizations.retry),
-            ).addColorStyle(FilledButtonStyles.primary).loadingBtn(
+            ).colorStyle(FilledButtonStyles.primaryContainer).loadingBtn(
                   constructor: FilledButton.new,
                   isLoading: _reauthenticating,
-                  colorStyle: FilledButtonStyles.primary,
+                  colorStyle: FilledButtonStyles.primaryContainer,
                 ),
           ),
         ],

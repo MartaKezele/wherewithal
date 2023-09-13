@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/wrappers/screen.dart';
-import '../utils/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({
@@ -18,7 +18,7 @@ class ErrorScreen extends StatelessWidget {
     // TODO finish error screen
     return Screen(
       appBar: AppBar(),
-      child: Column(
+      body: Column(
         children: [
           Text(title ?? AppLocalizations.of(context).genericErrorMsg),
           if (description != null) Text(description!),

@@ -7,7 +7,7 @@ import '../constants/spacers.dart';
 import '../constants/themes/action_result.dart';
 import '../constants/themes/container.dart';
 import '../constants/themes/overlay_banner.dart';
-import '../utils/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 import '../extensions/button/text_button.dart';
 
 class ActionResultOverlayBanner extends StatefulWidget {
@@ -178,7 +178,7 @@ class _ActionResultOverlayBannerState extends State<ActionResultOverlayBanner>
                       TextButton(
                         onPressed: _playExitAnimation,
                         child: Text(localizations.close.toUpperCase()),
-                      ).addColorStyle(buttonColorStyle)
+                      ).colorStyle(buttonColorStyle)
                     ],
                   ),
                 ),
