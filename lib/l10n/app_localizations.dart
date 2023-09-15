@@ -921,35 +921,51 @@ class AppLocalizations {
   }
 
   String repeatsEveryXDays(int howMany) {
-    return Intl.plural(howMany,
-        zero: 'Doesn\'t repeat',
-        one: 'Repeats every day',
-        other: 'Repeats every $howMany days',
-        locale: localeName);
+    return Intl.plural(
+      howMany,
+      zero: 'Doesn\'t repeat',
+      one: 'Repeats every day',
+      other: 'Repeats every $howMany days',
+      locale: localeName,
+      args: [howMany],
+      name: 'repeatsEveryXDays',
+    );
   }
 
   String repeatsEveryXWeeks(int howMany) {
-    return Intl.plural(howMany,
-        zero: 'Doesn\'t repeat',
-        one: 'Repeats every week',
-        other: 'Repeats every $howMany weeks',
-        locale: localeName);
+    return Intl.plural(
+      howMany,
+      zero: 'Doesn\'t repeat',
+      one: 'Repeats every week',
+      other: 'Repeats every $howMany weeks',
+      locale: localeName,
+      args: [howMany],
+      name: 'repeatsEveryXWeeks',
+    );
   }
 
   String repeatsEveryXMonths(int howMany) {
-    return Intl.plural(howMany,
-        zero: 'Doesn\'t repeat',
-        one: 'Repeats every month',
-        other: 'Repeats every $howMany months',
-        locale: localeName);
+    return Intl.plural(
+      howMany,
+      zero: 'Doesn\'t repeat',
+      one: 'Repeats every month',
+      other: 'Repeats every $howMany months',
+      locale: localeName,
+      args: [howMany],
+      name: 'repeatsEveryXMonths',
+    );
   }
 
   String repeatsEveryXYears(int howMany) {
-    return Intl.plural(howMany,
-        zero: 'Doesn\'t repeat',
-        one: 'Repeats every year',
-        other: 'Repeats every $howMany years',
-        locale: localeName);
+    return Intl.plural(
+      howMany,
+      zero: 'Doesn\'t repeat',
+      one: 'Repeats every year',
+      other: 'Repeats every $howMany years',
+      locale: localeName,
+      args: [howMany],
+      name: 'repeatsEveryXYears',
+    );
   }
 }
 

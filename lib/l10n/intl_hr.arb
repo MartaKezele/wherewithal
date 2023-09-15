@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2023-09-06T20:58:12.727284",
+  "@@last_modified": "2023-09-15T14:23:59.736164",
   "Wherewithal": "Wherewithal",
   "@Wherewithal": {
     "description": "App name (not to be translated in latin alphabets)",
@@ -11,7 +11,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "Language": "Language",
+  "Language": "Jezik",
   "@Language": {
     "type": "text",
     "placeholders": {}
@@ -466,6 +466,143 @@
     "type": "text",
     "placeholders": {}
   },
+  "Insights": "Uvidi",
+  "@Insights": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Recurring transactions": "Ponavljajuće transakcije",
+  "@Recurring transactions": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Categories": "Kategorije",
+  "@Categories": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Budget": "Proračun",
+  "@Budget": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Add": "Add",
+  "@Add": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Expense": "Expense",
+  "@Expense": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Income": "Income",
+  "@Income": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Category": "Category",
+  "@Category": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "days": "days",
+  "@days": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "weeks": "weeks",
+  "@weeks": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "months": "months",
+  "@months": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "years": "years",
+  "@years": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Monday": "Monday",
+  "@Monday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Tuesday": "Tuesday",
+  "@Tuesday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Wednesday": "Wednesday",
+  "@Wednesday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Thursday": "Thursday",
+  "@Thursday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Friday": "Friday",
+  "@Friday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Saturday": "Saturday",
+  "@Saturday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Sunday": "Sunday",
+  "@Sunday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "on Monday": "on Monday",
+  "@on Monday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "on Tuesday": "on Tuesday",
+  "@on Tuesday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "on Wednesday": "on Wednesday",
+  "@on Wednesday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "on Thursday": "on Thursday",
+  "@on Thursday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "on Friday": "on Friday",
+  "@on Friday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "on Saturday": "on Saturday",
+  "@on Saturday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "on Sunday": "on Sunday",
+  "@on Sunday": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "onDay": "on day {day}",
+  "@onDay": {
+    "type": "text",
+    "placeholders": {
+      "day": {}
+    }
+  },
   "signInUsingMethods": "Sign in using one of the following methods: {methods}. Once signed in you can configure sign in with google account in the profile section.",
   "@signInUsingMethods": {
     "type": "text",
@@ -489,6 +626,34 @@
   },
   "minCharacters": "Minimum {howMany} characters",
   "@minCharacters": {
+    "type": "text",
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "repeatsEveryXDays": "{howMany,plural, =0{Doesn''t repeat}=1{Repeats every day}other{Repeats every {howMany} days}}",
+  "@repeatsEveryXDays": {
+    "type": "text",
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "repeatsEveryXWeeks": "{howMany,plural, =0{Doesn''t repeat}=1{Repeats every week}other{Repeats every {howMany} weeks}}",
+  "@repeatsEveryXWeeks": {
+    "type": "text",
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "repeatsEveryXMonths": "{howMany,plural, =0{Doesn''t repeat}=1{Repeats every month}other{Repeats every {howMany} months}}",
+  "@repeatsEveryXMonths": {
+    "type": "text",
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "repeatsEveryXYears": "{howMany,plural, =0{Doesn''t repeat}=1{Repeats every year}other{Repeats every {howMany} years}}",
+  "@repeatsEveryXYears": {
     "type": "text",
     "placeholders": {
       "howMany": {}
