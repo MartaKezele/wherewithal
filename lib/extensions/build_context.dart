@@ -29,8 +29,8 @@ extension Navigation on BuildContext {
   }
 
   Future<T?> pushSettings<T extends Object?>() async {
-    return await pushNamed<T>(
-      NamedChildRoutes.settings.nonNullableName,
+    return await push<T>(
+      TopLevelRoutes.settings.path,
     );
   }
 

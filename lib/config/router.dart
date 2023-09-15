@@ -8,11 +8,14 @@ import 'routes.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+final initialLocation = NamedChildRoutes.insights.path;
+
 final router = GoRouter(
-  initialLocation: TopLevelRoutes.home.path,
+  initialLocation: initialLocation,
   routes: [
+    TopLevelRoutes.homeShellRoute,
+    TopLevelRoutes.settings,
     TopLevelRoutes.welcome,
-    TopLevelRoutes.home,
     TopLevelRoutes.verifyEmail,
     TopLevelRoutes.passwordReauth,
     TopLevelRoutes.googleReauth,
@@ -24,7 +27,7 @@ final router = GoRouter(
         auth.emailVerified &&
         (state.location.startsWith(TopLevelRoutes.welcome.path) ||
             state.location.startsWith(TopLevelRoutes.verifyEmail.path))) {
-      return TopLevelRoutes.home.path;
+      return initialLocation;
     }
 
     if (auth.signedIn &&

@@ -12,7 +12,7 @@ Future<void> themeModeDialog(BuildContext context) async {
       .map((mode) => RadioTileDialogOption(
             value: mode,
             groupValue: AdaptiveTheme.of(context).mode,
-            title: themeModeName(mode: mode),
+            title: themeModeName(context: context, mode: mode),
             onChanged: (AdaptiveThemeMode? value) {
               context.pop(value);
             },

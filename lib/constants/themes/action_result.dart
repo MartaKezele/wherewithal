@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../app_models/color_style.dart';
-import '../../config/router.dart';
 import '../styles/text_button.dart';
 
 ColorStyle textBtnActionResultColorStyle({
@@ -10,19 +9,19 @@ ColorStyle textBtnActionResultColorStyle({
     resultSuccess ? TextButtonStyles.success : TextButtonStyles.error;
 
 Color actionResultContainerColor({
+  required BuildContext context,
   required bool resultSuccess,
 }) {
-  assert(navigatorKey.currentContext != null);
   return resultSuccess
-      ? Theme.of(navigatorKey.currentContext!).colorScheme.tertiaryContainer
-      : Theme.of(navigatorKey.currentContext!).colorScheme.errorContainer;
+      ? Theme.of(context).colorScheme.tertiaryContainer
+      : Theme.of(context).colorScheme.errorContainer;
 }
 
 Color actionResultTextColor({
+  required BuildContext context,
   required bool resultSuccess,
 }) {
-  assert(navigatorKey.currentContext != null);
   return resultSuccess
-      ? Theme.of(navigatorKey.currentContext!).colorScheme.onTertiaryContainer
-      : Theme.of(navigatorKey.currentContext!).colorScheme.onErrorContainer;
+      ? Theme.of(context).colorScheme.onTertiaryContainer
+      : Theme.of(context).colorScheme.onErrorContainer;
 }

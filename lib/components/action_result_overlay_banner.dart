@@ -80,10 +80,12 @@ class _ActionResultOverlayBannerState extends State<ActionResultOverlayBanner>
     );
 
     final Color containerColor = actionResultContainerColor(
+      context: context,
       resultSuccess: widget.result.success,
     );
 
     final Color textColor = actionResultTextColor(
+      context: context,
       resultSuccess: widget.result.success,
     );
 

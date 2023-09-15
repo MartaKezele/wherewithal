@@ -92,7 +92,7 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
           ListTile(
             leading: const Icon(Icons.dark_mode_outlined),
             title: Text(localizations.themeMode),
-            subtitle: Text(themeModeName()),
+            subtitle: Text(themeModeName(context: context)),
             onTap: () => themeModeDialog(context),
           ),
           ListTile(

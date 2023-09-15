@@ -7,6 +7,7 @@ class NamedGoRoute extends GoRoute {
     required super.builder,
     super.routes,
     super.redirect,
+    super.parentNavigatorKey,
   }) : super(
           name: nonNullableName,
         );
