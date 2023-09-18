@@ -1,5 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:wherewithal/constants/themes/dialog.dart';
 
 import '../../config/color_schemes/dark.dart';
 import '../../config/color_schemes/light.dart';
@@ -34,6 +35,7 @@ ThemeData lightColorTheme(BuildContext context) => _themeData.copyWith(
       outlinedButtonTheme: outlinedButtonTheme,
       textButtonTheme: textButtonTheme,
       tabBarTheme: lightTabBarTheme,
+      dialogTheme: lightDialogTheme,
     );
 
 ThemeData darkColorTheme(BuildContext context) => _themeData.copyWith(
@@ -48,4 +50,5 @@ ThemeData darkColorTheme(BuildContext context) => _themeData.copyWith(
       outlinedButtonTheme: outlinedButtonTheme,
       textButtonTheme: textButtonTheme,
       tabBarTheme: darkTabBarTheme,
+      dialogTheme: darkDialogTheme,
     );

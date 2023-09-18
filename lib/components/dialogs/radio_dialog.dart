@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wherewithal/constants/themes/dialog.dart';
+import 'package:wherewithal/extensions/button/text_button.dart';
 
 import '../../constants/padding_size.dart';
 import '../../constants/themes/container.dart';
-import 'parts/cancel_button.dart';
+import '../../l10n/app_localizations.dart';
 
 const contentHeight = 350.0;
 
@@ -12,9 +15,8 @@ Future<T?> showRadioDialog<T>({
   required List<Widget> options,
   bool? restrictContentHeight,
 }) {
+  final localizations = AppLocalizations.of(context);
   final scrollController = ScrollController();
-  final backgroundColor = Theme.of(context).colorScheme.surface;
-  final foregroundColor = Theme.of(context).colorScheme.onSurface;
 
   return showDialog<T>(
       context: context,
@@ -23,12 +25,7 @@ Future<T?> showRadioDialog<T>({
           shape: containerShape,
           title: Text(
             title,
-            style: TextStyle(
-              color: foregroundColor,
-            ),
           ),
-          backgroundColor: backgroundColor,
-          surfaceTintColor: foregroundColor,
           children: [
             SizedBox(
               height: restrictContentHeight == true ? contentHeight : null,
@@ -46,14 +43,19 @@ Future<T?> showRadioDialog<T>({
                 ),
               ),
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: PaddingSize.lg,
                   ),
-                  child: CancelButton(),
+                  child: TextButton(
+                    onPressed: () {
+                      context.pop();
+                    },
+                    child: Text(localizations.cancel),
+                  ).colorStyle(dialogBtnColorStyle),
                 ),
               ],
             ),

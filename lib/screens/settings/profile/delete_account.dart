@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wherewithal/components/dialogs/confirm_dialog.dart';
 
 import '../../../change_notifiers/user_repo.dart';
 import '../../../components/wrappers/screen.dart';
@@ -61,8 +62,17 @@ class _DeleteAccountState extends State<DeleteAccount> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           HeightSpacer.md,
+          Text(
+            localizations.dataWillBeDeleted,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          HeightSpacer.md,
           FilledButton(
-            onPressed: _deleteAccount,
+            onPressed: () => showConfirmDialog(
+              context: context,
+              title: localizations.areYouSure,
+              onOkPressed: _deleteAccount,
+            ),
             child: Text(localizations.delete),
           )
               .colorStyle(

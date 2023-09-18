@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wherewithal/constants/spacers.dart';
 
 import '../../app_models/color_style.dart';
 import '../../app_models/types/button_constructor.dart';
 import '../../constants/icon_size.dart';
-import '../../constants/padding_size.dart';
 import '../../constants/themes/container.dart';
 
 extension Loading on ButtonStyleButton {
@@ -37,9 +37,7 @@ extension Loading on ButtonStyleButton {
               height: IconSize.md,
               child: icon,
             ),
-          const SizedBox(
-            width: PaddingSize.xs,
-          ),
+          WidthSpacer.xs,
           if (child != null) child!,
         ],
       ),

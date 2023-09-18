@@ -740,6 +740,27 @@ class AppLocalizations {
     );
   }
 
+  String get dataWillBeDeleted {
+    return Intl.message(
+      'Your data will be deleted, this action is non reversible.',
+      locale: localeName,
+    );
+  }
+
+  String get areYouSure {
+    return Intl.message(
+      'Are you sure?',
+      locale: localeName,
+    );
+  }
+
+  String get ok {
+    return Intl.message(
+      'OK',
+      locale: localeName,
+    );
+  }
+
   String get days {
     return Intl.message(
       'days',
