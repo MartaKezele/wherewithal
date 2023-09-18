@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_models/language.dart';
-import '../config/shared_prefs_keys.dart';
+import '../config/keys/shared_prefs.dart';
 import '../utils/prefs.dart';
 
 class LanguageChangeNotifier extends ChangeNotifier {

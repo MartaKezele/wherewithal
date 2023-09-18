@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../config/password.dart';
+import '../../../config/password_validation.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/form_field_validators.dart';
 

@@ -7,7 +7,7 @@ import '../../change_notifiers/auth_repo.dart';
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/password_form_field.dart';
 import '../../components/wrappers/screen.dart';
-import '../../constants/query_param_keys.dart';
+import '../../config/keys/query_param.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../app_models/action_result.dart';

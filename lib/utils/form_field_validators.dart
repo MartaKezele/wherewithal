@@ -2,8 +2,7 @@ import 'package:flutter/widgets.dart';
 // TODO: replace package imports with relative imports
 import 'package:wherewithal/app_models/validation_result.dart';
 
-import '../config/password.dart';
-import '../constants/regex.dart';
+import '../config/password_validation.dart';
 import '../l10n/app_localizations.dart';
 
 ValidationResult passwordValid(

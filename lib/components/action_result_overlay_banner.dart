@@ -4,9 +4,9 @@ import '../app_models/action_result.dart';
 import '../app_models/color_style.dart';
 import '../constants/padding_size.dart';
 import '../constants/spacers.dart';
-import '../constants/themes/action_result.dart';
-import '../constants/themes/container.dart';
-import '../constants/themes/overlay_banner.dart';
+import '../constants/styles/action_result.dart';
+import '../constants/styles/container.dart';
+import '../constants/styles/overlay_banner.dart';
 import '../l10n/app_localizations.dart';
 import '../extensions/button/text_button.dart';
 

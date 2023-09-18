@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../app_models/language.dart';
 import '../../change_notifiers/language.dart';
 import '../../config/countries.dart';
-import '../../constants/themes/flag.dart';
+import '../../constants/styles/flag.dart';
 import '../../l10n/app_localizations.dart';
 import 'parts/radio_tile_option.dart';
 import 'radio_dialog.dart';

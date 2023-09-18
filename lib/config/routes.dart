@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wherewithal/config/bottom_nav.dart';
 import 'package:wherewithal/config/router.dart';
-import 'package:wherewithal/constants/path_param_keys.dart';
+import 'package:wherewithal/config/keys/path_param.dart';
 import 'package:wherewithal/screens/home/budget.dart';
 import 'package:wherewithal/screens/home/categories/categories.dart';
 import 'package:wherewithal/screens/home/categories/category_view.dart';
@@ -13,7 +13,7 @@ import 'package:wherewithal/screens/home/recurring_transactions.dart';
 import 'package:wherewithal/screens/home/home.dart';
 
 import '../change_notifiers/auth.dart';
-import '../constants/query_param_keys.dart';
+import 'keys/query_param.dart';
 import '../app_models/named_go_route.dart';
 import '../screens/enter_app/create_account.dart';
 import '../screens/enter_app/forgot_password.dart';

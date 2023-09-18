@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../constants/spacers.dart';
-import '../constants/themes/card.dart';
-import '../constants/themes/container.dart';
+import '../constants/styles/card.dart';
+import '../constants/styles/container.dart';
 
 class AuthProviderCard extends StatelessWidget {
   const AuthProviderCard({

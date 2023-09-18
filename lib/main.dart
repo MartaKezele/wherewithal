@@ -15,7 +15,7 @@ import 'change_notifiers/user_repo.dart';
 import 'config/countries.dart';
 import 'config/date_format_patterns.dart';
 import 'config/router.dart';
-import 'config/shared_prefs_keys.dart';
+import 'config/keys/shared_prefs.dart';
 import 'constants/themes/themes.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';

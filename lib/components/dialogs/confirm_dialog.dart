@@ -5,7 +5,7 @@ import 'package:wherewithal/constants/themes/dialog.dart';
 import 'package:wherewithal/extensions/button/text_button.dart';
 
 import '../../constants/padding_size.dart';
-import '../../constants/themes/container.dart';
+import '../../constants/styles/container.dart';
 import '../../l10n/app_localizations.dart';
 
 Future<T?> showConfirmDialog<T>({

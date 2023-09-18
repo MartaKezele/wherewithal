@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_models/currency.dart';
-import '../config/shared_prefs_keys.dart';
+import '../config/keys/shared_prefs.dart';
 import '../utils/prefs.dart';
 
 class CurrencyChangeNotifier extends ChangeNotifier {

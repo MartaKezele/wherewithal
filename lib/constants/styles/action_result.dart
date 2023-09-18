@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app_models/color_style.dart';
-import '../styles/text_button.dart';
+import 'text_button.dart';
 
 ColorStyle textBtnActionResultColorStyle({
   required bool resultSuccess,

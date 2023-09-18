@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/constants/path_param_keys.dart';
+import 'package:wherewithal/config/keys/path_param.dart';
 
 import '../config/routes.dart';
-import '../constants/query_param_keys.dart';
+import '../config/keys/query_param.dart';
 
 extension Navigation on BuildContext {
   Future<T?> pushForgotPassword<T extends Object?>(

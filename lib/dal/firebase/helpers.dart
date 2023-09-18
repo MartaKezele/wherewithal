@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../config/password.dart';
+import '../../config/password_validation.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
 import '../../l10n/app_localizations.dart';

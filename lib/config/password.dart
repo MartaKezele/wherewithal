@@ -1,1 +1,0 @@
-const minPasswordCharacters = 6;

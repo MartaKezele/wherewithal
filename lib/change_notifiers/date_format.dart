@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
-import '../config/shared_prefs_keys.dart';
+import '../config/keys/shared_prefs.dart';
 import '../utils/prefs.dart';
 import 'language.dart';
 
