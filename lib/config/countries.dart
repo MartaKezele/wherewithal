@@ -37,6 +37,8 @@ final Country _croatia = Country(
 );
 
 final Country defaultCountry = _unitedStates;
+final String defaultLocaleStr =
+    '${defaultCountry.language.locale.languageCode}_${defaultCountry.language.locale.countryCode}';
 
 final countries = [
   _unitedStates,

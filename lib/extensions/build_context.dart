@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wherewithal/constants/path_param_keys.dart';
 
 import '../config/routes.dart';
 import '../constants/query_param_keys.dart';
@@ -66,6 +67,45 @@ extension Navigation on BuildContext {
       NamedChildRoutes.deleteAccount.nonNullableName,
       queryParameters: {
         QueryParamKeys.shouldRedirect: true.toString(),
+      },
+    );
+  }
+
+  Future<T?> pushCategoryView<T extends Object?>({
+    required int categoryId,
+  }) async {
+    return await pushNamed<T>(
+      NamedChildRoutes.category.nonNullableName,
+      pathParameters: {
+        PathParamKeys.categoryId: categoryId.toString(),
+      },
+    );
+  }
+
+  Future<T?> pushSub1CategoryView<T extends Object?>({
+    required int categoryId,
+    required int sub1categoryId,
+  }) async {
+    return await pushNamed<T>(
+      NamedChildRoutes.sub1category.nonNullableName,
+      pathParameters: {
+        PathParamKeys.categoryId: categoryId.toString(),
+        PathParamKeys.sub1categoryId: sub1categoryId.toString(),
+      },
+    );
+  }
+
+  Future<T?> pushSub2CategoryView<T extends Object?>({
+    required int categoryId,
+    required int sub1categoryId,
+    required int sub2categoryId,
+  }) async {
+    return await pushNamed<T>(
+      NamedChildRoutes.sub2category.nonNullableName,
+      pathParameters: {
+        PathParamKeys.categoryId: categoryId.toString(),
+        PathParamKeys.sub1categoryId: sub1categoryId.toString(),
+        PathParamKeys.sub2categoryId: sub2categoryId.toString(),
       },
     );
   }

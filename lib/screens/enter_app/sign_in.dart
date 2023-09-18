@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../change_notifiers/auth_repo.dart';
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
 import '../../components/form/form_fields/password_form_field.dart';
@@ -9,7 +11,6 @@ import '../../components/wrappers/enter_app_screen.dart';
 import '../../constants/hero_tags.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
-import '../../dal/repo_factory.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
 import '../../utils/form_field_validators.dart';
@@ -48,11 +49,12 @@ class _SignInState extends State<SignIn> {
       _signingIn = true;
     });
 
-    await RepoFactory.authRepo()
+    await GetIt.I<AuthRepoChangeNotifier>()
+        .authRepo
         .signInWithEmailAndPassword(
-      _emailController.text,
-      _passwordController.text,
-    )
+          _emailController.text,
+          _passwordController.text,
+        )
         .then((result) async {
       if (!result.success) {
         _resultBanner = showActionResultOverlayBanner(context, result);
@@ -128,8 +130,8 @@ class _SignInState extends State<SignIn> {
                       second: _passwordValueNotifier,
                       builder: (context, email, password, child) {
                         return FilledButton(
-                          onPressed: !emailValid(email).success ||
-                                  !passwordValid(password).success
+                          onPressed: !emailValid(email, localizations).success ||
+                                  !passwordValid(password, localizations).success
                               ? null
                               : () => executeFnIfFormValid(
                                     formKey: _formKey,

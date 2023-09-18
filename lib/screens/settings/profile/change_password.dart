@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../../change_notifiers/user_repo.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/password_form_field.dart';
 import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
-import '../../../dal/repo_factory.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../utils/form_field_validators.dart';
@@ -38,10 +39,11 @@ class _ChangePasswordState extends State<ChangePassword> {
       _changingPassword = true;
     });
 
-    await RepoFactory.userRepo()
+    await GetIt.I<UserRepoChangeNotifier>()
+        .userRepo
         .updatePassword(
-      _passwordController.text,
-    )
+          _passwordController.text,
+        )
         .then((result) {
       setState(() {
         _changingPassword = false;
@@ -94,7 +96,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 valueListenable: _passwordValueNotifier,
                 builder: (context, password, _) {
                   return FilledButton(
-                    onPressed: !passwordValid(password).success
+                    onPressed: !passwordValid(password, localizations).success
                         ? null
                         : () => executeFnIfFormValid(
                               formKey: _formKey,

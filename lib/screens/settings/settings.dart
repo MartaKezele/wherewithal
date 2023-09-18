@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../change_notifiers/auth_repo.dart';
 import '../../change_notifiers/currency.dart';
 import '../../change_notifiers/date_format.dart';
 import '../../change_notifiers/language.dart';
@@ -11,7 +13,6 @@ import '../../components/dialogs/language_dialog.dart';
 import '../../components/dialogs/theme_mode_dialog.dart';
 import '../../constants/padding_size.dart';
 import '../../constants/themes/list_tile.dart';
-import '../../dal/repo_factory.dart';
 import '../../extensions/build_context.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/theme_mode.dart';
@@ -34,7 +35,7 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
       _signingOut = true;
     });
 
-    await RepoFactory.authRepo().signOut();
+    await GetIt.I<AuthRepoChangeNotifier>().authRepo.signOut();
 
     setState(() {
       _signingOut = false;
@@ -52,7 +53,7 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
 
     final String? date = watchOnly(
       (DateFormatChangeNotifier changeNotifier) =>
-          changeNotifier.dateFormat()?.format(DateTime.now()),
+          changeNotifier.dateFormat?.format(DateTime.now()),
     );
 
     final String? currency = watchOnly(

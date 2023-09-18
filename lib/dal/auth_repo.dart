@@ -1,6 +1,11 @@
+import 'package:wherewithal/l10n/app_localizations.dart';
+
 import '../app_models/action_result.dart';
 
 abstract class AuthRepo {
+  AuthRepo(this.localizations);
+  AppLocalizations localizations;
+
   Future<ActionResult> signInWithEmailAndPassword(
     String email,
     String password,

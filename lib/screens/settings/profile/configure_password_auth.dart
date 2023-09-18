@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../change_notifiers/auth.dart';
+import '../../../change_notifiers/auth_repo.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/password_form_field.dart';
 import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
-import '../../../dal/repo_factory.dart';
 import '../../../app_models/action_result.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
@@ -57,11 +57,12 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
       return;
     }
 
-    await RepoFactory.authRepo()
+    await GetIt.I<AuthRepoChangeNotifier>()
+        .authRepo
         .linkWithPasswordCredential(
-      authChangeNotifier.email!,
-      _passwordController.text,
-    )
+          authChangeNotifier.email!,
+          _passwordController.text,
+        )
         .then((result) {
       setState(() {
         _linkingAuth = false;
@@ -113,7 +114,7 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
                 valueListenable: _passwordValueNotifier,
                 builder: (context, password, _) {
                   return FilledButton(
-                    onPressed: !passwordValid(password).success
+                    onPressed: !passwordValid(password, localizations).success
                         ? null
                         : () => executeFnIfFormValid(
                               formKey: _formKey,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../../change_notifiers/user_repo.dart';
 import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
-import '../../../dal/repo_factory.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/overlay_banner.dart';
 import '../../../extensions/button/button_style_button.dart';
@@ -25,7 +26,10 @@ class _DeleteAccountState extends State<DeleteAccount> {
       _deletingAccount = true;
     });
 
-    await RepoFactory.userRepo().deleteAccount().then((result) {
+    await GetIt.I<UserRepoChangeNotifier>()
+        .userRepo
+        .deleteAccount()
+        .then((result) {
       setState(() {
         _deletingAccount = false;
       });

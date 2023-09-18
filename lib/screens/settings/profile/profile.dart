@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../change_notifiers/auth.dart';
+import '../../../change_notifiers/user_repo.dart';
 import '../../../components/auth_provider_card.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/email_form_field.dart';
@@ -10,7 +12,6 @@ import '../../../config/auth_provider.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../constants/styles/outlined_button.dart';
-import '../../../dal/repo_factory.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../extensions/build_context.dart';
@@ -51,7 +52,8 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
       _savingChanges = true;
     });
 
-    await RepoFactory.userRepo()
+    await GetIt.I<UserRepoChangeNotifier>()
+        .userRepo
         .updateUserInfo(_displayNameController.text)
         .then((result) {
       setState(() {

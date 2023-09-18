@@ -4,11 +4,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../config/auth_provider.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
-import '../../l10n/app_localizations.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 
-class FirebaseAuthRepo implements AuthRepo {
+class FirebaseAuthRepo extends AuthRepo {
+  FirebaseAuthRepo(super.localizations);
+
   Future<OAuthCredential?> _googleAuthCredential() async {
     try {
       final googleUser = await GoogleSignIn().signIn();
@@ -26,8 +27,6 @@ class FirebaseAuthRepo implements AuthRepo {
   Future<ActionResult> _reauth(
     AuthCredential credential,
   ) async {
-    final localizations = AppLocalizations.ofCurrentContext();
-
     if (FirebaseAuth.instance.currentUser == null) {
       return ActionResult(
         success: false,
@@ -44,17 +43,15 @@ class FirebaseAuthRepo implements AuthRepo {
         messageTitle: localizations.reauthenticated,
       );
     } on FirebaseAuthException catch (e) {
-      return handleFirebaseAuthException(e);
+      return handleFirebaseAuthException(e, localizations);
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
   Future<ActionResult> _linkAccountWithCredential(
     AuthCredential credential,
   ) async {
-    final localizations = AppLocalizations.ofCurrentContext();
-
     try {
       if (FirebaseAuth.instance.currentUser == null) {
         return ActionResult(
@@ -68,9 +65,9 @@ class FirebaseAuthRepo implements AuthRepo {
         messageTitle: localizations.linkedAccountWithCredentials,
       );
     } on FirebaseAuthException catch (e) {
-      return handleFirebaseAuthException(e);
+      return handleFirebaseAuthException(e, localizations);
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
@@ -79,8 +76,6 @@ class FirebaseAuthRepo implements AuthRepo {
     String email,
     String password,
   ) async {
-    final localizations = AppLocalizations.ofCurrentContext();
-
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -92,9 +87,9 @@ class FirebaseAuthRepo implements AuthRepo {
         messageTitle: localizations.signedIn,
       );
     } on FirebaseAuthException catch (e) {
-      return handleFirebaseAuthException(e);
+      return handleFirebaseAuthException(e, localizations);
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
@@ -103,8 +98,6 @@ class FirebaseAuthRepo implements AuthRepo {
     String email,
     String password,
   ) async {
-    final localizations = AppLocalizations.ofCurrentContext();
-
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -115,16 +108,14 @@ class FirebaseAuthRepo implements AuthRepo {
         messageTitle: localizations.createdAccount,
       );
     } on FirebaseAuthException catch (e) {
-      return handleFirebaseAuthException(e);
+      return handleFirebaseAuthException(e, localizations);
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
   @override
   Future<ActionResult> sendVerificationEmail() async {
-    final localizations = AppLocalizations.ofCurrentContext();
-
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
@@ -152,7 +143,7 @@ class FirebaseAuthRepo implements AuthRepo {
         messageDescription: localizations.verifyEmailInstructions,
       );
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
@@ -160,8 +151,6 @@ class FirebaseAuthRepo implements AuthRepo {
   Future<ActionResult> sendPasswordResetEmail(
     String email,
   ) async {
-    final localizations = AppLocalizations.ofCurrentContext();
-
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       return ActionResult(
@@ -170,16 +159,14 @@ class FirebaseAuthRepo implements AuthRepo {
         messageDescription: localizations.didntReceiveEmail,
       );
     } on FirebaseAuthException catch (e) {
-      return handleFirebaseAuthException(e);
+      return handleFirebaseAuthException(e, localizations);
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
   @override
   Future<ActionResult> signOut() async {
-    final localizations = AppLocalizations.ofCurrentContext();
-
     try {
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
@@ -188,13 +175,12 @@ class FirebaseAuthRepo implements AuthRepo {
         messageTitle: localizations.signedOut,
       );
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
   @override
   Future<ActionResult> continueWithGoogle() async {
-    final localizations = AppLocalizations.ofCurrentContext();
     GoogleSignInAccount? googleUser;
 
     try {
@@ -233,9 +219,9 @@ class FirebaseAuthRepo implements AuthRepo {
               localizations.signInUsingMethods(result.data?.join(', ')),
         );
       }
-      return handleFirebaseAuthException(e);
+      return handleFirebaseAuthException(e, localizations);
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
@@ -244,8 +230,6 @@ class FirebaseAuthRepo implements AuthRepo {
     String email,
   ) async {
     try {
-      final localizations = AppLocalizations.ofCurrentContext();
-
       final signInMethods =
           await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
 
@@ -266,15 +250,14 @@ class FirebaseAuthRepo implements AuthRepo {
         data: authProviders,
       );
     } on FirebaseAuthException catch (e) {
-      return handleFirebaseAuthException(e);
+      return handleFirebaseAuthException(e, localizations);
     } catch (_) {
-      return genericFailureResult;
+      return genericFailureResult(localizations);
     }
   }
 
   @override
   Future<ActionResult> reauthWithGoogle() async {
-    final localizations = AppLocalizations.ofCurrentContext();
     final credential = await _googleAuthCredential();
 
     if (credential == null) {
@@ -299,7 +282,6 @@ class FirebaseAuthRepo implements AuthRepo {
 
   @override
   Future<ActionResult> linkWithGoogleCredential() async {
-    final localizations = AppLocalizations.ofCurrentContext();
     final credential = await _googleAuthCredential();
 
     if (credential == null) {

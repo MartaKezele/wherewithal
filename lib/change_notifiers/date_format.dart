@@ -11,7 +11,7 @@ class DateFormatChangeNotifier extends ChangeNotifier {
 
   String? _dateFormatPattern;
 
-  DateFormat? dateFormat() {
+  DateFormat? get dateFormat {
     final languageChangeNotifier = GetIt.I<LanguageChangeNotifier>();
 
     final localeString = languageChangeNotifier.language?.locale != null

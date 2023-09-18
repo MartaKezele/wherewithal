@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 
+import '../change_notifiers/auth_repo.dart';
 import '../constants/hero_tags.dart';
 import '../constants/styles/outlined_button.dart';
-import '../dal/repo_factory.dart';
 import '../extensions/button/button_style_button.dart';
 import '../extensions/button/outlined_button.dart';
 import '../l10n/app_localizations.dart';
@@ -30,7 +31,10 @@ class _SocialAuthState extends State<SocialAuth> {
       _loading = true;
     });
 
-    await RepoFactory.authRepo().continueWithGoogle().then((result) {
+    await GetIt.I<AuthRepoChangeNotifier>()
+        .authRepo
+        .continueWithGoogle()
+        .then((result) {
       setState(() {
         _loading = false;
       });

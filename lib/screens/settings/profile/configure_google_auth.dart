@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../change_notifiers/auth.dart';
+import '../../../change_notifiers/auth_repo.dart';
 import '../../../components/wrappers/screen.dart';
 import '../../../config/auth_provider.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
-import '../../../dal/repo_factory.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/overlay_banner.dart';
 import '../../../extensions/build_context.dart';
@@ -30,7 +31,10 @@ class _ConfigureGoogleAuthState extends State<ConfigureGoogleAuth>
       _linkingAuth = true;
     });
 
-    await RepoFactory.authRepo().linkWithGoogleCredential().then((result) {
+    await GetIt.I<AuthRepoChangeNotifier>()
+        .authRepo
+        .linkWithGoogleCredential()
+        .then((result) {
       setState(() {
         _linkingAuth = false;
       });

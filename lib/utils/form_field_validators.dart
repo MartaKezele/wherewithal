@@ -6,9 +6,10 @@ import '../config/password.dart';
 import '../constants/regex.dart';
 import '../l10n/app_localizations.dart';
 
-ValidationResult passwordValid(String? password) {
-  final localizations = AppLocalizations.ofCurrentContext();
-
+ValidationResult passwordValid(
+  String? password,
+  AppLocalizations localizations,
+) {
   if (password == null || password.isEmpty) {
     return ValidationResult(
       success: false,
@@ -27,9 +28,10 @@ ValidationResult passwordValid(String? password) {
   return ValidationResult(success: true);
 }
 
-ValidationResult emailValid(String? email) {
-  final localizations = AppLocalizations.ofCurrentContext();
-
+ValidationResult emailValid(
+  String? email,
+  AppLocalizations localizations,
+) {
   if (email == null || email.isEmpty) {
     return ValidationResult(
       success: false,
@@ -47,10 +49,16 @@ ValidationResult emailValid(String? email) {
   return ValidationResult(success: true);
 }
 
-String? emailValidator(String? email) {
-  return emailValid(email).message;
+String? emailValidator(
+  String? email,
+  AppLocalizations localizations,
+) {
+  return emailValid(email, localizations).message;
 }
 
-String? passwordValidator(String? password) {
-  return passwordValid(password).message;
+String? passwordValidator(
+  String? password,
+  AppLocalizations localizations,
+) {
+  return passwordValid(password, localizations).message;
 }

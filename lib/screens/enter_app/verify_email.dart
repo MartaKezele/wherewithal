@@ -3,11 +3,12 @@ import 'package:get_it/get_it.dart';
 
 import '../../app_models/action_result.dart';
 import '../../change_notifiers/auth.dart';
+import '../../change_notifiers/auth_repo.dart';
+import '../../change_notifiers/user_repo.dart';
 import '../../components/wrappers/enter_app_screen.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../constants/styles/outlined_button.dart';
-import '../../dal/repo_factory.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/button/filled_button.dart';
@@ -59,7 +60,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     GetIt.I<AuthChangeNotifier>().addListener(emailVerifiedChangeListener);
 
-    await RepoFactory.userRepo().reloadUser().then((result) {
+    await GetIt.I<UserRepoChangeNotifier>()
+        .userRepo
+        .reloadUser()
+        .then((result) {
       if (!result.success) {
         setState(() {
           _reloadingUser = false;
@@ -77,7 +81,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
       _resendingVerificationEmail = true;
     });
 
-    await RepoFactory.authRepo().sendVerificationEmail().then((result) {
+    await GetIt.I<AuthRepoChangeNotifier>()
+        .authRepo
+        .sendVerificationEmail()
+        .then((result) {
       setState(() {
         _resultBanner = showActionResultOverlayBanner(context, result);
         _resendingVerificationEmail = false;
@@ -90,7 +97,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
       _signingOut = true;
     });
 
-    await RepoFactory.authRepo().signOut().then((result) {
+    await GetIt.I<AuthRepoChangeNotifier>().authRepo.signOut().then((result) {
       setState(() {
         if (!result.success) {
           _resultBanner = showActionResultOverlayBanner(context, result);

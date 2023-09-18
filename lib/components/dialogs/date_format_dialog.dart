@@ -24,7 +24,7 @@ Future<void> dateFormatDialog(
 
     return RadioTileDialogOption<String?>(
       value: pattern,
-      groupValue: dateFormatChangeNotifier.dateFormat()?.pattern,
+      groupValue: dateFormatChangeNotifier.dateFormat?.pattern,
       title: dateFormat.format(DateTime.now()),
       onChanged: (String? value) {
         context.pop(value);

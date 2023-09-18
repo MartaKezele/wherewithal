@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/app_models/named_go_route.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomNavItem {
   final IconData icon;
-  final NamedGoRoute route;
+  final GoRoute route;
   final String Function(BuildContext context) label;
 
   BottomNavItem({

@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
   }
 
   void _onBottomNavItemTap(index) {
-    context.goNamed(widget.bottomNav[index].route.nonNullableName);
+    context.go(widget.bottomNav[index].route.path);
     setState(() {
       _currentBottomNavIndex = index;
     });

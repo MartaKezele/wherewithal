@@ -3,11 +3,11 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../change_notifiers/auth.dart';
+import '../../change_notifiers/auth_repo.dart';
 import '../../components/wrappers/screen.dart';
 import '../../constants/query_param_keys.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
-import '../../dal/repo_factory.dart';
 import '../../app_models/action_result.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/overlay_banner.dart';
@@ -51,7 +51,10 @@ class _GoogleReauthState extends State<GoogleReauth> {
       return;
     }
 
-    await RepoFactory.authRepo().reauthWithGoogle().then((result) {
+    await GetIt.I<AuthRepoChangeNotifier>()
+        .authRepo
+        .reauthWithGoogle()
+        .then((result) {
       setState(() {
         _reauthenticating = false;
         _showRetryBtn = !result.success;

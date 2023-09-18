@@ -1,6 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wherewithal/config/router.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../utils/theme_mode.dart';
@@ -25,13 +26,13 @@ Future<void> themeModeDialog(BuildContext context) async {
     options: themeModeRadioTiles,
   )) {
     case AdaptiveThemeMode.light:
-      AdaptiveTheme.of(context).setLight();
+      AdaptiveTheme.of(navigatorKey.currentContext!).setLight();
       break;
     case AdaptiveThemeMode.dark:
-      AdaptiveTheme.of(context).setDark();
+      AdaptiveTheme.of(navigatorKey.currentContext!).setDark();
       break;
     case AdaptiveThemeMode.system:
-      AdaptiveTheme.of(context).setSystem();
+      AdaptiveTheme.of(navigatorKey.currentContext!).setSystem();
       break;
     default:
       break;

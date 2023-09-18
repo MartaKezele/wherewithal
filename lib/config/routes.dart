@@ -2,8 +2,12 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wherewithal/config/bottom_nav.dart';
 import 'package:wherewithal/config/router.dart';
+import 'package:wherewithal/constants/path_param_keys.dart';
 import 'package:wherewithal/screens/home/budget.dart';
-import 'package:wherewithal/screens/home/categories.dart';
+import 'package:wherewithal/screens/home/categories/categories.dart';
+import 'package:wherewithal/screens/home/categories/category_view.dart';
+import 'package:wherewithal/screens/home/categories/sub_1_category_view.dart';
+import 'package:wherewithal/screens/home/categories/sub_2_category_view.dart';
 import 'package:wherewithal/screens/home/insights.dart';
 import 'package:wherewithal/screens/home/recurring_transactions.dart';
 import 'package:wherewithal/screens/home/home.dart';
@@ -39,6 +43,29 @@ class TopLevelRoutes {
       );
     },
     routes: bottomNavItems.map((navItem) => navItem.route).toList(),
+  );
+
+  static final insights = GoRoute(
+    path: '/insights',
+    builder: (context, state) => const Insights(),
+  );
+
+  static final recurringTransactions = GoRoute(
+    path: '/recurring-transactions',
+    builder: (context, state) => const RecurringTransactions(),
+  );
+
+  static final categories = GoRoute(
+    path: '/categories',
+    builder: (context, state) => const Categories(),
+    routes: [
+      NamedChildRoutes.category,
+    ],
+  );
+
+  static final budget = GoRoute(
+    path: '/budget',
+    builder: (context, state) => const Budget(),
   );
 
   static final welcome = GoRoute(
@@ -231,27 +258,30 @@ class NamedChildRoutes {
     },
   );
 
-  static final insights = NamedGoRoute(
-    nonNullableName: 'insights',
-    path: '/insights',
-    builder: (context, state) => const Insights(),
+  static final category = NamedGoRoute(
+    parentNavigatorKey: navigatorKey,
+    nonNullableName: 'category',
+    path: 'category/:${PathParamKeys.categoryId}',
+    builder: (context, state) => const CategoryView(),
+    routes: [
+      sub1category,
+    ],
   );
 
-  static final recurringTransactions = NamedGoRoute(
-    nonNullableName: 'recurringTransactions',
-    path: '/recurring-transactions',
-    builder: (context, state) => const RecurringTransactions(),
+  static final sub1category = NamedGoRoute(
+    parentNavigatorKey: navigatorKey,
+    nonNullableName: 'sub1category',
+    path: 'sub-1-category/:${PathParamKeys.sub1categoryId}',
+    builder: (context, state) => const Sub1CategoryView(),
+    routes: [
+      sub2category,
+    ],
   );
 
-  static final categories = NamedGoRoute(
-    nonNullableName: 'categories',
-    path: '/categories',
-    builder: (context, state) => const Categories(),
-  );
-
-  static final budget = NamedGoRoute(
-    nonNullableName: 'budget',
-    path: '/budget',
-    builder: (context, state) => const Budget(),
+  static final sub2category = NamedGoRoute(
+    parentNavigatorKey: navigatorKey,
+    nonNullableName: 'sub2category',
+    path: 'sub-2-category/:${PathParamKeys.sub2categoryId}',
+    builder: (context, state) => const Sub2CategoryView(),
   );
 }

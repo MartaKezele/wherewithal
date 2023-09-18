@@ -48,7 +48,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       keyboardType: TextInputType.visiblePassword,
       obscureText: _obscureText,
       autocorrect: false,
-      validator: (password) => passwordValidator(password),
+      validator: (password) => passwordValidator(password, localizations),
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }

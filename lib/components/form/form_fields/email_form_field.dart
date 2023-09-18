@@ -29,7 +29,10 @@ class _EmailFormFieldState extends State<EmailFormField> {
       ),
       keyboardType: TextInputType.emailAddress,
       autocorrect: false,
-      validator: (email) => emailValidator(email),
+      validator: (email) => emailValidator(
+        email,
+        AppLocalizations.of(context),
+      ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }

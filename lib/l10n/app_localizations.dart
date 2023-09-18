@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../config/countries.dart';
-import '../config/router.dart';
 import 'messages_all.dart';
 
 class AppLocalizations {
@@ -22,14 +21,6 @@ class AppLocalizations {
 
   static AppLocalizations of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
-  }
-
-  static AppLocalizations ofCurrentContext() {
-    assert(navigatorKey.currentContext != null);
-    return Localizations.of<AppLocalizations>(
-      navigatorKey.currentContext!,
-      AppLocalizations,
-    )!;
   }
 
   final String localeName;

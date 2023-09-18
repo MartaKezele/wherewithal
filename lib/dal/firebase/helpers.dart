@@ -5,11 +5,12 @@ import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
 import '../../l10n/app_localizations.dart';
 
-ActionResult handleFirebaseAuthException(FirebaseAuthException e) {
+ActionResult handleFirebaseAuthException(
+  FirebaseAuthException e,
+  AppLocalizations localizations,
+) {
   String messageTitle;
   String? messageDescription;
-
-  final localizations = AppLocalizations.ofCurrentContext();
 
   switch (e.code) {
     case 'invalid-email':
@@ -42,7 +43,7 @@ ActionResult handleFirebaseAuthException(FirebaseAuthException e) {
       messageTitle = localizations.tooManyRequestsErrorMsg;
       messageDescription = localizations.tryAgainLater;
     default:
-      return genericFailureResult;
+      return genericFailureResult(localizations);
   }
 
   return ActionResult(

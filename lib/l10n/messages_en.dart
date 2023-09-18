@@ -27,13 +27,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(min) => "The password must contain at least ${min} characters";
 
-  static m3(howMany) => "${Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every day', other: 'Repeats every ${howMany} days')}";
+  static m3(howMany) => Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every day', other: 'Repeats every ${howMany} days');
 
-  static m4(howMany) => "${Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every month', other: 'Repeats every ${howMany} months')}";
+  static m4(howMany) => Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every month', other: 'Repeats every ${howMany} months');
 
-  static m5(howMany) => "${Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every week', other: 'Repeats every ${howMany} weeks')}";
+  static m5(howMany) => Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every week', other: 'Repeats every ${howMany} weeks');
 
-  static m6(howMany) => "${Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every year', other: 'Repeats every ${howMany} years')}";
+  static m6(howMany) => Intl.plural(howMany, zero: 'Doesn\'t repeat', one: 'Repeats every year', other: 'Repeats every ${howMany} years');
 
   static m7(methods) => "Sign in using one of the following methods: ${methods}. Once signed in you can configure sign in with google account in the profile section.";
 
