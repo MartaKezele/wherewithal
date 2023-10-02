@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/config/routes.dart';
 
 import '../app_models/bottom_nav_item.dart';
 import '../l10n/app_localizations.dart';
+import 'routes.dart';
 
 List<BottomNavItem> bottomNavItems = [
   BottomNavItem(

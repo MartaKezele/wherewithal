@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../change_notifiers/auth.dart';
-import '../../change_notifiers/auth_repo.dart';
+import '../../change_notifiers/repo_factory.dart';
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/password_form_field.dart';
 import '../../components/wrappers/screen.dart';
@@ -13,7 +13,6 @@ import '../../constants/styles/filled_button.dart';
 import '../../app_models/action_result.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
-import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/button_style_button.dart';
@@ -64,7 +63,8 @@ class _PasswordReauthState extends State<PasswordReauth> {
       return;
     }
 
-    await GetIt.I<AuthRepoChangeNotifier>()
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
         .authRepo
         .reauthWithPassword(
           authChangeNotifier.email!,
@@ -131,9 +131,7 @@ class _PasswordReauthState extends State<PasswordReauth> {
                 valueListenable: _passwordValueNotifier,
                 builder: (context, password, _) {
                   return FilledButton(
-                    onPressed: !passwordValid(password, localizations).success
-                        ? null
-                        : () => executeFnIfFormValid(
+                    onPressed:  () => executeFnIfFormValid(
                               formKey: _formKey,
                               fn: _reauthenticate,
                             ),

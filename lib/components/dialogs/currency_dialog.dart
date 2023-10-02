@@ -8,7 +8,7 @@ import '../../change_notifiers/currency.dart';
 import '../../config/countries.dart';
 import '../../constants/styles/flag.dart';
 import '../../l10n/app_localizations.dart';
-import '../../components/dialogs/radio_dialog.dart';
+import 'list_view_dialog.dart';
 import 'parts/radio_tile_option.dart';
 
 Future<void> currencyDialog(
@@ -46,7 +46,7 @@ Future<void> currencyDialog(
     );
   }).toList();
 
-  final selectedCurrency = await showRadioDialog<Currency?>(
+  final selectedCurrency = await showListViewDialog<Currency?>(
     context: context,
     title: localizations.currency,
     options: currencyRadioTiles,

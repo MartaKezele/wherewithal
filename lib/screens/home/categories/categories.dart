@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/extensions/build_context.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../../l10n/app_localizations.dart';
-import '../../../mock_data.dart';
+import '../../../change_notifiers/auth.dart';
+import '../../../components/categories_list_view.dart';
+import '../../../config/routes.dart';
+import '../../../models/enums/transaction_types.dart';
+import '../../../models/models.dart' as models;
 
 class Categories extends StatelessWidget {
   const Categories({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+    final tabs = TransactionTypes.values
+        .map(
+          (transactionType) => Tab(
+            icon: Icon(transactionType.icon),
+            text: transactionType.localizedName(context),
+          ),
+        )
+        .toList();
 
-    final tabs = [
-      Tab(
-        icon: const Icon(Icons.remove_rounded),
-        text: localizations.expense,
-      ),
-      Tab(
-        icon: const Icon(Icons.add_rounded),
-        text: localizations.income,
-      ),
-    ];
+    final tabContents = TransactionTypes.values.map((transactionType) {
+      return CategoriesListView(
+        ref: models.usersRef
+            .doc(GetIt.I<AuthChangeNotifier>().id)
+            .categories
+            .whereTransactionType(isEqualTo: transactionType.name)
+            .orderByTitle(),
+        nextRoutePathPart: NamedChildRoutes.categoryPath,
+        foregroundColor: transactionType.foregroundColor(context),
+      );
+    }).toList();
 
     return DefaultTabController(
       length: tabs.length,
@@ -28,48 +39,11 @@ class Categories extends StatelessWidget {
         children: [
           Container(
             color: Theme.of(context).colorScheme.primaryContainer,
-            child: TabBar(
-              tabs: tabs,
-            ),
+            child: TabBar(tabs: tabs),
           ),
           Expanded(
             child: TabBarView(
-              children: [
-                ListView(
-                  children: MockData.expenseCategories
-                      .map(
-                        (category) => ListTile(
-                          title: Text(category.title),
-                          trailing: category.budget != null
-                              ? Text('${category.budget}')
-                              : null,
-                          textColor:
-                              Theme.of(context).colorScheme.onErrorContainer,
-                          onTap: () => context.pushCategoryView(
-                            categoryId: category.id,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-                ListView(
-                  children: MockData.incomeCategories
-                      .map(
-                        (category) => ListTile(
-                          title: Text(category.title),
-                          trailing: category.budget != null
-                              ? Text('${category.budget}')
-                              : null,
-                          textColor:
-                              Theme.of(context).colorScheme.onTertiaryContainer,
-                          onTap: () => context.pushCategoryView(
-                            categoryId: category.id,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
+              children: tabContents,
             ),
           ),
         ],

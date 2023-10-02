@@ -1,12 +1,12 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/config/router.dart';
 
+import '../../config/router.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/theme_mode.dart';
 import 'parts/radio_tile_option.dart';
-import 'radio_dialog.dart';
+import 'list_view_dialog.dart';
 
 Future<void> themeModeDialog(BuildContext context) async {
   final themeModeRadioTiles = AdaptiveThemeMode.values
@@ -20,7 +20,7 @@ Future<void> themeModeDialog(BuildContext context) async {
           ))
       .toList();
 
-  switch (await showRadioDialog<AdaptiveThemeMode>(
+  switch (await showListViewDialog<AdaptiveThemeMode>(
     context: context,
     title: AppLocalizations.of(context).themeMode,
     options: themeModeRadioTiles,

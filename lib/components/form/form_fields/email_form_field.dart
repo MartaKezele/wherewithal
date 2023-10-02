@@ -25,7 +25,7 @@ class _EmailFormFieldState extends State<EmailFormField> {
       enabled: widget.enabled,
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
-        label: Text(AppLocalizations.of(context).email),
+        label: Text('${AppLocalizations.of(context).email}*'),
       ),
       keyboardType: TextInputType.emailAddress,
       autocorrect: false,
@@ -33,7 +33,6 @@ class _EmailFormFieldState extends State<EmailFormField> {
         email,
         AppLocalizations.of(context),
       ),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 }

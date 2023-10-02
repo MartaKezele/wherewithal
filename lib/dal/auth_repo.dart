@@ -1,6 +1,5 @@
-import 'package:wherewithal/l10n/app_localizations.dart';
-
 import '../app_models/action_result.dart';
+import '../l10n/app_localizations.dart';
 
 abstract class AuthRepo {
   AuthRepo(this.localizations);

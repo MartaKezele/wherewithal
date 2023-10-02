@@ -9,7 +9,7 @@ import '../../config/countries.dart';
 import '../../constants/styles/flag.dart';
 import '../../l10n/app_localizations.dart';
 import 'parts/radio_tile_option.dart';
-import 'radio_dialog.dart';
+import 'list_view_dialog.dart';
 
 Future<void> languageDialog(BuildContext context) async {
   final localizations = AppLocalizations.of(context);
@@ -37,7 +37,7 @@ Future<void> languageDialog(BuildContext context) async {
           ))
       .toList();
 
-  final selectedLanguage = await showRadioDialog<Language>(
+  final selectedLanguage = await showListViewDialog<Language>(
     context: context,
     title: localizations.language,
     options: languageRadioTiles,

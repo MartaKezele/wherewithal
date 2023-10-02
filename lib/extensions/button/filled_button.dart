@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/spacers.dart';
 
 import '../../app_models/color_style.dart';
+import '../../constants/spacers.dart';
 
 extension Style on FilledButton {
   ButtonStyle? _filledBtnStyle(ColorStyle colorStyle) {

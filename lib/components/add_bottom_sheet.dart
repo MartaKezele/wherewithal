@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../constants/styles/filled_button.dart';
 import '../constants/styles/container.dart';
@@ -7,7 +8,12 @@ import '../extensions/button/filled_button.dart';
 import '../extensions/button/button_style_button.dart';
 
 class AddBottomSheet extends StatelessWidget {
-  const AddBottomSheet({super.key});
+  const AddBottomSheet({
+    super.key,
+    required this.addCategory,
+  });
+
+  final void Function() addCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +66,8 @@ class AddBottomSheet extends StatelessWidget {
         Expanded(
           child: FilledButton(
             onPressed: () {
-              // TODO add new category
+              context.pop();
+              addCategory();
             },
             child: Text(localizations.category),
           )

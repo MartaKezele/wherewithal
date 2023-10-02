@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/app_models/bottom_nav_item.dart';
-import 'package:wherewithal/extensions/build_context.dart';
 
+import '../../app_models/action_result.dart';
+import '../../app_models/bottom_nav_item.dart';
+import '../../change_notifiers/auth.dart';
 import '../../components/add_bottom_sheet.dart';
+import '../../components/dialogs/scrollable_form_dialog.dart';
+import '../../components/form/category_form.dart';
 import '../../constants/styles/container.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/overlay_banner.dart';
+import '../../models/models.dart' as models;
+import '../../extensions/build_context.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -22,13 +29,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _addCategoryFormKey = GlobalKey<CategoryFormState>();
+  final _addCategoryFormStateKey = GlobalKey<FormState>();
+
   int _currentBottomNavIndex = 0;
+  OverlayEntry? _resultBanner;
 
   void _onFabPressed() {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
-      builder: (BuildContext context) => const AddBottomSheet(),
+      builder: (BuildContext context) => AddBottomSheet(
+        addCategory: _addCategory,
+      ),
     );
   }
 
@@ -37,6 +50,40 @@ class _HomeState extends State<Home> {
     setState(() {
       _currentBottomNavIndex = index;
     });
+  }
+
+  void _addCategory() async {
+    await showScrollableFormDialog<ActionResult>(
+      context: context,
+      title: AppLocalizations.of(context).addSubcategory,
+      form: CategoryForm(
+        key: _addCategoryFormKey,
+        formKey: _addCategoryFormStateKey,
+        addSubcategoryFn: models.usersRef
+            .doc(GetIt.I<AuthChangeNotifier>().id)
+            .categories
+            .add,
+      ),
+      formKey: _addCategoryFormStateKey,
+      onSubmit: () {
+        assert(_addCategoryFormKey.currentState != null);
+        return _addCategoryFormKey.currentState!.addCategory();
+      },
+      submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
+    ).then((result) {
+      if (result != null) {
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          result,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    hideOverlayBanner(_resultBanner);
+    super.dispose();
   }
 
   @override

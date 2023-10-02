@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
 
-import '../../change_notifiers/auth_repo.dart';
+import '../../change_notifiers/repo_factory.dart';
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
 import '../../components/wrappers/enter_app_screen.dart';
@@ -11,9 +10,9 @@ import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
-import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/button/button_style_button.dart';
+import '../../extensions/button/filled_button.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({
@@ -44,9 +43,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       _sendingPasswordResetEmail = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>()
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
         .authRepo
-        .sendPasswordResetEmail(_emailController.text)
+        .sendPasswordResetEmail(_emailController.text.trim())
         .then((result) {
       setState(() {
         _sendingPasswordResetEmail = false;
@@ -99,12 +99,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 valueListenable: _emailValueNotifier,
                 builder: (context, email, child) {
                   return FilledButton(
-                    onPressed: !emailValid(email, localizations).success
-                        ? null
-                        : () => executeFnIfFormValid(
-                              formKey: _formKey,
-                              fn: _resetPassword,
-                            ),
+                    onPressed: () => executeFnIfFormValid(
+                      formKey: _formKey,
+                      fn: _resetPassword,
+                    ),
                     child: Text(localizations.send),
                   )
                       .colorStyle(FilledButtonStyles.enterAppPrimary)

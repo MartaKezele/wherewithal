@@ -3,8 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../app_models/action_result.dart';
 import '../../change_notifiers/auth.dart';
-import '../../change_notifiers/auth_repo.dart';
-import '../../change_notifiers/user_repo.dart';
+import '../../change_notifiers/repo_factory.dart';
 import '../../components/wrappers/enter_app_screen.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
@@ -60,8 +59,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     GetIt.I<AuthChangeNotifier>().addListener(emailVerifiedChangeListener);
 
-    await GetIt.I<UserRepoChangeNotifier>()
-        .userRepo
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
+        .userRepo1
         .reloadUser()
         .then((result) {
       if (!result.success) {
@@ -81,7 +81,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
       _resendingVerificationEmail = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>()
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
         .authRepo
         .sendVerificationEmail()
         .then((result) {
@@ -97,7 +98,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
       _signingOut = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>().authRepo.signOut().then((result) {
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
+        .authRepo
+        .signOut()
+        .then((result) {
       setState(() {
         if (!result.success) {
           _resultBanner = showActionResultOverlayBanner(context, result);

@@ -7,7 +7,7 @@ import '../../change_notifiers/date_format.dart';
 import '../../config/date_format_patterns.dart';
 import '../../l10n/app_localizations.dart';
 import 'parts/radio_tile_option.dart';
-import 'radio_dialog.dart';
+import 'list_view_dialog.dart';
 
 Future<void> dateFormatDialog(
   BuildContext context,
@@ -32,7 +32,7 @@ Future<void> dateFormatDialog(
     );
   }).toList();
 
-  final selectedDateFormatPattern = await showRadioDialog<String?>(
+  final selectedDateFormatPattern = await showListViewDialog<String?>(
     context: context,
     title: localizations.dateFormat,
     options: dateFormatRadioTiles,

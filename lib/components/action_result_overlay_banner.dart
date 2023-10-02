@@ -37,14 +37,14 @@ class _ActionResultOverlayBannerState extends State<ActionResultOverlayBanner>
 
   bool _entering = false;
 
-  void _playEnterAnimation() async {
+  Future<void> _playEnterAnimation() async {
     setState(() {
       _entering = true;
     });
     await _controller.forward();
   }
 
-  void _playExitAnimation() async {
+  Future<void> _playExitAnimation() async {
     setState(() {
       _entering = false;
     });

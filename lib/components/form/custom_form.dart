@@ -19,6 +19,7 @@ class CustomForm extends StatelessWidget {
         return contents[index];
       }
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           HeightSpacer.xs,
           contents[index],

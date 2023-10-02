@@ -4,19 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:wherewithal/change_notifiers/auth_repo.dart';
-import 'package:wherewithal/dal/repo_factory.dart';
 
 import 'change_notifiers/auth.dart';
 import 'change_notifiers/currency.dart';
 import 'change_notifiers/date_format.dart';
 import 'change_notifiers/language.dart';
-import 'change_notifiers/user_repo.dart';
+import 'change_notifiers/repo_factory.dart';
 import 'config/countries.dart';
 import 'config/date_format_patterns.dart';
 import 'config/router.dart';
 import 'config/keys/shared_prefs.dart';
 import 'constants/themes/themes.dart';
+import 'dal/repo_factory.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'utils/prefs.dart';
@@ -56,7 +55,7 @@ Future<void> main() async {
 
   String localeStr = languageCode != null && countryCode != null
       ? '${languageCode}_$countryCode'
-      : defaultLocaleStr;
+      : defaultCountry.language.fullLocaleString;
 
   final getIt = GetIt.instance;
 
@@ -72,15 +71,11 @@ Future<void> main() async {
   getIt.registerSingleton<AuthChangeNotifier>(
     AuthChangeNotifier.instance,
   );
-
-  getIt.registerSingleton<AuthRepoChangeNotifier>(
-    AuthRepoChangeNotifier(
-      RepoFactory.authRepo(localeStr),
-    ),
-  );
-  getIt.registerSingleton<UserRepoChangeNotifier>(
-    UserRepoChangeNotifier(
-      RepoFactory.userRepo(localeStr),
+  getIt.registerSingleton<RepoFactoryChangeNotifier>(
+    RepoFactoryChangeNotifier(
+      RepoFactory.fromFullLocaleString(
+        fullLocaleString: localeStr,
+      ),
     ),
   );
 

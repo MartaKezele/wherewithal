@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../change_notifiers/user_repo.dart';
+import '../../../change_notifiers/repo_factory.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/password_form_field.dart';
 import '../../../components/wrappers/screen.dart';
@@ -9,7 +9,6 @@ import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
-import '../../../utils/form_field_validators.dart';
 import '../../../utils/overlay_banner.dart';
 import '../../../extensions/build_context.dart';
 import '../../../extensions/button/filled_button.dart';
@@ -39,8 +38,9 @@ class _ChangePasswordState extends State<ChangePassword> {
       _changingPassword = true;
     });
 
-    await GetIt.I<UserRepoChangeNotifier>()
-        .userRepo
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
+        .userRepo1
         .updatePassword(
           _passwordController.text,
         )
@@ -96,12 +96,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                 valueListenable: _passwordValueNotifier,
                 builder: (context, password, _) {
                   return FilledButton(
-                    onPressed: !passwordValid(password, localizations).success
-                        ? null
-                        : () => executeFnIfFormValid(
-                              formKey: _formKey,
-                              fn: _changePassword,
-                            ),
+                    onPressed: () => executeFnIfFormValid(
+                      formKey: _formKey,
+                      fn: _changePassword,
+                    ),
                     child: Text(localizations.confirm),
                   )
                       .colorStyle(

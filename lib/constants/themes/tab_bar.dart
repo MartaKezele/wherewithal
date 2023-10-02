@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wherewithal/config/color_schemes/dark.dart';
-import 'package:wherewithal/config/color_schemes/light.dart';
+
+import '../../config/color_schemes/dark.dart';
+import '../../config/color_schemes/light.dart';
 
 const tabIndicatorWidth = 3.0;
 

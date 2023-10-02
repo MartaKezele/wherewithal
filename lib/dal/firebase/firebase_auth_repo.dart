@@ -1,14 +1,54 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../change_notifiers/repo_factory.dart';
 import '../../config/auth_provider.dart';
+import '../../config/setup_data/categories.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
+import '../../models/models.dart' as models;
+import '../../models/setup/setup_category.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 
 class FirebaseAuthRepo extends AuthRepo {
   FirebaseAuthRepo(super.localizations);
+
+  Future<void> _setupCategories({
+    required dynamic rootDoc,
+    required List<SetupCategory> categories,
+  }) async {
+    for (final category in categories) {
+      final subcategoryDoc = await rootDoc.subcategories.add(category);
+      await _setupCategories(
+        rootDoc: subcategoryDoc,
+        categories: category.subcategories,
+      );
+    }
+  }
+
+  Future<ActionResult> _setupUserData(String userUid) async {
+    final userResult = await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
+        .userRepo2
+        .create(userUid);
+
+    if (userResult.data != null) {
+      for (final category in allSetupCategories) {
+        final categoryDoc = await models.usersRef
+            .doc(userResult.data!.id)
+            .categories
+            .add(category);
+        await _setupCategories(
+          rootDoc: categoryDoc,
+          categories: category.subcategories,
+        );
+      }
+    }
+
+    return userResult;
+  }
 
   Future<OAuthCredential?> _googleAuthCredential() async {
     try {
@@ -99,14 +139,17 @@ class FirebaseAuthRepo extends AuthRepo {
     String password,
   ) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return ActionResult(
-        success: true,
-        messageTitle: localizations.createdAccount,
-      );
+
+      if (userCredential.user == null) {
+        return genericFailureResult(localizations);
+      }
+
+      return await _setupUserData(userCredential.user!.uid);
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e, localizations);
     } catch (_) {
@@ -201,7 +244,27 @@ class FirebaseAuthRepo extends AuthRepo {
         idToken: googleAuth.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (userCredential.user == null) {
+        return genericFailureResult(localizations);
+      }
+
+      final userResult = await GetIt.I<RepoFactoryChangeNotifier>()
+          .repoFactory
+          .userRepo2
+          .retrieveByUid(userCredential.user!.uid);
+
+      if (!userResult.success) {
+        final userResult = await _setupUserData(userCredential.user!.uid);
+        // Reload user so that AuthChangeNotifier can register firestore user listener
+        await GetIt.I<RepoFactoryChangeNotifier>()
+            .repoFactory
+            .userRepo1
+            .reloadUser();
+        return userResult;
+      }
 
       return ActionResult(
         success: true,

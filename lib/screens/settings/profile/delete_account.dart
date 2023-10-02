@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wherewithal/components/dialogs/confirm_dialog.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../change_notifiers/user_repo.dart';
+import '../../../change_notifiers/repo_factory.dart';
+import '../../../components/dialogs/confirm_dialog.dart';
 import '../../../components/wrappers/screen.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
@@ -27,8 +28,9 @@ class _DeleteAccountState extends State<DeleteAccount> {
       _deletingAccount = true;
     });
 
-    await GetIt.I<UserRepoChangeNotifier>()
-        .userRepo
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
+        .userRepo1
         .deleteAccount()
         .then((result) {
       setState(() {
@@ -69,10 +71,12 @@ class _DeleteAccountState extends State<DeleteAccount> {
           HeightSpacer.md,
           FilledButton(
             onPressed: () => showConfirmDialog(
-              context: context,
-              title: localizations.areYouSure,
-              onOkPressed: _deleteAccount,
-            ),
+                context: context,
+                title: localizations.areYouSure,
+                onOkPressed: () {
+                  context.pop();
+                  _deleteAccount();
+                }),
             child: Text(localizations.delete),
           )
               .colorStyle(

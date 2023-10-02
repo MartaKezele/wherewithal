@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../change_notifiers/repo_factory.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
-import '../user_repo.dart';
+import '../user_repo_1.dart';
 import 'helpers.dart';
 
-class FirebaseUserRepo extends UserRepo {
-  FirebaseUserRepo(super.localizations);
+class FirebaseUserRepo1 extends UserRepo1 {
+  FirebaseUserRepo1(super.localizations);
 
   @override
   Future<ActionResult> updateUserInfo(String? displayName) async {
@@ -54,12 +56,16 @@ class FirebaseUserRepo extends UserRepo {
         );
       }
 
-      await FirebaseAuth.instance.currentUser!.delete();
+      final deleteResult = await GetIt.I<RepoFactoryChangeNotifier>()
+          .repoFactory
+          .userRepo2
+          .delete(FirebaseAuth.instance.currentUser!.uid);
 
-      return ActionResult(
-        success: true,
-        messageTitle: localizations.deletedAccount,
-      );
+      if (deleteResult.success) {
+        await FirebaseAuth.instance.currentUser!.delete();
+      }
+
+      return deleteResult;
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e, localizations);
     } catch (_) {

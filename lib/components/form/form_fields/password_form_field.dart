@@ -27,7 +27,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       controller: widget.controller,
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
-        label: Text(localizations.password),
+        label: Text('${localizations.password}*'),
         hintText: localizations.minCharacters(minPasswordCharacters),
         hintStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
@@ -49,7 +49,6 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       obscureText: _obscureText,
       autocorrect: false,
       validator: (password) => passwordValidator(password, localizations),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 }

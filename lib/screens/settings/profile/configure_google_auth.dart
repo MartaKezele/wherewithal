@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../change_notifiers/auth.dart';
-import '../../../change_notifiers/auth_repo.dart';
+import '../../../change_notifiers/repo_factory.dart';
 import '../../../components/wrappers/screen.dart';
 import '../../../config/auth_provider.dart';
 import '../../../constants/spacers.dart';
@@ -31,7 +31,8 @@ class _ConfigureGoogleAuthState extends State<ConfigureGoogleAuth>
       _linkingAuth = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>()
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
         .authRepo
         .linkWithGoogleCredential()
         .then((result) {

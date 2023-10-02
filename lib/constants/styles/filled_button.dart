@@ -69,6 +69,16 @@ class FilledButtonStyles {
     overlayColor: Colors.white.withOpacity(overlayOpacity),
   );
 
+  static final _darkSurfaceVariant = ColorStyle(
+    foregroundColor: darkColorScheme.onSurfaceVariant,
+    disabledForegroundColor:
+        darkColorScheme.onSurfaceVariant.withOpacity(disabledForegroundOpacity),
+    backgroundColor: darkColorScheme.surfaceVariant,
+    disabledBackgroundColor:
+        darkColorScheme.surfaceVariant.withOpacity(disabledBackgroundOpacity),
+    overlayColor: Colors.white.withOpacity(overlayOpacity),
+  );
+
   static final _darkError = ColorStyle(
     foregroundColor: darkColorScheme.onErrorContainer,
     disabledForegroundColor:
@@ -154,6 +164,16 @@ class FilledButtonStyles {
     overlayColor: Colors.black.withOpacity(overlayOpacity),
   );
 
+  static final _lightSurfaceVariant = ColorStyle(
+    foregroundColor: lightColorScheme.onSurfaceVariant,
+    disabledForegroundColor: lightColorScheme.onSurfaceVariant
+        .withOpacity(disabledForegroundOpacity),
+    backgroundColor: lightColorScheme.surfaceVariant,
+    disabledBackgroundColor:
+        lightColorScheme.surfaceVariant.withOpacity(disabledBackgroundOpacity),
+    overlayColor: Colors.black.withOpacity(overlayOpacity),
+  );
+
   static final _lightError = ColorStyle(
     foregroundColor: lightColorScheme.onErrorContainer,
     disabledForegroundColor: lightColorScheme.onErrorContainer
@@ -203,6 +223,11 @@ class FilledButtonStyles {
   static ColorStyle get surface => currentThemeColorStyle(
         darkColorStyle: _darkSurface,
         lightColorStyle: _lightSurface,
+      );
+
+  static ColorStyle get surfaceVariant => currentThemeColorStyle(
+        darkColorStyle: _darkSurfaceVariant,
+        lightColorStyle: _lightSurfaceVariant,
       );
 
   static ColorStyle get error => currentThemeColorStyle(

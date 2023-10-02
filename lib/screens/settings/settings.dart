@@ -3,10 +3,10 @@ import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../change_notifiers/auth_repo.dart';
 import '../../change_notifiers/currency.dart';
 import '../../change_notifiers/date_format.dart';
 import '../../change_notifiers/language.dart';
+import '../../change_notifiers/repo_factory.dart';
 import '../../components/dialogs/currency_dialog.dart';
 import '../../components/dialogs/date_format_dialog.dart';
 import '../../components/dialogs/language_dialog.dart';
@@ -35,7 +35,7 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
       _signingOut = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>().authRepo.signOut();
+    await GetIt.I<RepoFactoryChangeNotifier>().repoFactory.authRepo.signOut();
 
     setState(() {
       _signingOut = false;
@@ -63,7 +63,9 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
     );
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(localizations.settings),
+      ),
       body: ListView(
         children: [
           ListTile(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../change_notifiers/auth_repo.dart';
+import '../../change_notifiers/repo_factory.dart';
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
 import '../../components/form/form_fields/password_form_field.dart';
@@ -13,7 +13,6 @@ import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
-import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/build_context.dart';
 import '../../extensions/button/filled_button.dart';
@@ -49,11 +48,12 @@ class _SignInState extends State<SignIn> {
       _signingIn = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>()
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
         .authRepo
         .signInWithEmailAndPassword(
-          _emailController.text,
-          _passwordController.text,
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
         )
         .then((result) async {
       if (!result.success) {
@@ -130,13 +130,10 @@ class _SignInState extends State<SignIn> {
                       second: _passwordValueNotifier,
                       builder: (context, email, password, child) {
                         return FilledButton(
-                          onPressed: !emailValid(email, localizations).success ||
-                                  !passwordValid(password, localizations).success
-                              ? null
-                              : () => executeFnIfFormValid(
-                                    formKey: _formKey,
-                                    fn: _signIn,
-                                  ),
+                          onPressed: () => executeFnIfFormValid(
+                            formKey: _formKey,
+                            fn: _signIn,
+                          ),
                           child: Text(localizations.signIn),
                         )
                             .colorStyle(FilledButtonStyles.enterAppPrimary)

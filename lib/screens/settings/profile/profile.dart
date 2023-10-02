@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../change_notifiers/auth.dart';
-import '../../../change_notifiers/user_repo.dart';
+import '../../../change_notifiers/repo_factory.dart';
 import '../../../components/auth_provider_card.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/email_form_field.dart';
@@ -52,8 +52,9 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
       _savingChanges = true;
     });
 
-    await GetIt.I<UserRepoChangeNotifier>()
-        .userRepo
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
+        .userRepo1
         .updateUserInfo(_displayNameController.text)
         .then((result) {
       setState(() {
@@ -92,7 +93,9 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
         _nameFieldDirty ? _displayNameController.text : displayName ?? '';
 
     return Screen(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(localizations.profile),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

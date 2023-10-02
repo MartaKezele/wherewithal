@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void executeFnIfFormValid({
-  required GlobalKey<FormState> formKey,
+  required GlobalKey<dynamic> formKey,
   required Future<void> Function() fn,
 }) {
   FocusManager.instance.primaryFocus?.unfocus();

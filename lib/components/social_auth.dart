@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 
-import '../change_notifiers/auth_repo.dart';
+import '../change_notifiers/repo_factory.dart';
 import '../constants/hero_tags.dart';
 import '../constants/styles/outlined_button.dart';
 import '../extensions/button/button_style_button.dart';
@@ -31,7 +31,8 @@ class _SocialAuthState extends State<SocialAuth> {
       _loading = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>()
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
         .authRepo
         .continueWithGoogle()
         .then((result) {
@@ -42,6 +43,13 @@ class _SocialAuthState extends State<SocialAuth> {
         _resultBanner = showActionResultOverlayBanner(context, result);
       }
     });
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override

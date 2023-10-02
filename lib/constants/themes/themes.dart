@@ -1,12 +1,12 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:wherewithal/constants/themes/dialog.dart';
 
 import '../../config/color_schemes/dark.dart';
 import '../../config/color_schemes/light.dart';
 import 'app_bar.dart';
 import 'bottom_navigation_bar.dart';
 import 'button.dart';
+import 'dialog.dart';
 import 'floating_action_button.dart';
 import 'list_tile.dart';
 import 'tab_bar.dart';
@@ -27,7 +27,7 @@ ThemeData lightColorTheme(BuildContext context) => _themeData.copyWith(
       colorScheme: lightColorScheme,
       appBarTheme: lightAppBarTheme(context),
       scaffoldBackgroundColor: lightColorScheme.surface,
-      floatingActionButtonTheme: lightFloatingActionButtonThemeData,
+      floatingActionButtonTheme: lightFabThemeData,
       bottomNavigationBarTheme: lightBottomNavigationBarThemeData,
       listTileTheme: lightListTileThemeData,
       textTheme: lightTextTheme(context),
@@ -42,7 +42,7 @@ ThemeData darkColorTheme(BuildContext context) => _themeData.copyWith(
       colorScheme: darkColorScheme,
       appBarTheme: darkAppBarTheme(context),
       scaffoldBackgroundColor: darkColorScheme.surface,
-      floatingActionButtonTheme: darkFloatingActionButtonThemeData,
+      floatingActionButtonTheme: darkFabThemeData,
       bottomNavigationBarTheme: darkBottomNavigationBarThemeData,
       listTileTheme: darkListTileThemeData,
       textTheme: darkTextTheme(context),

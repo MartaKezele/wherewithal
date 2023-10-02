@@ -742,7 +742,7 @@ class AppLocalizations {
 
   String get dataWillBeDeleted {
     return Intl.message(
-      'Your data will be deleted, this action is non reversible.',
+      'Your data will be deleted, this action is non-reversible.',
       locale: localeName,
     );
   }
@@ -761,138 +761,189 @@ class AppLocalizations {
     );
   }
 
-  String get days {
+  String get want {
     return Intl.message(
-      'days',
+      'Want',
       locale: localeName,
     );
   }
 
-  String get weeks {
+  String get need {
     return Intl.message(
-      'weeks',
+      'Need',
       locale: localeName,
     );
   }
 
-  String get months {
+  String get investment {
     return Intl.message(
-      'months',
+      'Investment',
       locale: localeName,
     );
   }
 
-  String get years {
+  String get transactionType {
     return Intl.message(
-      'years',
+      'Transaction type',
       locale: localeName,
     );
   }
 
-  String get monday {
+  String get deleteCategoryConfirmationMsg {
     return Intl.message(
-      'Monday',
+      'All subcategories will be deleted. This action is non-reversible.',
       locale: localeName,
     );
   }
 
-  String get tuesday {
+  String get userCouldNotBeFound {
     return Intl.message(
-      'Tuesday',
+      'User could not be found.',
       locale: localeName,
     );
   }
 
-  String get wednesday {
+  String get retrievedUser {
     return Intl.message(
-      'Wednesday',
+      'Successfully retrieved user.',
       locale: localeName,
     );
   }
 
-  String get thursday {
+  String get couldNotDeleteData {
     return Intl.message(
-      'Thursday',
+      'Could not delete your data.',
       locale: localeName,
     );
   }
 
-  String get friday {
+  String get fetchedCategories {
     return Intl.message(
-      'Friday',
+      'Fetched categories.',
       locale: localeName,
     );
   }
 
-  String get saturday {
+  String get subcategories {
     return Intl.message(
-      'Saturday',
+      'Subcategories',
       locale: localeName,
     );
   }
 
-  String get sunday {
+  String get title {
     return Intl.message(
-      'Sunday',
+      'Title',
       locale: localeName,
     );
   }
 
-  String get onMonday {
+  String get settings {
     return Intl.message(
-      'on Monday',
+      'Settings',
       locale: localeName,
     );
   }
 
-  String get onTuesday {
+  String get reason {
     return Intl.message(
-      'on Tuesday',
+      'Reason',
       locale: localeName,
     );
   }
 
-  String get onWednesday {
+  String get none {
     return Intl.message(
-      'on Wednesday',
+      'None',
       locale: localeName,
     );
   }
 
-  String get onThursday {
+  String get addSubcategory {
     return Intl.message(
-      'on Thursday',
+      'Add subcategory',
       locale: localeName,
     );
   }
 
-  String get onFriday {
+  String get updatedCategory {
     return Intl.message(
-      'on Friday',
+      'Updated category',
       locale: localeName,
     );
   }
 
-  String get onSaturday {
+  String get couldNotUpdateCategory {
     return Intl.message(
-      'on Saturday',
+      'Could not update category',
       locale: localeName,
     );
   }
 
-  String get onSunday {
+  String get createdCategory {
     return Intl.message(
-      'on Sunday',
+      'Created category',
       locale: localeName,
     );
   }
 
-  String onDay(int day) {
+  String get couldNotCreateCategory {
     return Intl.message(
-      'on day $day',
+      'Could not create category',
       locale: localeName,
-      name: 'onDay',
-      args: [day],
+    );
+  }
+
+  String get noData {
+    return Intl.message(
+      'No data',
+      locale: localeName,
+    );
+  }
+
+  String get error {
+    return Intl.message(
+      'Error',
+      locale: localeName,
+    );
+  }
+
+  String get errorFetchingCategory {
+    return Intl.message(
+      'Error fetching category',
+      locale: localeName,
+    );
+  }
+
+  String get valueIsRequired {
+    return Intl.message(
+      'Value is required',
+      locale: localeName,
+    );
+  }
+
+  String get numberNotValid {
+    return Intl.message(
+      'Number not valid',
+      locale: localeName,
+    );
+  }
+
+  String couldNotDeleteCategory(String categoryTitle) {
+    return Intl.message(
+      'Could not delete category $categoryTitle',
+      locale: localeName,
+      name: 'deletedCategory',
+      args: [categoryTitle],
+    );
+  }
+
+  String deletedCategory(String categoryTitle) {
+    return Intl.message(
+      'Deleted category $categoryTitle',
+      locale: localeName,
+      name: 'deletedCategory',
+      args: [categoryTitle],
     );
   }
 
@@ -929,54 +980,6 @@ class AppLocalizations {
       locale: localeName,
       name: 'minCharacters',
       args: [howMany],
-    );
-  }
-
-  String repeatsEveryXDays(int howMany) {
-    return Intl.plural(
-      howMany,
-      zero: 'Doesn\'t repeat',
-      one: 'Repeats every day',
-      other: 'Repeats every $howMany days',
-      locale: localeName,
-      args: [howMany],
-      name: 'repeatsEveryXDays',
-    );
-  }
-
-  String repeatsEveryXWeeks(int howMany) {
-    return Intl.plural(
-      howMany,
-      zero: 'Doesn\'t repeat',
-      one: 'Repeats every week',
-      other: 'Repeats every $howMany weeks',
-      locale: localeName,
-      args: [howMany],
-      name: 'repeatsEveryXWeeks',
-    );
-  }
-
-  String repeatsEveryXMonths(int howMany) {
-    return Intl.plural(
-      howMany,
-      zero: 'Doesn\'t repeat',
-      one: 'Repeats every month',
-      other: 'Repeats every $howMany months',
-      locale: localeName,
-      args: [howMany],
-      name: 'repeatsEveryXMonths',
-    );
-  }
-
-  String repeatsEveryXYears(int howMany) {
-    return Intl.plural(
-      howMany,
-      zero: 'Doesn\'t repeat',
-      one: 'Repeats every year',
-      other: 'Repeats every $howMany years',
-      locale: localeName,
-      args: [howMany],
-      name: 'repeatsEveryXYears',
     );
   }
 }

@@ -48,6 +48,37 @@ ValidationResult emailValid(
   return ValidationResult(success: true);
 }
 
+ValidationResult requiredValid(
+  String? text,
+  AppLocalizations localizations,
+) {
+  if (text == null || text.isEmpty) {
+    return ValidationResult(
+      success: false,
+      message: localizations.valueIsRequired,
+    );
+  }
+
+  return ValidationResult(success: true);
+}
+
+ValidationResult doubleValid(
+  String? text,
+  AppLocalizations localizations,
+) {
+  if (text != null && text.isNotEmpty) {
+    final number = double.tryParse(text);
+    if (number == null) {
+      return ValidationResult(
+        success: false,
+        message: localizations.numberNotValid,
+      );
+    }
+  }
+
+  return ValidationResult(success: true);
+}
+
 String? emailValidator(
   String? email,
   AppLocalizations localizations,
@@ -60,4 +91,18 @@ String? passwordValidator(
   AppLocalizations localizations,
 ) {
   return passwordValid(password, localizations).message;
+}
+
+String? requiredValidator(
+  String? text,
+  AppLocalizations localizations,
+) {
+  return requiredValid(text, localizations).message;
+}
+
+String? doubleValidator(
+  String? text,
+  AppLocalizations localizations,
+) {
+  return doubleValid(text, localizations).message;
 }

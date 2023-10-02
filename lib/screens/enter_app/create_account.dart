@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wherewithal/change_notifiers/auth_repo.dart';
-import 'package:wherewithal/extensions/button/filled_button.dart';
 
+import '../../change_notifiers/repo_factory.dart';
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/email_form_field.dart';
 import '../../components/form/form_fields/password_form_field.dart';
@@ -14,9 +13,9 @@ import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/form.dart';
-import '../../utils/form_field_validators.dart';
 import '../../utils/overlay_banner.dart';
 import '../../extensions/build_context.dart';
+import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/button_style_button.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -49,11 +48,12 @@ class _CreateAccountState extends State<CreateAccount> {
       _creatingAccount = true;
     });
 
-    await GetIt.I<AuthRepoChangeNotifier>()
+    await GetIt.I<RepoFactoryChangeNotifier>()
+        .repoFactory
         .authRepo
         .createAccountWithEmailAndPassword(
-          _emailController.text,
-          _passwordController.text,
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
         )
         .then((result) async {
       if (!result.success) {
@@ -119,13 +119,10 @@ class _CreateAccountState extends State<CreateAccount> {
                       second: _passwordValueNotifier,
                       builder: (context, email, password, child) {
                         return FilledButton(
-                          onPressed: !emailValid(email, localizations).success ||
-                                  !passwordValid(password, localizations).success
-                              ? null
-                              : () => executeFnIfFormValid(
-                                    formKey: _formKey,
-                                    fn: _createAccount,
-                                  ),
+                          onPressed: () => executeFnIfFormValid(
+                            formKey: _formKey,
+                            fn: _createAccount,
+                          ),
                           child: Text(localizations.createAccount),
                         )
                             .colorStyle(FilledButtonStyles.enterAppSecondary)

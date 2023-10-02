@@ -1,18 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wherewithal/config/bottom_nav.dart';
-import 'package:wherewithal/config/router.dart';
-import 'package:wherewithal/config/keys/path_param.dart';
-import 'package:wherewithal/screens/home/budget.dart';
-import 'package:wherewithal/screens/home/categories/categories.dart';
-import 'package:wherewithal/screens/home/categories/category_view.dart';
-import 'package:wherewithal/screens/home/categories/sub_1_category_view.dart';
-import 'package:wherewithal/screens/home/categories/sub_2_category_view.dart';
-import 'package:wherewithal/screens/home/insights.dart';
-import 'package:wherewithal/screens/home/recurring_transactions.dart';
-import 'package:wherewithal/screens/home/home.dart';
 
 import '../change_notifiers/auth.dart';
+import '../models/models.dart' as models;
+import '../screens/home/budget.dart';
+import '../screens/home/categories/categories.dart';
+import '../screens/home/categories/category_view.dart';
+import '../screens/home/home.dart';
+import '../screens/home/insights.dart';
+import '../screens/home/recurring_transactions.dart';
+import 'bottom_nav.dart';
+import 'keys/path_param.dart';
 import 'keys/query_param.dart';
 import '../app_models/named_go_route.dart';
 import '../screens/enter_app/create_account.dart';
@@ -32,6 +30,7 @@ import '../screens/settings/profile/profile.dart';
 import '../screens/settings/settings.dart';
 import '../l10n/app_localizations.dart';
 import 'auth_provider.dart';
+import 'router.dart';
 
 class TopLevelRoutes {
   static final homeShellRoute = ShellRoute(
@@ -46,7 +45,7 @@ class TopLevelRoutes {
   );
 
   static final insights = GoRoute(
-    path: '/insights',
+    path: '/',
     builder: (context, state) => const Insights(),
   );
 
@@ -128,6 +127,9 @@ class NamedChildRoutes {
   static const _configurePasswordAuthName = 'configurePasswordAuth';
   static const _configureGoogleAuthName = 'configureGoogleAuth';
   static const _deleteAccountName = 'deleteAccount';
+  static const categoryPath = 'category';
+  static const _sub1categoryPath = 'sub-1-category';
+  static const _sub2categoryPath = 'sub-2-category';
 
   static _redirectToReauth(
     GoRouterState state,
@@ -261,8 +263,26 @@ class NamedChildRoutes {
   static final category = NamedGoRoute(
     parentNavigatorKey: navigatorKey,
     nonNullableName: 'category',
-    path: 'category/:${PathParamKeys.categoryId}',
-    builder: (context, state) => const CategoryView(),
+    path: '$categoryPath/:${PathParamKeys.categoryId}',
+    builder: (context, state) {
+      final categoryId = state.pathParameters[PathParamKeys.categoryId];
+
+      assert(categoryId != null);
+
+      final categoryRef = models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .categories
+          .doc(categoryId);
+
+      return CategoryView(
+        ref: categoryRef,
+        subcategoriesRef: categoryRef.subcategories,
+        nextRoutePathPart: _sub1categoryPath,
+        updateFn: categoryRef.update,
+        deleteFn: categoryRef.delete,
+        addSubcategoryFn: categoryRef.subcategories.add,
+      );
+    },
     routes: [
       sub1category,
     ],
@@ -271,8 +291,29 @@ class NamedChildRoutes {
   static final sub1category = NamedGoRoute(
     parentNavigatorKey: navigatorKey,
     nonNullableName: 'sub1category',
-    path: 'sub-1-category/:${PathParamKeys.sub1categoryId}',
-    builder: (context, state) => const Sub1CategoryView(),
+    path: '$_sub1categoryPath/:${PathParamKeys.sub1categoryId}',
+    builder: (context, state) {
+      final categoryId = state.pathParameters[PathParamKeys.categoryId];
+      final sub1categoryId = state.pathParameters[PathParamKeys.sub1categoryId];
+      assert(categoryId != null);
+      assert(sub1categoryId != null);
+
+      final sub1categoryRef = models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .categories
+          .doc(categoryId)
+          .subcategories
+          .doc(sub1categoryId);
+
+      return CategoryView(
+        ref: sub1categoryRef,
+        subcategoriesRef: sub1categoryRef.subcategories,
+        nextRoutePathPart: _sub2categoryPath,
+        updateFn: sub1categoryRef.update,
+        deleteFn: sub1categoryRef.delete,
+        addSubcategoryFn: sub1categoryRef.subcategories.add,
+      );
+    },
     routes: [
       sub2category,
     ],
@@ -281,7 +322,30 @@ class NamedChildRoutes {
   static final sub2category = NamedGoRoute(
     parentNavigatorKey: navigatorKey,
     nonNullableName: 'sub2category',
-    path: 'sub-2-category/:${PathParamKeys.sub2categoryId}',
-    builder: (context, state) => const Sub2CategoryView(),
+    path: '$_sub2categoryPath/:${PathParamKeys.sub2categoryId}',
+    builder: (context, state) {
+      final categoryId = state.pathParameters[PathParamKeys.categoryId];
+      final sub1categoryId = state.pathParameters[PathParamKeys.sub1categoryId];
+      final sub2categoryId = state.pathParameters[PathParamKeys.sub2categoryId];
+
+      assert(categoryId != null);
+      assert(sub1categoryId != null);
+      assert(sub2categoryId != null);
+
+      final sub2categoryRef = models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .categories
+          .doc(categoryId)
+          .subcategories
+          .doc(sub1categoryId)
+          .subcategories
+          .doc(sub2categoryId);
+
+      return CategoryView(
+        ref: sub2categoryRef,
+        updateFn: sub2categoryRef.update,
+        deleteFn: sub2categoryRef.delete,
+      );
+    },
   );
 }

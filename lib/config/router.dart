@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../change_notifiers/auth.dart';
-import '../change_notifiers/auth_repo.dart';
+import '../change_notifiers/repo_factory.dart';
 import 'routes.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -24,7 +24,7 @@ final router = GoRouter(
     final auth = GetIt.I<AuthChangeNotifier>();
 
     if (auth.signedIn &&
-        auth.emailVerified &&
+        auth.emailVerified && auth.id != null &&
         (state.location.startsWith(TopLevelRoutes.welcome.path) ||
             state.location.startsWith(TopLevelRoutes.verifyEmail.path))) {
       return initialLocation;
@@ -33,7 +33,7 @@ final router = GoRouter(
     if (auth.signedIn &&
         !auth.emailVerified &&
         !state.location.startsWith(TopLevelRoutes.verifyEmail.path)) {
-      await GetIt.I<AuthRepoChangeNotifier>().authRepo.sendVerificationEmail();
+      await GetIt.I<RepoFactoryChangeNotifier>().repoFactory.authRepo.sendVerificationEmail();
       return TopLevelRoutes.verifyEmail.path;
     }
 
