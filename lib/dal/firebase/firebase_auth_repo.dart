@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wherewithal/config/setup_data/categories/expense.dart';
+import 'package:wherewithal/config/setup_data/categories/income.dart';
 
 import '../../change_notifiers/repo_factory.dart';
 import '../../config/auth_provider.dart';
-import '../../config/setup_data/categories.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
 import '../../models/models.dart' as models;
@@ -35,6 +36,7 @@ class FirebaseAuthRepo extends AuthRepo {
         .create(userUid);
 
     if (userResult.data != null) {
+      final allSetupCategories = [...expenseCategories, ...incomeCategories];
       for (final category in allSetupCategories) {
         final categoryDoc = await models.usersRef
             .doc(userResult.data!.id)

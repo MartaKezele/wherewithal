@@ -276,7 +276,7 @@ class NamedChildRoutes {
 
       return CategoryView(
         ref: categoryRef,
-        subcategoriesRef: categoryRef.subcategories,
+        subcategoriesRef: categoryRef.subcategories.orderByTitle(),
         nextRoutePathPart: _sub1categoryPath,
         updateFn: categoryRef.update,
         deleteFn: categoryRef.delete,
@@ -307,7 +307,7 @@ class NamedChildRoutes {
 
       return CategoryView(
         ref: sub1categoryRef,
-        subcategoriesRef: sub1categoryRef.subcategories,
+        subcategoriesRef: sub1categoryRef.subcategories.orderByTitle(),
         nextRoutePathPart: _sub2categoryPath,
         updateFn: sub1categoryRef.update,
         deleteFn: sub1categoryRef.delete,
