@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 // TODO: replace package imports with relative imports
 import 'package:wherewithal/app_models/validation_result.dart';
 
@@ -48,11 +48,25 @@ ValidationResult emailValid(
   return ValidationResult(success: true);
 }
 
-ValidationResult requiredValid(
+ValidationResult requiredTextValid(
   String? text,
   AppLocalizations localizations,
 ) {
   if (text == null || text.isEmpty) {
+    return ValidationResult(
+      success: false,
+      message: localizations.valueIsRequired,
+    );
+  }
+
+  return ValidationResult(success: true);
+}
+
+ValidationResult requiredObjectValid(
+  Object? object,
+  AppLocalizations localizations,
+) {
+  if (object == null) {
     return ValidationResult(
       success: false,
       message: localizations.valueIsRequired,
@@ -79,6 +93,47 @@ ValidationResult doubleValid(
   return ValidationResult(success: true);
 }
 
+ValidationResult requiredDoubleValid(
+  String? text,
+  AppLocalizations localizations,
+) {
+  final requiredTextValidResult = requiredTextValid(text, localizations);
+
+  if (requiredTextValidResult.success == false) {
+    return requiredTextValidResult;
+  }
+
+  return doubleValid(text, localizations);
+}
+
+ValidationResult requiredDateTimeValid(
+  DateTime? dateTime,
+  AppLocalizations localizations,
+) {
+  if (dateTime == null) {
+    return ValidationResult(
+      success: false,
+      message: localizations.valueIsRequired,
+    );
+  }
+
+  return ValidationResult(success: true);
+}
+
+ValidationResult requiredDateTimeRangeValid(
+  DateTimeRange? dateTimeRange,
+  AppLocalizations localizations,
+) {
+  if (dateTimeRange == null) {
+    return ValidationResult(
+      success: false,
+      message: localizations.valueIsRequired,
+    );
+  }
+
+  return ValidationResult(success: true);
+}
+
 String? emailValidator(
   String? email,
   AppLocalizations localizations,
@@ -93,11 +148,11 @@ String? passwordValidator(
   return passwordValid(password, localizations).message;
 }
 
-String? requiredValidator(
+String? requiredTextValidator(
   String? text,
   AppLocalizations localizations,
 ) {
-  return requiredValid(text, localizations).message;
+  return requiredTextValid(text, localizations).message;
 }
 
 String? doubleValidator(
@@ -105,4 +160,38 @@ String? doubleValidator(
   AppLocalizations localizations,
 ) {
   return doubleValid(text, localizations).message;
+}
+
+String? requiredDoubleValidator(
+  String? text,
+  AppLocalizations localizations,
+) {
+  return requiredDoubleValid(text, localizations).message;
+}
+
+String? requiredObjectValidator(
+  Object? object,
+  AppLocalizations localizations,
+) {
+  return requiredObjectValid(object, localizations).message;
+}
+
+String? requiredDateTimeValidator(
+  DateTime? dateTime,
+  AppLocalizations localizations,
+) {
+  return requiredDateTimeValid(
+    dateTime,
+    localizations,
+  ).message;
+}
+
+String? requiredDateTimeRangeValidator(
+  DateTimeRange? dateTimeRange,
+  AppLocalizations localizations,
+) {
+  return requiredDateTimeRangeValid(
+    dateTimeRange,
+    localizations,
+  ).message;
 }

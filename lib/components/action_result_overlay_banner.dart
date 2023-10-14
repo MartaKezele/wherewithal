@@ -9,6 +9,7 @@ import '../constants/styles/container.dart';
 import '../constants/styles/overlay_banner.dart';
 import '../l10n/app_localizations.dart';
 import '../extensions/button/text_button.dart';
+import 'drag_indicator.dart';
 
 class ActionResultOverlayBanner extends StatefulWidget {
   const ActionResultOverlayBanner({
@@ -144,19 +145,7 @@ class _ActionResultOverlayBannerState extends State<ActionResultOverlayBanner>
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(dragIndicatorContainerRadius),
-                              ),
-                              color: textColor,
-                            ),
-                            height: dragIndicatorHeight,
-                            width: dragIndicatorWidth,
-                            child: const SizedBox(),
-                          ),
-                        ],
+                        children: [DragIndicator(color: textColor)],
                       ),
                       HeightSpacer.lg,
                       Text(

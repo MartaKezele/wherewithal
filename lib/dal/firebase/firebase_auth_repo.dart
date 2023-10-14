@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:wherewithal/config/setup_data/categories/expense.dart';
-import 'package:wherewithal/config/setup_data/categories/income.dart';
 
 import '../../change_notifiers/repo_factory.dart';
 import '../../config/auth_provider.dart';
+import '../../config/setup_data/categories/expense.dart';
+import '../../config/setup_data/categories/income.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
 import '../../models/models.dart' as models;
@@ -17,13 +17,24 @@ class FirebaseAuthRepo extends AuthRepo {
   FirebaseAuthRepo(super.localizations);
 
   Future<void> _setupCategories({
-    required dynamic rootDoc,
+    required String userId,
+    required String? parentCategoryId,
     required List<SetupCategory> categories,
   }) async {
     for (final category in categories) {
-      final subcategoryDoc = await rootDoc.subcategories.add(category);
+      final subcategoryDoc = await models.usersRef.doc(userId).categories.add(
+            models.Category(
+              id: '',
+              title: category.title,
+              transactionType: category.transactionType,
+              budget: category.budget,
+              categoryReason: category.categoryReason,
+              parentCategoryId: parentCategoryId,
+            ),
+          );
       await _setupCategories(
-        rootDoc: subcategoryDoc,
+        userId: userId,
+        parentCategoryId: subcategoryDoc.id,
         categories: category.subcategories,
       );
     }
@@ -36,17 +47,11 @@ class FirebaseAuthRepo extends AuthRepo {
         .create(userUid);
 
     if (userResult.data != null) {
-      final allSetupCategories = [...expenseCategories, ...incomeCategories];
-      for (final category in allSetupCategories) {
-        final categoryDoc = await models.usersRef
-            .doc(userResult.data!.id)
-            .categories
-            .add(category);
-        await _setupCategories(
-          rootDoc: categoryDoc,
-          categories: category.subcategories,
-        );
-      }
+      await _setupCategories(
+        userId: userResult.data!.id,
+        categories: [...expenseCategories, ...incomeCategories],
+        parentCategoryId: null,
+      );
     }
 
     return userResult;

@@ -2,12 +2,12 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../change_notifiers/auth.dart';
-import '../models/models.dart' as models;
 import '../screens/home/budget.dart';
 import '../screens/home/categories/categories.dart';
 import '../screens/home/categories/category_view.dart';
 import '../screens/home/home.dart';
-import '../screens/home/insights.dart';
+import '../screens/home/insights/insights.dart';
+import '../screens/home/insights/value_transaction_view.dart';
 import '../screens/home/recurring_transactions.dart';
 import 'bottom_nav.dart';
 import 'keys/path_param.dart';
@@ -47,6 +47,9 @@ class TopLevelRoutes {
   static final insights = GoRoute(
     path: '/',
     builder: (context, state) => const Insights(),
+    routes: [
+      NamedChildRoutes.valueTransaction,
+    ],
   );
 
   static final recurringTransactions = GoRoute(
@@ -127,9 +130,6 @@ class NamedChildRoutes {
   static const _configurePasswordAuthName = 'configurePasswordAuth';
   static const _configureGoogleAuthName = 'configureGoogleAuth';
   static const _deleteAccountName = 'deleteAccount';
-  static const categoryPath = 'category';
-  static const _sub1categoryPath = 'sub-1-category';
-  static const _sub2categoryPath = 'sub-2-category';
 
   static _redirectToReauth(
     GoRouterState state,
@@ -263,88 +263,30 @@ class NamedChildRoutes {
   static final category = NamedGoRoute(
     parentNavigatorKey: navigatorKey,
     nonNullableName: 'category',
-    path: '$categoryPath/:${PathParamKeys.categoryId}',
+    path: 'category/:${PathParamKeys.categoryId}',
     builder: (context, state) {
       final categoryId = state.pathParameters[PathParamKeys.categoryId];
 
       assert(categoryId != null);
 
-      final categoryRef = models.usersRef
-          .doc(GetIt.I<AuthChangeNotifier>().id)
-          .categories
-          .doc(categoryId);
-
       return CategoryView(
-        ref: categoryRef,
-        subcategoriesRef: categoryRef.subcategories.orderByTitle(),
-        nextRoutePathPart: _sub1categoryPath,
-        updateFn: categoryRef.update,
-        deleteFn: categoryRef.delete,
-        addSubcategoryFn: categoryRef.subcategories.add,
+        id: categoryId!,
       );
     },
-    routes: [
-      sub1category,
-    ],
   );
 
-  static final sub1category = NamedGoRoute(
+  static final valueTransaction = NamedGoRoute(
     parentNavigatorKey: navigatorKey,
-    nonNullableName: 'sub1category',
-    path: '$_sub1categoryPath/:${PathParamKeys.sub1categoryId}',
+    nonNullableName: 'valueTransaction',
+    path: 'value-transaction/:${PathParamKeys.valueTransactionId}',
     builder: (context, state) {
-      final categoryId = state.pathParameters[PathParamKeys.categoryId];
-      final sub1categoryId = state.pathParameters[PathParamKeys.sub1categoryId];
-      assert(categoryId != null);
-      assert(sub1categoryId != null);
+      final valueTransactionId =
+          state.pathParameters[PathParamKeys.valueTransactionId];
 
-      final sub1categoryRef = models.usersRef
-          .doc(GetIt.I<AuthChangeNotifier>().id)
-          .categories
-          .doc(categoryId)
-          .subcategories
-          .doc(sub1categoryId);
+      assert(valueTransactionId != null);
 
-      return CategoryView(
-        ref: sub1categoryRef,
-        subcategoriesRef: sub1categoryRef.subcategories.orderByTitle(),
-        nextRoutePathPart: _sub2categoryPath,
-        updateFn: sub1categoryRef.update,
-        deleteFn: sub1categoryRef.delete,
-        addSubcategoryFn: sub1categoryRef.subcategories.add,
-      );
-    },
-    routes: [
-      sub2category,
-    ],
-  );
-
-  static final sub2category = NamedGoRoute(
-    parentNavigatorKey: navigatorKey,
-    nonNullableName: 'sub2category',
-    path: '$_sub2categoryPath/:${PathParamKeys.sub2categoryId}',
-    builder: (context, state) {
-      final categoryId = state.pathParameters[PathParamKeys.categoryId];
-      final sub1categoryId = state.pathParameters[PathParamKeys.sub1categoryId];
-      final sub2categoryId = state.pathParameters[PathParamKeys.sub2categoryId];
-
-      assert(categoryId != null);
-      assert(sub1categoryId != null);
-      assert(sub2categoryId != null);
-
-      final sub2categoryRef = models.usersRef
-          .doc(GetIt.I<AuthChangeNotifier>().id)
-          .categories
-          .doc(categoryId)
-          .subcategories
-          .doc(sub1categoryId)
-          .subcategories
-          .doc(sub2categoryId);
-
-      return CategoryView(
-        ref: sub2categoryRef,
-        updateFn: sub2categoryRef.update,
-        deleteFn: sub2categoryRef.delete,
+      return ValueTransactionView(
+        id: valueTransactionId!,
       );
     },
   );

@@ -8,6 +8,7 @@ class SetupCategory extends Category {
     required super.title,
     required super.transactionType,
     super.categoryReason,
+    super.parentCategoryId,
     super.budget,
     this.subcategories = const [],
   });

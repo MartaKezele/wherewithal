@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../../change_notifiers/auth.dart';
 import '../../../components/categories_list_view.dart';
-import '../../../config/routes.dart';
 import '../../../models/enums/transaction_types.dart';
 import '../../../models/models.dart' as models;
 
@@ -27,8 +26,8 @@ class Categories extends StatelessWidget {
             .doc(GetIt.I<AuthChangeNotifier>().id)
             .categories
             .whereTransactionType(isEqualTo: transactionType.name)
+            .whereParentCategoryId(isNull: true)
             .orderByTitle(),
-        nextRoutePathPart: NamedChildRoutes.categoryPath,
         foregroundColor: transactionType.foregroundColor(context),
       );
     }).toList();

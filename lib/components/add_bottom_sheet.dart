@@ -11,9 +11,13 @@ class AddBottomSheet extends StatelessWidget {
   const AddBottomSheet({
     super.key,
     required this.addCategory,
+    required this.addExpense,
+    required this.addIncome,
   });
 
   final void Function() addCategory;
+  final void Function() addExpense;
+  final void Function() addIncome;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,8 @@ class AddBottomSheet extends StatelessWidget {
         Expanded(
           child: FilledButton(
             onPressed: () {
-              // TODO add new expense
+              context.pop();
+              addExpense();
             },
             child: Text(localizations.expense),
           )
@@ -46,7 +51,8 @@ class AddBottomSheet extends StatelessWidget {
         Expanded(
           child: FilledButton(
             onPressed: () {
-              // TODO add new income
+              context.pop();
+              addIncome();
             },
             child: Text(localizations.income),
           )

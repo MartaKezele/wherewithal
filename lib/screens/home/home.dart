@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app_models/action_result.dart';
 import '../../app_models/bottom_nav_item.dart';
-import '../../change_notifiers/auth.dart';
 import '../../components/add_bottom_sheet.dart';
 import '../../components/dialogs/scrollable_form_dialog.dart';
 import '../../components/form/category_form.dart';
+import '../../components/form/value_transaction_form.dart';
 import '../../constants/styles/container.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/enums/transaction_types.dart';
 import '../../utils/overlay_banner.dart';
-import '../../models/models.dart' as models;
 import '../../extensions/build_context.dart';
 
 class Home extends StatefulWidget {
@@ -32,6 +31,9 @@ class _HomeState extends State<Home> {
   final _addCategoryFormKey = GlobalKey<CategoryFormState>();
   final _addCategoryFormStateKey = GlobalKey<FormState>();
 
+  final _addTransactionFormKey = GlobalKey<ValueTransactionFormState>();
+  final _addTransactionFormStateKey = GlobalKey<FormState>();
+
   int _currentBottomNavIndex = 0;
   OverlayEntry? _resultBanner;
 
@@ -41,6 +43,8 @@ class _HomeState extends State<Home> {
       useSafeArea: true,
       builder: (BuildContext context) => AddBottomSheet(
         addCategory: _addCategory,
+        addExpense: () => _addTransaction(TransactionTypes.expense),
+        addIncome: () => _addTransaction(TransactionTypes.income),
       ),
     );
   }
@@ -55,14 +59,10 @@ class _HomeState extends State<Home> {
   void _addCategory() async {
     await showScrollableFormDialog<ActionResult>(
       context: context,
-      title: AppLocalizations.of(context).addSubcategory,
+      title: AppLocalizations.of(context).addCategory,
       form: CategoryForm(
         key: _addCategoryFormKey,
         formKey: _addCategoryFormStateKey,
-        addSubcategoryFn: models.usersRef
-            .doc(GetIt.I<AuthChangeNotifier>().id)
-            .categories
-            .add,
       ),
       formKey: _addCategoryFormStateKey,
       onSubmit: () {
@@ -70,6 +70,31 @@ class _HomeState extends State<Home> {
         return _addCategoryFormKey.currentState!.addCategory();
       },
       submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
+    ).then((result) {
+      if (result != null) {
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          result,
+        );
+      }
+    });
+  }
+
+  void _addTransaction(TransactionTypes transactionType) async {
+    await showScrollableFormDialog<ActionResult>(
+      context: context,
+      title: AppLocalizations.of(context).addTransaction,
+      form: ValueTransactionForm(
+        key: _addTransactionFormKey,
+        formKey: _addTransactionFormStateKey,
+        transactionType: transactionType,
+      ),
+      onSubmit: () {
+        assert(_addTransactionFormKey.currentState != null);
+        return _addTransactionFormKey.currentState!.addValueTransaction();
+      },
+      submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
+      formKey: _addTransactionFormStateKey,
     ).then((result) {
       if (result != null) {
         _resultBanner = showActionResultOverlayBanner(

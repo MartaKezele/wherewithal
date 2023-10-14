@@ -8,6 +8,18 @@ import '../../models/models.dart' as models;
 class FirestoreUserRepo2 extends UserRepo2 {
   FirestoreUserRepo2(super.localizations);
 
+  Future<void> _deleteValueTransactions(
+    String userDocId,
+    Transaction transaction,
+  ) async {
+    final valueTransactionsQuery =
+        await models.usersRef.doc(userDocId).valueTransactions.get();
+
+    for (final valueTransactionDoc in valueTransactionsQuery.docs) {
+      valueTransactionDoc.reference.delete();
+    }
+  }
+
   Future<void> _deleteCategories(
     String userDocId,
     Transaction transaction,
@@ -16,74 +28,10 @@ class FirestoreUserRepo2 extends UserRepo2 {
         await models.usersRef.doc(userDocId).categories.get();
 
     for (final categoryDoc in categoriesQuery.docs) {
-      await _deleteSub1Categories(
-        userDocId,
-        categoryDoc.id,
-        transaction,
-      );
-
       models.usersRef
           .doc(userDocId)
           .categories
           .doc(categoryDoc.id)
-          .transactionDelete(transaction);
-    }
-  }
-
-  Future<void> _deleteSub1Categories(
-    String userDocId,
-    String categoryDocId,
-    Transaction transaction,
-  ) async {
-    final sub1categoriesQuery = await models.usersRef
-        .doc(userDocId)
-        .categories
-        .doc(categoryDocId)
-        .subcategories
-        .get();
-
-    for (final sub1categoryDoc in sub1categoriesQuery.docs) {
-      await _deleteSub2Categories(
-        userDocId,
-        categoryDocId,
-        sub1categoryDoc.id,
-        transaction,
-      );
-
-      models.usersRef
-          .doc(userDocId)
-          .categories
-          .doc(categoryDocId)
-          .subcategories
-          .doc(sub1categoryDoc.id)
-          .transactionDelete(transaction);
-    }
-  }
-
-  Future<void> _deleteSub2Categories(
-    String userDocId,
-    String categoryDocId,
-    String sub1categoryDocId,
-    Transaction transaction,
-  ) async {
-    final sub2categoriesQuery = await models.usersRef
-        .doc(userDocId)
-        .categories
-        .doc(categoryDocId)
-        .subcategories
-        .doc(sub1categoryDocId)
-        .subcategories
-        .get();
-
-    for (final sub2categoryDoc in sub2categoriesQuery.docs) {
-      models.usersRef
-          .doc(userDocId)
-          .categories
-          .doc(categoryDocId)
-          .subcategories
-          .doc(sub1categoryDocId)
-          .subcategories
-          .doc(sub2categoryDoc.id)
           .transactionDelete(transaction);
     }
   }
@@ -132,6 +80,10 @@ class FirestoreUserRepo2 extends UserRepo2 {
 
       return await FirebaseFirestore.instance
           .runTransaction((transaction) async {
+        await _deleteValueTransactions(
+          userDocId,
+          transaction,
+        );
         await _deleteCategories(
           userDocId,
           transaction,

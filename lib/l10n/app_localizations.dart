@@ -908,9 +908,142 @@ class AppLocalizations {
     );
   }
 
+  String get history {
+    return Intl.message(
+      'History',
+      locale: localeName,
+    );
+  }
+
+  String get analytics {
+    return Intl.message(
+      'Analytics',
+      locale: localeName,
+    );
+  }
+
+  String get addExpense {
+    return Intl.message(
+      'Add expense',
+      locale: localeName,
+    );
+  }
+
+  String get addIncome {
+    return Intl.message(
+      'Add income',
+      locale: localeName,
+    );
+  }
+
+  String get createdTransaction {
+    return Intl.message(
+      'Created transaction',
+      locale: localeName,
+    );
+  }
+
+  String get updatedTransaction {
+    return Intl.message(
+      'Updated transaction',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotCreateTransaction {
+    return Intl.message(
+      'Could not create transaction',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotUpdateTransaction {
+    return Intl.message(
+      'Could not update transaction',
+      locale: localeName,
+    );
+  }
+
   String get errorFetchingCategory {
     return Intl.message(
       'Error fetching category',
+      locale: localeName,
+    );
+  }
+
+  String get errorFetchingTransaction {
+    return Intl.message(
+      'Error fetching transaction',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotLoadCategories {
+    return Intl.message(
+      'Could not load categories.',
+      locale: localeName,
+    );
+  }
+
+  String get pleaseTryAgainLater {
+    return Intl.message(
+      'Please try again later.',
+      locale: localeName,
+    );
+  }
+
+  String get noCategoryData {
+    return Intl.message(
+      'No category data',
+      locale: localeName,
+    );
+  }
+
+  String get dateIsNotInRightFormat {
+    return Intl.message(
+      'Date is not in right format',
+      locale: localeName,
+    );
+  }
+
+  String get dateFormatIsNotSpecified {
+    return Intl.message(
+      'Date format is not specified',
+      locale: localeName,
+    );
+  }
+
+  String get addCategory {
+    return Intl.message(
+      'Add category',
+      locale: localeName,
+    );
+  }
+
+  String get secondaryCategory {
+    return Intl.message(
+      'Secondary category',
+      locale: localeName,
+    );
+  }
+
+  String get tertiaryCategory {
+    return Intl.message(
+      'Tertiary category',
+      locale: localeName,
+    );
+  }
+
+  String get date {
+    return Intl.message(
+      'Date',
+      locale: localeName,
+    );
+  }
+
+  String get value {
+    return Intl.message(
+      'Value',
       locale: localeName,
     );
   }
@@ -929,11 +1062,60 @@ class AppLocalizations {
     );
   }
 
+  String get deletedTransaction {
+    return Intl.message(
+      'Deleted transaction',
+      locale: localeName,
+    );
+  }
+
+  String get addTransaction {
+    return Intl.message(
+      'Add transaction',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotLoadCategoriesFilter {
+    return Intl.message(
+      'Could not load categories filter',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotDeleteTransaction {
+    return Intl.message(
+      'Could not delete transaction',
+      locale: localeName,
+    );
+  }
+
+  String get all {
+    return Intl.message(
+      'All',
+      locale: localeName,
+    );
+  }
+
+  String get dateRange {
+    return Intl.message(
+      'Date range',
+      locale: localeName,
+    );
+  }
+
+  String get reasons {
+    return Intl.message(
+      'Reasons',
+      locale: localeName,
+    );
+  }
+
   String couldNotDeleteCategory(String categoryTitle) {
     return Intl.message(
       'Could not delete category $categoryTitle',
       locale: localeName,
-      name: 'deletedCategory',
+      name: 'couldNotDeleteCategory',
       args: [categoryTitle],
     );
   }
@@ -944,6 +1126,24 @@ class AppLocalizations {
       locale: localeName,
       name: 'deletedCategory',
       args: [categoryTitle],
+    );
+  }
+
+  String couldNotDeleteTransactionWithTitle(String title) {
+    return Intl.message(
+      'Could not delete transaction $title',
+      locale: localeName,
+      name: 'couldNotDeleteTransactionWithTitle',
+      args: [title],
+    );
+  }
+
+  String deletedTransactionWithTitle(String title) {
+    return Intl.message(
+      'Deleted transaction $title',
+      locale: localeName,
+      name: 'deletedTransactionWithTitle',
+      args: [title],
     );
   }
 

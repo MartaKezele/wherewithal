@@ -7,7 +7,10 @@ import '../l10n/app_localizations.dart';
 class ErrorContent extends StatelessWidget {
   const ErrorContent({
     super.key,
+    this.text,
   });
+
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class ErrorContent extends StatelessWidget {
         ),
         HeightSpacer.md,
         Text(
-          AppLocalizations.of(context).genericErrorMsg,
+          text ?? AppLocalizations.of(context).genericErrorMsg,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: fgColor,
               ),

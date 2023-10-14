@@ -1,32 +1,28 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app_models/action_result.dart';
 import '../../../change_notifiers/auth.dart';
-import '../../../components/categories_list_view.dart';
 import '../../../components/dialogs/confirm_dialog.dart';
-import '../../../components/dialogs/scrollable_form_dialog.dart';
 import '../../../components/error_content.dart';
-import '../../../components/form/category_form.dart';
+import '../../../components/form/value_transaction_form.dart';
 import '../../../components/loading_content.dart';
 import '../../../components/no_data_content.dart';
 import '../../../constants/icon_size.dart';
 import '../../../constants/padding_size.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
-import '../../../constants/themes/floating_action_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/models.dart' as models;
 import '../../../utils/form.dart';
 import '../../../utils/overlay_banner.dart';
-import '../../../extensions/button/filled_button.dart';
 import '../../../extensions/button/button_style_button.dart';
+import '../../../extensions/button/filled_button.dart';
 
-class CategoryView extends StatefulWidget with GetItStatefulWidgetMixin {
-  CategoryView({
+class ValueTransactionView extends StatefulWidget {
+  const ValueTransactionView({
     super.key,
     required this.id,
   });
@@ -34,21 +30,20 @@ class CategoryView extends StatefulWidget with GetItStatefulWidgetMixin {
   final String id;
 
   @override
-  State<CategoryView> createState() => _CategoryViewState();
+  State<ValueTransactionView> createState() => _ValueTransactionViewState();
 }
 
-class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
-  final _updateCategoryFormKey = GlobalKey<CategoryFormState>();
-  final _updateCategoryFormStateKey = GlobalKey<FormState>();
-  final _addSubcategoryFormKey = GlobalKey<CategoryFormState>();
-  final _addSubcategoryFormStateKey = GlobalKey<FormState>();
-  final _scrollController = ScrollController();
+class _ValueTransactionViewState extends State<ValueTransactionView> {
+  final _updateValueTransactionFormKey = GlobalKey<ValueTransactionFormState>();
+  final _updateValueTransactionFormStateKey = GlobalKey<FormState>();
 
   bool _deleting = false;
   bool _updating = false;
   OverlayEntry? _resultBanner;
 
-  Future<void> _delete(String categoryTitle) async {
+  Future<void> _delete(String? transactionTitle) async {
+    final localizations = AppLocalizations.of(context);
+
     setState(() {
       _deleting = true;
     });
@@ -56,7 +51,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
     try {
       models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
-          .categories
+          .valueTransactions
           .doc(widget.id)
           .delete()
           .then((_) {
@@ -67,8 +62,9 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
           context,
           ActionResult(
             success: true,
-            messageTitle:
-                AppLocalizations.of(context).deletedCategory(categoryTitle),
+            messageTitle: transactionTitle != null
+                ? localizations.deletedTransactionWithTitle(transactionTitle)
+                : localizations.deletedTransaction,
           ),
         );
         context.pop();
@@ -81,8 +77,10 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
         context,
         ActionResult(
           success: false,
-          messageTitle: AppLocalizations.of(context)
-              .couldNotDeleteCategory(categoryTitle),
+          messageTitle: transactionTitle != null
+              ? localizations
+                  .couldNotDeleteTransactionWithTitle(transactionTitle)
+              : localizations.couldNotCreateTransaction,
         ),
       );
     }
@@ -92,44 +90,14 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
     setState(() {
       _updating = true;
     });
-    await _updateCategoryFormKey.currentState?.updateCategory().then((result) {
+
+    await _updateValueTransactionFormKey.currentState
+        ?.updateValueTransaction()
+        .then((result) {
       setState(() {
         _updating = false;
       });
       _resultBanner = showActionResultOverlayBanner(context, result);
-    });
-  }
-
-  Future<ActionResult> _createSubcategory() async {
-    assert(_addSubcategoryFormKey.currentState != null);
-    return _addSubcategoryFormKey.currentState!.addCategory();
-  }
-
-  void _showCreateSubcategoryDialog(models.Category parentCategory) async {
-    await showScrollableFormDialog<ActionResult>(
-      context: context,
-      title: AppLocalizations.of(context).addSubcategory,
-      form: CategoryForm(
-        key: _addSubcategoryFormKey,
-        formKey: _addSubcategoryFormStateKey,
-        category: models.Category(
-          id: '',
-          title: '',
-          transactionType: parentCategory.transactionType,
-          parentCategoryId: parentCategory.id,
-        ),
-        disableTransactionTypeField: true,
-      ),
-      formKey: _addSubcategoryFormStateKey,
-      onSubmit: _createSubcategory,
-      submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
-    ).then((result) {
-      if (result != null) {
-        _resultBanner = showActionResultOverlayBanner(
-          context,
-          result,
-        );
-      }
     });
   }
 
@@ -147,14 +115,14 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
     final bgColor = Theme.of(context).colorScheme.surfaceVariant;
     final fgColor = Theme.of(context).colorScheme.onSurfaceVariant;
 
-    return FirestoreBuilder<models.CategoryDocumentSnapshot>(
+    return FirestoreBuilder<models.ValueTransactionDocumentSnapshot>(
       ref: models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
-          .categories
+          .valueTransactions
           .doc(widget.id),
       builder: (
         context,
-        AsyncSnapshot<models.CategoryDocumentSnapshot> snapshot,
+        AsyncSnapshot<models.ValueTransactionDocumentSnapshot> snapshot,
         Widget? child,
       ) {
         if (snapshot.hasError) {
@@ -170,9 +138,9 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
           return LoadingContent(color: fgColor);
         }
 
-        final category = snapshot.requireData.data;
+        final valueTransaction = snapshot.requireData.data;
 
-        if (category == null) {
+        if (valueTransaction == null) {
           return Scaffold(
             appBar: AppBar(
               title: Text(localizations.noData),
@@ -181,25 +149,19 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
           );
         }
 
-        final subcategoriesRef = models.usersRef
-            .doc(GetIt.I<AuthChangeNotifier>().id)
-            .categories
-            .whereParentCategoryId(isEqualTo: category.id)
-            .orderByTitle();
-
         return Scaffold(
           appBar: AppBar(
-            title: Text(category.title),
+            title:
+                Text(valueTransaction.title ?? valueTransaction.categoryTitle),
             actions: [
               IconButton(
                 color: deleteColor,
                 onPressed: () => showConfirmDialog(
                     context: context,
                     title: localizations.areYouSure,
-                    description: localizations.deleteCategoryConfirmationMsg,
                     onOkPressed: () {
                       context.pop();
-                      _delete(category.title);
+                      _delete(valueTransaction.title);
                     }),
                 icon: _deleting
                     ? SizedBox(
@@ -216,21 +178,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
             ],
           ),
           backgroundColor: bgColor,
-          floatingActionButton: Theme(
-            data: Theme.of(context).copyWith(
-              floatingActionButtonTheme: surfaceVariantFabThemeData(context),
-            ),
-            child: FloatingActionButton(
-              onPressed: () => _showCreateSubcategoryDialog(category),
-              child: const Icon(
-                Icons.add_rounded,
-              ),
-            ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
           body: SingleChildScrollView(
-            controller: _scrollController,
             child: Column(
               children: [
                 Column(
@@ -246,16 +194,15 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
                       color: Theme.of(context).colorScheme.background,
                       child: Column(
                         children: [
-                          CategoryForm(
-                            key: _updateCategoryFormKey,
-                            formKey: _updateCategoryFormStateKey,
-                            category: category,
-                            disableTransactionTypeField: true,
+                          ValueTransactionForm(
+                            key: _updateValueTransactionFormKey,
+                            formKey: _updateValueTransactionFormStateKey,
+                            valueTransaction: valueTransaction,
                           ),
-                          HeightSpacer.lg,
+                          HeightSpacer.xs,
                           FilledButton(
                             onPressed: () => executeFnIfFormValid(
-                              formKey: _updateCategoryFormStateKey,
+                              formKey: _updateValueTransactionFormStateKey,
                               fn: _update,
                             ),
                             child: Text(
@@ -271,25 +218,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
                         ],
                       ),
                     ),
-                    HeightSpacer.lg,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: PaddingSize.md,
-                      ),
-                      child: Text(
-                        localizations.subcategories,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: fgColor,
-                            ),
-                      ),
-                    ),
-                    HeightSpacer.lg,
                   ],
-                ),
-                CategoriesListView(
-                  ref: subcategoriesRef,
-                  scrollController: _scrollController,
-                  foregroundColor: fgColor,
                 ),
               ],
             ),

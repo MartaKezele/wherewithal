@@ -1,39 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../app_models/action_result.dart';
-import '../../app_models/types/firestore_category.dart';
-import '../../constants/styles/dropdown_form_field_button.dart';
+import '../../app_models/custom_dropdown_entry.dart';
+import '../../change_notifiers/auth.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/enums/category_reasons.dart';
 import '../../models/enums/transaction_types.dart';
 import '../../models/models.dart' as models;
+import '../../utils/dropdown/transaction_type_dropdown.dart';
 import '../../utils/form_field_validators.dart';
+import '../dropdown/custom_dropdown.dart';
 import 'custom_form.dart';
 
 class CategoryForm extends StatefulWidget {
   const CategoryForm({
     super.key,
     this.category,
-    this.updateFn,
-    this.addSubcategoryFn,
     required this.formKey,
     this.disableTransactionTypeField = false,
   });
 
   final models.Category? category;
-  final Future<void> Function({
-    double? budget,
-    FieldValue budgetFieldValue,
-    String? categoryReason,
-    FieldValue categoryReasonFieldValue,
-    String title,
-    FieldValue titleFieldValue,
-    String transactionType,
-    FieldValue transactionTypeFieldValue,
-  })? updateFn;
-  final Future<CategoryDocumentReferenceType> Function(models.Category value)?
-      addSubcategoryFn;
   final GlobalKey<FormState> formKey;
   final bool disableTransactionTypeField;
 
@@ -45,34 +33,40 @@ class CategoryFormState extends State<CategoryForm> {
   late final TextEditingController _titleController;
   late final TextEditingController _budgetController;
 
-  CategoryReasons? _selectedCategoryReason;
-  late TransactionTypes? _selectedTransactionType;
+  List<TransactionTypes> _selectedTransactionTypes = [];
+  List<CategoryReasons> _selectedCategoryReasons = [];
 
   models.Category categoryInfo() {
-    assert(_selectedTransactionType != null);
+    assert(_selectedTransactionTypes.isNotEmpty);
 
     return models.Category(
       id: widget.category?.id ?? '',
       title: _titleController.text.trim(),
-      transactionType: _selectedTransactionType!.name,
-      categoryReason: _selectedCategoryReason?.name,
+      transactionType: _selectedTransactionTypes.first.name,
+      categoryReason: _selectedCategoryReasons.first.name,
+      parentCategoryId: widget.category?.parentCategoryId,
       budget: double.tryParse(_budgetController.text),
     );
   }
 
   Future<ActionResult> updateCategory() async {
-    assert(widget.updateFn != null);
-
     final localizations = AppLocalizations.of(context);
     final category = categoryInfo();
 
+    // TODO we need to update category info in all transactions
+    // using cloud functions
     try {
-      await widget.updateFn!(
-        budget: category.budget,
-        categoryReason: category.categoryReason,
-        title: category.title,
-        transactionType: category.transactionType,
-      );
+      await models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .categories
+          .doc(category.id)
+          .update(
+            title: category.title,
+            transactionType: category.transactionType,
+            categoryReason: category.categoryReason,
+            budget: category.budget,
+          );
+
       return ActionResult(
         success: true,
         messageTitle: localizations.updatedCategory,
@@ -86,11 +80,13 @@ class CategoryFormState extends State<CategoryForm> {
   }
 
   Future<ActionResult> addCategory() async {
-    assert(widget.addSubcategoryFn != null);
     final localizations = AppLocalizations.of(context);
 
     try {
-      await widget.addSubcategoryFn!(categoryInfo());
+      await models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .categories
+          .add(categoryInfo());
 
       return ActionResult(
         success: true,
@@ -104,6 +100,28 @@ class CategoryFormState extends State<CategoryForm> {
     }
   }
 
+  void _initTransactionType() {
+    if (widget.category != null) {
+      final transactionType = TransactionTypes.fromName(
+        widget.category!.transactionType,
+      );
+      if (transactionType != null) {
+        _selectedTransactionTypes = [transactionType];
+      }
+    }
+  }
+
+  void _initCategoryReason() {
+    if (widget.category != null) {
+      final categoryReason = CategoryReasons.fromName(
+        widget.category?.categoryReason,
+      );
+      if (categoryReason != null) {
+        _selectedCategoryReasons = [categoryReason];
+      }
+    }
+  }
+
   @override
   void initState() {
     _titleController = TextEditingController(text: widget.category?.title);
@@ -112,13 +130,16 @@ class CategoryFormState extends State<CategoryForm> {
           ? widget.category!.budget.toString()
           : null,
     );
-    _selectedCategoryReason = CategoryReasons.fromName(
-      widget.category?.categoryReason,
-    );
-    _selectedTransactionType = TransactionTypes.fromName(
-      widget.category?.transactionType,
-    );
+
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _initTransactionType();
+    _initCategoryReason();
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -132,25 +153,22 @@ class CategoryFormState extends State<CategoryForm> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
-    final categoryReasonItems = CategoryReasons.values
-        .map((categoryReason) => DropdownMenuItem(
-              value: categoryReason,
-              child: Text(
-                categoryReason.localizedName(context),
-              ),
-            ))
+    final transactionTypeOptions = TransactionTypes.values
+        .map(
+          (transactionType) => transactionTypeDropdownEntry(
+            transactionType,
+            context,
+          ),
+        )
         .toList();
 
-    final transactionTypeItems = TransactionTypes.values
-        .map((transactionType) => DropdownMenuItem(
-              value: transactionType,
-              child: Text(
-                transactionType.localizedName(context),
-                style: widget.disableTransactionTypeField
-                    ? disabledDropdownTextStyle(context)
-                    : dropdownTextStyle(context),
-              ),
-            ))
+    final categoryReasonOptions = CategoryReasons.values
+        .map(
+          (categoryReason) => CustomDropdownEntry(
+            value: categoryReason,
+            title: categoryReason.localizedName(context),
+          ),
+        )
         .toList();
 
     return CustomForm(
@@ -162,7 +180,7 @@ class CategoryFormState extends State<CategoryForm> {
             label: Text('${localizations.title}*'),
           ),
           autocorrect: false,
-          validator: (title) => requiredValidator(
+          validator: (title) => requiredTextValidator(
             title,
             AppLocalizations.of(context),
           ),
@@ -174,51 +192,39 @@ class CategoryFormState extends State<CategoryForm> {
             label: Text(localizations.budget),
           ),
         ),
-        DropdownButtonFormField(
-          style: dropdownTextStyle(context),
-          dropdownColor: dropdownColor(context),
-          value: TransactionTypes.fromName(widget.category?.transactionType),
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            label: Text('${localizations.transactionType}*'),
-          ),
-          items: transactionTypeItems,
-          validator: (transactionType) => requiredValidator(
-            transactionType?.name,
-            AppLocalizations.of(context),
-          ),
-          onChanged: widget.disableTransactionTypeField
-              ? null
-              : (TransactionTypes? value) {
-                  setState(() {
-                    _selectedTransactionType = value;
-                  });
-                },
+        CustomDropdown<TransactionTypes>(
+          options: transactionTypeOptions,
+          selectedOptions: _selectedTransactionTypes
+              .map((transactionType) =>
+                  transactionTypeDropdownEntry(transactionType, context))
+              .toList(),
+          onSelectionChanged: (selection) {
+            setState(() {
+              _selectedTransactionTypes = selection
+                  .map((dropdownEntry) => dropdownEntry.value)
+                  .toList();
+            });
+          },
+          title: localizations.transactionType,
         ),
         Visibility(
-          visible: _selectedTransactionType == TransactionTypes.expense,
-          child: DropdownButtonFormField(
-            style: dropdownTextStyle(context),
-            dropdownColor: dropdownColor(context),
-            value: _selectedCategoryReason,
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              label: Text(localizations.reason),
-            ),
-            items: [
-              DropdownMenuItem(
-                value: null,
-                child: Text(
-                  localizations.none,
-                ),
-              ),
-              ...categoryReasonItems,
-            ],
-            onChanged: (value) {
+          visible: _selectedTransactionTypes.isNotEmpty &&
+              _selectedTransactionTypes.first == TransactionTypes.expense,
+          child: CustomDropdown<CategoryReasons>(
+            options: categoryReasonOptions,
+            selectedOptions: _selectedCategoryReasons
+                .map((categoryReason) => CustomDropdownEntry(
+                    value: categoryReason,
+                    title: categoryReason.localizedName(context)))
+                .toList(),
+            onSelectionChanged: (selection) {
               setState(() {
-                _selectedCategoryReason = value;
+                _selectedCategoryReasons = selection
+                    .map((dropdownEntry) => dropdownEntry.value)
+                    .toList();
               });
             },
+            title: localizations.reason,
           ),
         ),
       ],
