@@ -206,6 +206,7 @@ class CategoryFormState extends State<CategoryForm> {
             });
           },
           title: localizations.transactionType,
+          required: true,
         ),
         Visibility(
           visible: _selectedTransactionTypes.isNotEmpty &&

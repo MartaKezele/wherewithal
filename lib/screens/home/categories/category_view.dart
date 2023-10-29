@@ -196,7 +196,8 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
                 onPressed: () => showConfirmDialog(
                     context: context,
                     title: localizations.areYouSure,
-                    description: localizations.deleteCategoryConfirmationMsg,
+                    description:
+                        Text(localizations.deleteCategoryConfirmationMsg),
                     onOkPressed: () {
                       context.pop();
                       _delete(category.title);

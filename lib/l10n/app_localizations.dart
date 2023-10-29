@@ -719,6 +719,20 @@ class AppLocalizations {
     );
   }
 
+  String get scanReceipt {
+    return Intl.message(
+      'Scan receipt',
+      locale: localeName,
+    );
+  }
+
+  String get addItem {
+    return Intl.message(
+      'Add item',
+      locale: localeName,
+    );
+  }
+
   String get expense {
     return Intl.message(
       'Expense',
@@ -1108,6 +1122,161 @@ class AppLocalizations {
     return Intl.message(
       'Reasons',
       locale: localeName,
+    );
+  }
+
+  String get scan {
+    return Intl.message(
+      'Scan',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotProcessReceipt {
+    return Intl.message(
+      'Could not process receipt',
+      locale: localeName,
+    );
+  }
+
+  String get transaction {
+    return Intl.message(
+      'Transaction',
+      locale: localeName,
+    );
+  }
+
+  String get receipt {
+    return Intl.message(
+      'Receipt',
+      locale: localeName,
+    );
+  }
+
+  String get newReceipt {
+    return Intl.message(
+      'New receipt',
+      locale: localeName,
+    );
+  }
+
+  String get createdTransactions {
+    return Intl.message(
+      'Created transactions',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotCreateTransactions {
+    return Intl.message(
+      'Could not create transactions',
+      locale: localeName,
+    );
+  }
+
+  String get camera {
+    return Intl.message(
+      'Camera',
+      locale: localeName,
+    );
+  }
+
+  String get gallery {
+    return Intl.message(
+      'Gallery',
+      locale: localeName,
+    );
+  }
+
+  String get failedToProcessReceipt {
+    return Intl.message(
+      'Failed to process receipt',
+      locale: localeName,
+    );
+  }
+
+  String get receiptProcessingQuotaHasBeenReached {
+    return Intl.message(
+      'Receipt processing quota has been reached for this month',
+      locale: localeName,
+    );
+  }
+
+  String get processingReceipts {
+    return Intl.message(
+      'Processing receipts',
+      locale: localeName,
+    );
+  }
+
+  String get totalPrice {
+    return Intl.message(
+      'Total price',
+      locale: localeName,
+    );
+  }
+
+  String get addReceiptTransactions {
+    return Intl.message(
+      'Add receipt transactions',
+      locale: localeName,
+    );
+  }
+
+  String get failurePickingImages {
+    return Intl.message(
+      'Failure picking images',
+      locale: localeName,
+    );
+  }
+
+  String get failureCapturingImage {
+    return Intl.message(
+      'Failure capturing image',
+      locale: localeName,
+    );
+  }
+
+  String get dataExtracted {
+    return Intl.message(
+      'Data extracted',
+      locale: localeName,
+    );
+  }
+
+  String get uploadedFiles {
+    return Intl.message(
+      'Uploaded files',
+      locale: localeName,
+    );
+  }
+
+  String get fetchedReceiptRecognitionQuota {
+    return Intl.message(
+      'Fetched receipt recognition quota',
+      locale: localeName,
+    );
+  }
+
+  String get failureFetchingReceiptRecognitionQuota {
+    return Intl.message(
+      'Failure fetching receipt recognition quota',
+      locale: localeName,
+    );
+  }
+
+  String createdXOutOfYTransactions(
+    int numberOfCreatedTransactions,
+    int numberOfAllTransactions,
+  ) {
+    return Intl.message(
+      'Created $numberOfCreatedTransactions/$numberOfAllTransactions transactions',
+      locale: localeName,
+      name: 'createdXOutOfYTransactions',
+      args: [
+        numberOfCreatedTransactions,
+        numberOfAllTransactions,
+      ],
     );
   }
 

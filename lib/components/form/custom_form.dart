@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/spacers.dart';
+import '../../constants/padding_size.dart';
 
 class CustomForm extends StatelessWidget {
   const CustomForm({
     super.key,
     required this.formKey,
     required this.contents,
+    this.spacing = PaddingSize.xs,
   });
 
   final GlobalKey<FormState> formKey;
   final List<Widget> contents;
+  final double spacing;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,9 @@ class CustomForm extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          HeightSpacer.xs,
+          SizedBox(
+            height: spacing,
+          ),
           contents[index],
         ],
       );

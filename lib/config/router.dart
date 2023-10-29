@@ -19,12 +19,14 @@ final router = GoRouter(
     TopLevelRoutes.verifyEmail,
     TopLevelRoutes.passwordReauth,
     TopLevelRoutes.googleReauth,
+    TopLevelRoutes.createReceipt,
   ],
   redirect: (context, state) async {
     final auth = GetIt.I<AuthChangeNotifier>();
 
     if (auth.signedIn &&
-        auth.emailVerified && auth.id != null &&
+        auth.emailVerified &&
+        auth.id != null &&
         (state.location.startsWith(TopLevelRoutes.welcome.path) ||
             state.location.startsWith(TopLevelRoutes.verifyEmail.path))) {
       return initialLocation;
@@ -33,7 +35,10 @@ final router = GoRouter(
     if (auth.signedIn &&
         !auth.emailVerified &&
         !state.location.startsWith(TopLevelRoutes.verifyEmail.path)) {
-      await GetIt.I<RepoFactoryChangeNotifier>().repoFactory.authRepo.sendVerificationEmail();
+      await GetIt.I<RepoFactoryChangeNotifier>()
+          .repoFactory
+          .authRepo
+          .sendVerificationEmail();
       return TopLevelRoutes.verifyEmail.path;
     }
 

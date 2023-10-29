@@ -811,7 +811,7 @@ abstract class ValueTransactionCollectionReference
     DocumentSnapshot<Map<String, Object?>> snapshot,
     SnapshotOptions? options,
   ) {
-    return _$ValueTransactionFromJson({'id': snapshot.id, ...?snapshot.data()});
+    return ValueTransaction.fromJson({'id': snapshot.id, ...?snapshot.data()});
   }
 
   static Map<String, Object?> toFirestore(

@@ -10,7 +10,7 @@ import '../../extensions/button/text_button.dart';
 Future<T?> showConfirmDialog<T>({
   required BuildContext context,
   required String title,
-  String? description,
+  Widget? description,
   final void Function()? onOkPressed,
 }) {
   return showDialog<T>(
@@ -28,7 +28,13 @@ Future<T?> showConfirmDialog<T>({
             ),
             child: Column(
               children: [
-                if (description != null) Text(description),
+                if (description != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: PaddingSize.xs,
+                    ),
+                    child: description,
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

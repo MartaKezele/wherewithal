@@ -44,6 +44,10 @@ extension Navigation on BuildContext {
     );
   }
 
+  Future<T?> pushCreateReceipt<T extends Object?>() async {
+    return await push<T>(TopLevelRoutes.createReceipt.path);
+  }
+
   Future<T?> pushConfigurePasswordAuth<T extends Object?>() async {
     return await pushNamed<T>(
       NamedChildRoutes.configurePasswordAuth.nonNullableName,

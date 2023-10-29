@@ -74,6 +74,20 @@ class ValueTransaction {
   final String categoryTransactionType;
   final String? categoryReason;
 
+  factory ValueTransaction.fromJson(Map<String, dynamic> json) {
+    return ValueTransaction(
+      id: json['id'] as String,
+      title: json['title'] as String?,
+      dateTime: const FirestoreDateTimeConverter()
+          .fromJson(json['dateTime'] as Timestamp),
+      value: (json['value'] as num).toDouble(),
+      categoryId: json['categoryId'] as String,
+      categoryTitle: json['categoryTitle'] as String,
+      categoryTransactionType: json['categoryTransactionType'] as String,
+      categoryReason: json['categoryReason'] as String?,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       other is ValueTransaction &&

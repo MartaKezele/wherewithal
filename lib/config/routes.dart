@@ -7,6 +7,7 @@ import '../screens/home/categories/categories.dart';
 import '../screens/home/categories/category_view.dart';
 import '../screens/home/home.dart';
 import '../screens/home/insights/insights.dart';
+import '../screens/home/create_receipt.dart';
 import '../screens/home/insights/value_transaction_view.dart';
 import '../screens/home/recurring_transactions.dart';
 import 'bottom_nav.dart';
@@ -112,6 +113,12 @@ class TopLevelRoutes {
       NamedChildRoutes.profile,
       NamedChildRoutes.notifications,
     ],
+  );
+
+  static final createReceipt = GoRoute(
+    parentNavigatorKey: navigatorKey,
+    path: '/create-receipt',
+    builder: (context, state) => CreateReceipt(),
   );
 
   static final error = GoRoute(
