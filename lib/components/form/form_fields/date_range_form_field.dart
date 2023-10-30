@@ -76,7 +76,7 @@ class _DateFormFieldState extends State<DateRangeFormField>
           context: context,
           initialDateRange: widget.dateTimeRange,
           firstDate: firstDate,
-          lastDate: endOfDay(DateTime.now()),
+          lastDate: endOfThisWeek(),
         );
         DateTimeRange? adjustedDateTimeRange;
 

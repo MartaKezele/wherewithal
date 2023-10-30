@@ -34,10 +34,8 @@ class _TransactionHistoryState extends State<TransactionHistory>
   final _scrollController = ScrollController();
 
   DateTimeRange? _dateTimeRange = DateTimeRange(
-    start: beginningOfToday().subtract(
-      const Duration(days: 7),
-    ),
-    end: endOfDay(DateTime.now()),
+    start: beginningOfThisWeek(),
+    end: endOfThisWeek(),
   );
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<CategoryReasons> _selectedCategoryReasons = [];
