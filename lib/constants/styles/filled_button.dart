@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../app_models/color_style.dart';
-import '../../config/color_schemes/dark.dart';
-import '../../config/color_schemes/light.dart';
+import '../color_schemes/dark.dart';
+import '../color_schemes/light.dart';
 import '../../utils/style.dart';
 import 'opacity.dart';
 

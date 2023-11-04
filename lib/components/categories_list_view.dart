@@ -30,12 +30,12 @@ class CategoriesListView extends StatelessWidget with GetItMixin {
           changeNotifier.currency?.symbol,
     );
 
-    return FirestoreBuilder<models.CategoryQuerySnapshot>(
+    return FirestoreBuilder(
       ref: ref,
       builder: (
         context,
-        AsyncSnapshot<models.CategoryQuerySnapshot> snapshot,
-        Widget? child,
+        snapshot,
+        child,
       ) {
         if (snapshot.hasError) {
           return const Padding(

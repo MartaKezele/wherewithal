@@ -23,7 +23,7 @@ class Insights extends StatelessWidget {
     ];
 
     final tabContents = [
-      const Analytics(),
+      Analytics(),
       TransactionHistory(),
     ];
 

@@ -1,6 +1,6 @@
 import '../../app_models/color_style.dart';
-import '../../config/color_schemes/dark.dart';
-import '../../config/color_schemes/light.dart';
+import '../color_schemes/dark.dart';
+import '../color_schemes/light.dart';
 import '../../utils/style.dart';
 import 'opacity.dart';
 
@@ -33,6 +33,13 @@ class TextButtonStyles {
     disabledForegroundColor:
         darkColorScheme.onSurface.withOpacity(disabledForegroundOpacity),
     overlayColor: darkColorScheme.onSurface.withOpacity(overlayOpacity),
+  );
+
+  static final _darkSurfaceVariant = ColorStyle(
+    foregroundColor: darkColorScheme.onSurfaceVariant,
+    disabledForegroundColor:
+        darkColorScheme.onSurfaceVariant.withOpacity(disabledForegroundOpacity),
+    overlayColor: darkColorScheme.onSurfaceVariant.withOpacity(overlayOpacity),
   );
 
   static final _darkError = ColorStyle(
@@ -80,6 +87,13 @@ class TextButtonStyles {
     overlayColor: lightColorScheme.onSurface.withOpacity(overlayOpacity),
   );
 
+  static final _lightSurfaceVariant = ColorStyle(
+    foregroundColor: lightColorScheme.onSurfaceVariant,
+    disabledForegroundColor: lightColorScheme.onSurfaceVariant
+        .withOpacity(disabledForegroundOpacity),
+    overlayColor: lightColorScheme.onSurfaceVariant.withOpacity(overlayOpacity),
+  );
+
   static final _lightError = ColorStyle(
     foregroundColor: lightColorScheme.onErrorContainer,
     disabledForegroundColor: lightColorScheme.onErrorContainer
@@ -120,6 +134,13 @@ class TextButtonStyles {
     return currentThemeColorStyle(
       darkColorStyle: _darkSurface,
       lightColorStyle: _lightSurface,
+    );
+  }
+
+  static ColorStyle get surfaceVariant {
+    return currentThemeColorStyle(
+      darkColorStyle: _darkSurfaceVariant,
+      lightColorStyle: _lightSurfaceVariant,
     );
   }
 

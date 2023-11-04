@@ -1223,6 +1223,34 @@ class AppLocalizations {
     );
   }
 
+  String get cashFlow {
+    return Intl.message(
+      'Cash flow',
+      locale: localeName,
+    );
+  }
+
+  String get incomeByCategories {
+    return Intl.message(
+      'Income by categories',
+      locale: localeName,
+    );
+  }
+
+  String get goDeeper {
+    return Intl.message(
+      'Go deeper',
+      locale: localeName,
+    );
+  }
+
+  String get spendingByCategories {
+    return Intl.message(
+      'Spending by categories',
+      locale: localeName,
+    );
+  }
+
   String get failurePickingImages {
     return Intl.message(
       'Failure picking images',

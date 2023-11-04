@@ -939,6 +939,8 @@ abstract class ValueTransactionDocumentReference
     FieldValue categoryTransactionTypeFieldValue,
     String? categoryReason,
     FieldValue categoryReasonFieldValue,
+    String? parentCategoryId,
+    FieldValue parentCategoryIdFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -960,6 +962,8 @@ abstract class ValueTransactionDocumentReference
     FieldValue categoryTransactionTypeFieldValue,
     String? categoryReason,
     FieldValue categoryReasonFieldValue,
+    String? parentCategoryId,
+    FieldValue parentCategoryIdFieldValue,
   });
 }
 
@@ -1012,6 +1016,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
     FieldValue? categoryTransactionTypeFieldValue,
     Object? categoryReason = _sentinel,
     FieldValue? categoryReasonFieldValue,
+    Object? parentCategoryId = _sentinel,
+    FieldValue? parentCategoryIdFieldValue,
   }) async {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -1042,6 +1048,10 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       categoryReason == _sentinel || categoryReasonFieldValue == null,
       "Cannot specify both categoryReason and categoryReasonFieldValue",
     );
+    assert(
+      parentCategoryId == _sentinel || parentCategoryIdFieldValue == null,
+      "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
+    );
     final json = {
       if (title != _sentinel)
         _$ValueTransactionFieldMap['title']!: title as String?,
@@ -1074,6 +1084,12 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
             categoryReason as String?,
       if (categoryReasonFieldValue != null)
         _$ValueTransactionFieldMap['categoryReason']!: categoryReasonFieldValue,
+      if (parentCategoryId != _sentinel)
+        _$ValueTransactionFieldMap['parentCategoryId']!:
+            parentCategoryId as String?,
+      if (parentCategoryIdFieldValue != null)
+        _$ValueTransactionFieldMap['parentCategoryId']!:
+            parentCategoryIdFieldValue,
     };
 
     return reference.update(json);
@@ -1095,6 +1111,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
     FieldValue? categoryTransactionTypeFieldValue,
     Object? categoryReason = _sentinel,
     FieldValue? categoryReasonFieldValue,
+    Object? parentCategoryId = _sentinel,
+    FieldValue? parentCategoryIdFieldValue,
   }) {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -1125,6 +1143,10 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       categoryReason == _sentinel || categoryReasonFieldValue == null,
       "Cannot specify both categoryReason and categoryReasonFieldValue",
     );
+    assert(
+      parentCategoryId == _sentinel || parentCategoryIdFieldValue == null,
+      "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
+    );
     final json = {
       if (title != _sentinel)
         _$ValueTransactionFieldMap['title']!: title as String?,
@@ -1157,6 +1179,12 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
             categoryReason as String?,
       if (categoryReasonFieldValue != null)
         _$ValueTransactionFieldMap['categoryReason']!: categoryReasonFieldValue,
+      if (parentCategoryId != _sentinel)
+        _$ValueTransactionFieldMap['parentCategoryId']!:
+            parentCategoryId as String?,
+      if (parentCategoryIdFieldValue != null)
+        _$ValueTransactionFieldMap['parentCategoryId']!:
+            parentCategoryIdFieldValue,
     };
 
     transaction.update(reference, json);
@@ -1335,6 +1363,17 @@ abstract class ValueTransactionQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
+  ValueTransactionQuery whereParentCategoryId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
 
   ValueTransactionQuery orderByDocumentId({
     bool descending = false,
@@ -1421,6 +1460,18 @@ abstract class ValueTransactionQuery
   });
 
   ValueTransactionQuery orderByCategoryReason({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    ValueTransactionDocumentSnapshot? startAtDocument,
+    ValueTransactionDocumentSnapshot? endAtDocument,
+    ValueTransactionDocumentSnapshot? endBeforeDocument,
+    ValueTransactionDocumentSnapshot? startAfterDocument,
+  });
+
+  ValueTransactionQuery orderByParentCategoryId({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -1803,6 +1854,35 @@ class _$ValueTransactionQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$ValueTransactionFieldMap['categoryReason']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  ValueTransactionQuery whereParentCategoryId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$ValueTransactionQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$ValueTransactionFieldMap['parentCategoryId']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -2338,6 +2418,79 @@ class _$ValueTransactionQuery
   }) {
     final query = $referenceWithoutCursor.orderBy(
         _$ValueTransactionFieldMap['categoryReason']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$ValueTransactionQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  ValueTransactionQuery orderByParentCategoryId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    ValueTransactionDocumentSnapshot? startAtDocument,
+    ValueTransactionDocumentSnapshot? endAtDocument,
+    ValueTransactionDocumentSnapshot? endBeforeDocument,
+    ValueTransactionDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$ValueTransactionFieldMap['parentCategoryId']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -3943,6 +4096,7 @@ ValueTransaction _$ValueTransactionFromJson(Map<String, dynamic> json) =>
       categoryTitle: json['categoryTitle'] as String,
       categoryTransactionType: json['categoryTransactionType'] as String,
       categoryReason: json['categoryReason'] as String?,
+      parentCategoryId: json['parentCategoryId'] as String?,
     );
 
 const _$ValueTransactionFieldMap = <String, String>{
@@ -3954,6 +4108,7 @@ const _$ValueTransactionFieldMap = <String, String>{
   'categoryTitle': 'categoryTitle',
   'categoryTransactionType': 'categoryTransactionType',
   'categoryReason': 'categoryReason',
+  'parentCategoryId': 'parentCategoryId',
 };
 
 Map<String, dynamic> _$ValueTransactionToJson(ValueTransaction instance) =>
@@ -3966,4 +4121,5 @@ Map<String, dynamic> _$ValueTransactionToJson(ValueTransaction instance) =>
       'categoryTitle': instance.categoryTitle,
       'categoryTransactionType': instance.categoryTransactionType,
       'categoryReason': instance.categoryReason,
+      'parentCategoryId': instance.parentCategoryId,
     };

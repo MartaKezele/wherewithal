@@ -43,7 +43,9 @@ class CategoryFormState extends State<CategoryForm> {
       id: widget.category?.id ?? '',
       title: _titleController.text.trim(),
       transactionType: _selectedTransactionTypes.first.name,
-      categoryReason: _selectedCategoryReasons.first.name,
+      categoryReason: _selectedCategoryReasons.isEmpty
+          ? null
+          : _selectedCategoryReasons.first.name,
       parentCategoryId: widget.category?.parentCategoryId,
       budget: double.tryParse(_budgetController.text),
     );
@@ -53,8 +55,7 @@ class CategoryFormState extends State<CategoryForm> {
     final localizations = AppLocalizations.of(context);
     final category = categoryInfo();
 
-    // TODO we need to update category info in all transactions
-    // using cloud functions
+    // TODO update category info in all transactions using cloud functions
     try {
       await models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)

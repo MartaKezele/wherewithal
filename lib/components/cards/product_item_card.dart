@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-import '../app_models/custom_dropdown_entry.dart';
-import '../change_notifiers/auth.dart';
-import '../constants/padding_size.dart';
-import '../constants/styles/container.dart';
-import '../constants/styles/icon_button.dart';
-import '../l10n/app_localizations.dart';
-import '../models/enums/transaction_types.dart';
-import '../models/models.dart' as models;
-import 'form/form_fields/categories_form_field.dart';
-import 'form/form_fields/price_value_form_field.dart';
+import '../../app_models/custom_dropdown_entry.dart';
+import '../../change_notifiers/auth.dart';
+import '../../constants/padding_size.dart';
+import '../../constants/styles/container.dart';
+import '../../constants/styles/icon_button.dart';
+import '../../l10n/app_localizations.dart';
+import '../../models/enums/transaction_types.dart';
+import '../form/form_fields/categories_form_field.dart';
+import '../form/form_fields/price_value_form_field.dart';
+
+import '../../models/models.dart' as models;
 import '../../extensions/button/icon_button.dart';
 
 class ProductItemCard extends StatelessWidget with GetItMixin {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../config/color_schemes/dark.dart';
-import '../../config/color_schemes/light.dart';
+import '../color_schemes/dark.dart';
+import '../color_schemes/light.dart';
 import 'icon.dart';
 
 TextStyle? _appBarTitleTextStyle(BuildContext context) =>

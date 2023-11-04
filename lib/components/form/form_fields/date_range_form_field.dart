@@ -14,11 +14,13 @@ class DateRangeFormField extends StatefulWidget with GetItStatefulWidgetMixin {
     required this.setDateTimeRange,
     this.dateTimeRange,
     this.required = false,
+    this.autoValidateMode,
   });
 
   final void Function(DateTimeRange? dateTimeRange) setDateTimeRange;
   final DateTimeRange? dateTimeRange;
   final bool required;
+  final AutovalidateMode? autoValidateMode;
 
   @override
   State<DateRangeFormField> createState() => _DateFormFieldState();
@@ -69,6 +71,7 @@ class _DateFormFieldState extends State<DateRangeFormField>
                 ),
               )
           : null,
+      autovalidateMode: widget.autoValidateMode,
       keyboardType: TextInputType.none,
       showCursor: false,
       onTap: () async {
@@ -76,7 +79,7 @@ class _DateFormFieldState extends State<DateRangeFormField>
           context: context,
           initialDateRange: widget.dateTimeRange,
           firstDate: firstDate,
-          lastDate: endOfThisWeek(),
+          lastDate: endOfDay(DateTime.now()),
         );
         DateTimeRange? adjustedDateTimeRange;
 

@@ -35,7 +35,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   DateTimeRange? _dateTimeRange = DateTimeRange(
     start: beginningOfThisWeek(),
-    end: endOfThisWeek(),
+    end: endOfDay(DateTime.now()),
   );
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<CategoryReasons> _selectedCategoryReasons = [];
@@ -43,7 +43,8 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   List<models.ValueTransactionQueryDocumentSnapshot>
       _filterTransactionsByTransactionTypes(
-          List<models.ValueTransactionQueryDocumentSnapshot> filteredDocs) {
+    List<models.ValueTransactionQueryDocumentSnapshot> filteredDocs,
+  ) {
     if (_selectedTransactionTypes.isNotEmpty) {
       filteredDocs = filteredDocs
           .where(
@@ -274,12 +275,12 @@ class _TransactionHistoryState extends State<TransactionHistory>
               ],
             ),
           ),
-          FirestoreBuilder<models.ValueTransactionQuerySnapshot>(
+          FirestoreBuilder(
             ref: valueTransactionsRef,
             builder: (
               context,
-              AsyncSnapshot<models.ValueTransactionQuerySnapshot> snapshot,
-              Widget? child,
+              snapshot,
+              child,
             ) {
               if (snapshot.hasError) {
                 return const Padding(

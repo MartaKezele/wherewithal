@@ -4,7 +4,7 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../change_notifiers/auth.dart';
 import '../../../change_notifiers/repo_factory.dart';
-import '../../../components/auth_provider_card.dart';
+import '../../../components/cards/auth_provider_card.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/email_form_field.dart';
 import '../../../components/wrappers/screen.dart';

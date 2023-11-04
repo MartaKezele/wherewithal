@@ -58,6 +58,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
       categoryTitle: _selectedCategories.first.title,
       categoryTransactionType: _selectedTransactionTypes.first.name,
       categoryReason: _selectedCategories.first.categoryReason,
+      parentCategoryId: _selectedCategories.first.parentCategoryId,
     );
   }
 
@@ -78,6 +79,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
             categoryTitle: valueTransaction.categoryTitle,
             categoryTransactionType: valueTransaction.categoryTransactionType,
             categoryReason: valueTransaction.categoryReason,
+            parentCategoryId: valueTransaction.parentCategoryId,
           );
       return ActionResult(
         success: true,

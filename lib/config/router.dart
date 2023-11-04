@@ -20,6 +20,7 @@ final router = GoRouter(
     TopLevelRoutes.passwordReauth,
     TopLevelRoutes.googleReauth,
     TopLevelRoutes.createReceipt,
+    TopLevelRoutes.error,
   ],
   redirect: (context, state) async {
     final auth = GetIt.I<AuthChangeNotifier>();

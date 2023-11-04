@@ -1,8 +1,8 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/color_schemes/dark.dart';
-import '../../config/color_schemes/light.dart';
+import '../color_schemes/dark.dart';
+import '../color_schemes/light.dart';
 import 'app_bar.dart';
 import 'bottom_navigation_bar.dart';
 import 'button.dart';

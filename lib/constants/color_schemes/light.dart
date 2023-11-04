@@ -31,5 +31,5 @@ const lightColorScheme = ColorScheme(
   surface: Color(0xFFFDF8FD),
   onSurface: Color(0xFF1C1B1E),
   surfaceVariant: Color(0xFFE7E0EB),
-  onSurfaceVariant: Color(0xFF49454E),
+  onSurfaceVariant: Color.fromARGB(255, 18, 15, 21),
 );

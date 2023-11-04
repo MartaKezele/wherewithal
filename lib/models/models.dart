@@ -59,6 +59,7 @@ class ValueTransaction {
     required this.categoryTitle,
     required this.categoryTransactionType,
     this.categoryReason,
+    this.parentCategoryId,
   }) {
     _$assertValueTransaction(this);
   }
@@ -73,6 +74,7 @@ class ValueTransaction {
   final String categoryTitle;
   final String categoryTransactionType;
   final String? categoryReason;
+  final String? parentCategoryId;
 
   factory ValueTransaction.fromJson(Map<String, dynamic> json) {
     return ValueTransaction(
@@ -85,6 +87,7 @@ class ValueTransaction {
       categoryTitle: json['categoryTitle'] as String,
       categoryTransactionType: json['categoryTransactionType'] as String,
       categoryReason: json['categoryReason'] as String?,
+      parentCategoryId: json['parentCategoryId'] as String?,
     );
   }
 

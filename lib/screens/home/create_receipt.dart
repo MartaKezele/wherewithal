@@ -9,13 +9,14 @@ import '../../app_models/product_item_data.dart';
 import '../../change_notifiers/auth.dart';
 import '../../change_notifiers/currency.dart';
 import '../../components/bottom_sheets/camera_gallery_bottom_sheet.dart';
+import '../../components/cards/product_item_card.dart';
 import '../../components/dialogs/confirm_dialog.dart';
 import '../../components/form/custom_form.dart';
 import '../../components/form/form_fields/date_form_field.dart';
 import '../../components/image_preview.dart';
-import '../../components/product_item_card.dart';
 import '../../components/wrappers/loading_overlay_wrapper.dart';
 import '../../components/wrappers/screen.dart';
+import '../../config/fraction_digits.dart';
 import '../../constants/padding_size.dart';
 import '../../constants/spacers.dart';
 import '../../constants/styles/filled_button.dart';
@@ -30,8 +31,6 @@ import '../../models/models.dart' as models;
 import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/outlined_button.dart';
 import '../../extensions/button/button_style_button.dart';
-
-const _totalPriceFranctionDigits = 2;
 
 class CreateReceipt extends StatefulWidget with GetItStatefulWidgetMixin {
   CreateReceipt({
@@ -448,7 +447,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                                 Text(
-                                  '${_calculateTotalPrice().toStringAsFixed(_totalPriceFranctionDigits)} $currency',
+                                  '${_calculateTotalPrice().toStringAsFixed(priceFractionDigits)} $currency',
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ],

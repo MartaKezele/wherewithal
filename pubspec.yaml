@@ -13,6 +13,7 @@ dependencies:
   envied: ^0.3.0+3
   firebase_auth: ^4.7.1
   firebase_core: ^2.15.0
+  fl_chart: ^0.64.0
   flutter:
     sdk: flutter
   flutter_localizations:
