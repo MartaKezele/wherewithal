@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wherewithal/l10n/app_localizations.dart';
 
 import '../../constants/padding_size.dart';
 import '../../constants/spacers.dart';
@@ -13,6 +14,8 @@ Future<T?> showConfirmDialog<T>({
   Widget? description,
   final void Function()? onOkPressed,
 }) {
+  final localizations = AppLocalizations.of(context);
+
   return showDialog<T>(
     context: context,
     builder: (BuildContext context) {
@@ -50,7 +53,7 @@ Future<T?> showConfirmDialog<T>({
                     TextButton(
                       onPressed: onOkPressed,
                       child: Text(
-                        MaterialLocalizations.of(context).okButtonLabel,
+                        localizations.ok,
                       ),
                     ).colorStyle(TextButtonStyles.surface),
                   ],

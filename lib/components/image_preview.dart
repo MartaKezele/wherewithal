@@ -53,11 +53,7 @@ class ImagePreview extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.close_rounded),
                   onPressed: onRemovePressed,
-                ).colorStyle(
-                  errorMessage != null
-                      ? FilledIconButtonStyles.error
-                      : FilledIconButtonStyles.success,
-                ),
+                ).colorStyle(FilledIconButtonStyles.error),
               ),
             ],
           ),

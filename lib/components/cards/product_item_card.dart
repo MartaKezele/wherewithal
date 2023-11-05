@@ -56,7 +56,7 @@ class ProductItemCard extends StatelessWidget with GetItMixin {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.errorContainer,
+              color: Theme.of(context).colorScheme.surfaceVariant,
               borderRadius: const BorderRadius.all(
                 Radius.circular(containerBorderRadius),
               ),
