@@ -1237,9 +1237,30 @@ class AppLocalizations {
     );
   }
 
-  String get goDeeper {
+  String get moreDetails {
     return Intl.message(
-      'Go deeper',
+      'More details',
+      locale: localeName,
+    );
+  }
+
+  String get loading {
+    return Intl.message(
+      'Loading',
+      locale: localeName,
+    );
+  }
+
+  String get settingUpData {
+    return Intl.message(
+      'Setting up data',
+      locale: localeName,
+    );
+  }
+
+  String get welcome {
+    return Intl.message(
+      'Welcome',
       locale: localeName,
     );
   }

@@ -122,7 +122,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
       ),
       formKey: _addSubcategoryFormStateKey,
       onSubmit: _createSubcategory,
-      submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
+      submitBtnText: AppLocalizations.of(context).save,
     ).then((result) {
       if (result != null) {
         _resultBanner = showActionResultOverlayBanner(
@@ -259,9 +259,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
                               formKey: _updateCategoryFormStateKey,
                               fn: _update,
                             ),
-                            child: Text(
-                              MaterialLocalizations.of(context).saveButtonLabel,
-                            ),
+                            child: Text(localizations.save),
                           )
                               .colorStyle(FilledButtonStyles.primaryContainer)
                               .loadingBtn(

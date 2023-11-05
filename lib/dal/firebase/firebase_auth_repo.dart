@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../change_notifiers/auth.dart';
 import '../../change_notifiers/repo_factory.dart';
 import '../../config/auth_provider.dart';
 import '../../config/setup_data/categories/expense.dart';
@@ -129,6 +130,8 @@ class FirebaseAuthRepo extends AuthRepo {
         password: password,
       );
 
+      GetIt.I<AuthChangeNotifier>().hasDataBeenSetUp = true;
+
       return ActionResult(
         success: true,
         messageTitle: localizations.signedIn,
@@ -156,7 +159,10 @@ class FirebaseAuthRepo extends AuthRepo {
         return genericFailureResult(localizations);
       }
 
-      return await _setupUserData(userCredential.user!.uid);
+      final setupDataResult = await _setupUserData(userCredential.user!.uid);
+      GetIt.I<AuthChangeNotifier>().hasDataBeenSetUp = true;
+
+      return setupDataResult;
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e, localizations);
     } catch (_) {
@@ -264,14 +270,14 @@ class FirebaseAuthRepo extends AuthRepo {
           .retrieveByUid(userCredential.user!.uid);
 
       if (!userResult.success) {
-        final userResult = await _setupUserData(userCredential.user!.uid);
-        // Reload user so that AuthChangeNotifier can register firestore user listener
-        await GetIt.I<RepoFactoryChangeNotifier>()
-            .repoFactory
-            .userRepo1
-            .reloadUser();
-        return userResult;
+        final newUserResult = await _setupUserData(userCredential.user!.uid);
+        if (newUserResult.success) {
+          GetIt.I<AuthChangeNotifier>().hasDataBeenSetUp = true;
+        }
+        return newUserResult;
       }
+
+      GetIt.I<AuthChangeNotifier>().hasDataBeenSetUp = true;
 
       return ActionResult(
         success: true,

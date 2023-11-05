@@ -25,27 +25,26 @@ final router = GoRouter(
   redirect: (context, state) async {
     final auth = GetIt.I<AuthChangeNotifier>();
 
-    if (auth.signedIn &&
-        auth.emailVerified &&
-        auth.id != null &&
-        (state.location.startsWith(TopLevelRoutes.welcome.path) ||
-            state.location.startsWith(TopLevelRoutes.verifyEmail.path))) {
-      return initialLocation;
-    }
-
-    if (auth.signedIn &&
-        !auth.emailVerified &&
-        !state.location.startsWith(TopLevelRoutes.verifyEmail.path)) {
-      await GetIt.I<RepoFactoryChangeNotifier>()
-          .repoFactory
-          .authRepo
-          .sendVerificationEmail();
-      return TopLevelRoutes.verifyEmail.path;
-    }
-
     if (!auth.signedIn &&
         !state.location.startsWith(TopLevelRoutes.welcome.path)) {
       return TopLevelRoutes.welcome.path;
+    }
+
+    if (auth.signedIn && auth.id != null && auth.hasDataBeenSetUp) {
+      if (!auth.emailVerified &&
+          !state.location.startsWith(TopLevelRoutes.verifyEmail.path)) {
+        await GetIt.I<RepoFactoryChangeNotifier>()
+            .repoFactory
+            .authRepo
+            .sendVerificationEmail();
+        return TopLevelRoutes.verifyEmail.path;
+      }
+
+      if (auth.emailVerified &&
+          (state.location.startsWith(TopLevelRoutes.welcome.path) ||
+              state.location.startsWith(TopLevelRoutes.verifyEmail.path))) {
+        return initialLocation;
+      }
     }
 
     return null;

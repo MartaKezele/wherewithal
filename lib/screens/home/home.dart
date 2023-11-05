@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
         assert(_addCategoryFormKey.currentState != null);
         return _addCategoryFormKey.currentState!.addCategory();
       },
-      submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
+      submitBtnText: AppLocalizations.of(context).save,
     ).then((result) {
       if (result != null) {
         _resultBanner = showActionResultOverlayBanner(
@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
         assert(_addTransactionFormKey.currentState != null);
         return _addTransactionFormKey.currentState!.addValueTransaction();
       },
-      submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
+      submitBtnText: AppLocalizations.of(context).save,
       formKey: _addTransactionFormStateKey,
     ).then((result) {
       if (result != null) {

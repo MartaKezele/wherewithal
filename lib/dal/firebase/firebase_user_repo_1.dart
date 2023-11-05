@@ -65,6 +65,8 @@ class FirebaseUserRepo1 extends UserRepo1 {
         await FirebaseAuth.instance.currentUser!.delete();
       }
 
+      await GetIt.I<RepoFactoryChangeNotifier>().repoFactory.authRepo.signOut();
+
       return deleteResult;
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e, localizations);

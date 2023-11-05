@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../app_models/custom_dropdown_entry.dart';
 import '../../constants/padding_size.dart';
 import '../../constants/styles/outlined_button.dart';
+import '../../l10n/app_localizations.dart';
 import '../drag_indicator.dart';
 import '../../extensions/button/outlined_button.dart';
 import '../no_data_content.dart';
@@ -41,6 +42,8 @@ class _ModalBottomSheetDropdownState<T>
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -89,7 +92,7 @@ class _ModalBottomSheetDropdownState<T>
             onPressed: () {
               context.pop();
             },
-            child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+            child: Text(localizations.close),
           ).colorStyle(OutlinedButtonStyles.primary),
         ),
       ],

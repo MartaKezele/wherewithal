@@ -21,7 +21,7 @@ class ValueTransactionsByCategoryChartCard extends StatelessWidget
     required this.sections,
     required this.onLegendItemClicked,
     this.goBackFn,
-    this.goDeeperFn,
+    this.moreDetailsFn,
     this.selectedSectionId,
   });
 
@@ -30,7 +30,7 @@ class ValueTransactionsByCategoryChartCard extends StatelessWidget
   final List<PieSectionData> sections;
   final void Function(String? categoryId) onLegendItemClicked;
   final void Function()? goBackFn;
-  final void Function()? goDeeperFn;
+  final void Function()? moreDetailsFn;
   final String? selectedSectionId;
 
   final colorContainerSize = 15.0;
@@ -71,8 +71,7 @@ class ValueTransactionsByCategoryChartCard extends StatelessWidget
                                     index,
                                     PieChartSectionData(
                                       value: section.value,
-                                      color:
-                                          chartSectionColorFromIndex(index),
+                                      color: chartSectionColorFromIndex(index),
                                       showTitle: false,
                                       radius: section.id == selectedSectionId
                                           ? selectedSectionRadius
@@ -95,7 +94,7 @@ class ValueTransactionsByCategoryChartCard extends StatelessWidget
                       ),
                     ),
                   ),
-                  if (goBackFn != null || goDeeperFn != null)
+                  if (goBackFn != null || moreDetailsFn != null)
                     Padding(
                       padding: const EdgeInsets.only(
                         top: PaddingSize.xxs,
@@ -109,10 +108,10 @@ class ValueTransactionsByCategoryChartCard extends StatelessWidget
                               icon: const Icon(Icons.arrow_back),
                               label: Text(localizations.goBack),
                             ).colorStyle(TextButtonStyles.surfaceVariant),
-                          if (goDeeperFn != null)
+                          if (moreDetailsFn != null)
                             TextButton.icon(
-                              onPressed: goDeeperFn,
-                              icon: Text(localizations.goDeeper),
+                              onPressed: moreDetailsFn,
+                              icon: Text(localizations.moreDetails),
                               label: const Icon(Icons.arrow_forward),
                             ).colorStyle(TextButtonStyles.surfaceVariant),
                         ],

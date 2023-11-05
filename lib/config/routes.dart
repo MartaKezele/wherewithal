@@ -125,8 +125,8 @@ class TopLevelRoutes {
     path: '/error',
     builder: (context, state) {
       return ErrorScreen(
-        title: state.queryParameters[QueryParamKeys.errorTitle],
-        description: state.queryParameters[QueryParamKeys.errorDescription],
+        title: state.queryParameters[QueryParamKeys.title],
+        description: state.queryParameters[QueryParamKeys.description],
       );
     },
   );
@@ -252,7 +252,7 @@ class NamedChildRoutes {
       final authProviders = GetIt.I<AuthChangeNotifier>().authProviders;
 
       if (authProviders.isEmpty) {
-        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorTitle}=${localizations.noConfiguredAuthProviders}';
+        return '${TopLevelRoutes.error.path}?${QueryParamKeys.title}=${localizations.noConfiguredAuthProviders}';
       }
 
       final redirectRoute = authProviderRedirectRoutes[authProviders.first];

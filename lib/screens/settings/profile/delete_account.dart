@@ -46,6 +46,13 @@ class _DeleteAccountState extends State<DeleteAccount> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void dispose() {
     hideOverlayBanner(_resultBanner);
     super.dispose();

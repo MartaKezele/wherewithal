@@ -46,7 +46,7 @@ Future<T?> showConfirmDialog<T>({
                         context.pop();
                       },
                       child: Text(
-                        MaterialLocalizations.of(context).cancelButtonLabel,
+                        localizations.cancel,
                       ),
                     ).colorStyle(TextButtonStyles.surface),
                     WidthSpacer.sm,

@@ -234,7 +234,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                               _selectedExpenseSectionId = categoryId;
                             });
                           },
-                          goDeeperFn: _selectedExpenseSectionId == null ||
+                          moreDetailsFn: _selectedExpenseSectionId == null ||
                                   _transactionsByCategoriesPieSections(
                                     _selectedExpenseSectionId,
                                     expenseCategories,
@@ -266,7 +266,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                               _selectedIncomeSectionId = categoryId;
                             });
                           },
-                          goDeeperFn: _selectedIncomeSectionId == null ||
+                          moreDetailsFn: _selectedIncomeSectionId == null ||
                                   _transactionsByCategoriesPieSections(
                                     _selectedIncomeSectionId,
                                     incomeCategories,

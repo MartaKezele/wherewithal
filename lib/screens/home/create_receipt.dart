@@ -459,7 +459,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                           );
                         },
                       ),
-              child: Text(MaterialLocalizations.of(context).saveButtonLabel),
+              child: Text(localizations.save),
             )
                 .colorStyle(
                   FilledButtonStyles.enterAppPrimary,

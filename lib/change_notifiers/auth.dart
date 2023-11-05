@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import '../config/auth_provider.dart';
 import '../models/models.dart' as models;
-import 'repo_factory.dart';
 
 class AuthChangeNotifier extends ChangeNotifier {
   AuthChangeNotifier._privateConstructor() {
@@ -26,6 +24,13 @@ class AuthChangeNotifier extends ChangeNotifier {
   String? get id => _user?.id;
 
   List<AuthProvider> get authProviders => _authProviders;
+
+  bool _hasDataBeenSetUp = false;
+  bool get hasDataBeenSetUp => _hasDataBeenSetUp;
+  set hasDataBeenSetUp(bool value) {
+    _hasDataBeenSetUp = value;
+    notifyListeners();
+  }
 
   void _updateAuthProviders() {
     final providerData = _firebaseAuthUser?.providerData;
@@ -59,15 +64,6 @@ class AuthChangeNotifier extends ChangeNotifier {
           }
           notifyListeners();
         });
-
-        final userResult = await GetIt.I<RepoFactoryChangeNotifier>()
-            .repoFactory
-            .userRepo2
-            .retrieveByUid(user.uid);
-
-        if (userResult.success) {
-          _user = userResult.data;
-        }
       }
       _updateAuthProviders();
       notifyListeners();
