@@ -42,7 +42,7 @@ class CustomDropdown<T> extends StatelessWidget {
       maxLines: null,
       decoration: InputDecoration(
         border: const UnderlineInputBorder(),
-        label: Text(title),
+        label: Text('$title${required ? '*' : ''}'),
         suffixIcon: const Icon(
           Icons.arrow_drop_down_rounded,
         ),

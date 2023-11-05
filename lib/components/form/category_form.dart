@@ -193,7 +193,7 @@ class CategoryFormState extends State<CategoryForm> {
             label: Text(localizations.budget),
           ),
         ),
-        CustomDropdown<TransactionTypes>(
+        CustomDropdown(
           options: transactionTypeOptions,
           selectedOptions: _selectedTransactionTypes
               .map((transactionType) =>

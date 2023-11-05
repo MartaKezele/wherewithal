@@ -216,7 +216,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
           },
           dateTime: _dateTime,
         ),
-        CustomDropdown<TransactionTypes>(
+        CustomDropdown(
           options: TransactionTypes.values
               .map(
                 (transactionType) => CustomDropdownEntry(
@@ -247,6 +247,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
             });
           },
           title: localizations.transactionType,
+          required: true,
         ),
         CategoriesFormField(
           onSelectionChanged: (selection) {

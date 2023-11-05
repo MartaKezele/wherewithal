@@ -28,10 +28,9 @@ class DateFormField extends StatelessWidget with GetItMixin {
       (DateFormatChangeNotifier changeNotifier) => changeNotifier.dateFormat,
     );
 
-    final dateTimeText = dateFormat?.format(
-          dateTime ?? initialDate,
-        ) ??
-        initialDate.toIso8601String();
+    final dateTimeText = dateFormat != null && dateTime != null
+        ? dateFormat.format(dateTime!)
+        : '';
 
     return TextFormField(
       controller: TextEditingController(
