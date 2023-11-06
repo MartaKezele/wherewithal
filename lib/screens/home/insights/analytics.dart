@@ -17,6 +17,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../models/enums/transaction_types.dart';
 import '../../../models/models.dart' as models;
 import '../../../utils/categories.dart';
+import '../../../utils/percentage.dart';
 
 class Analytics extends StatefulWidget with GetItStatefulWidgetMixin {
   Analytics({super.key});
@@ -31,10 +32,10 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
     end: endOfDay(DateTime.now()),
   );
 
-  final List<String?> _parentExpenseCategoryIds = [null];
-  final List<String?> _parentIncomeCategoryIds = [null];
-  String? _selectedExpenseSectionId;
-  String? _selectedIncomeSectionId;
+  final List<PieSectionData?> _parentExpenseSections = [null];
+  final List<PieSectionData?> _parentIncomeSections = [null];
+  PieSectionData? _selectedExpenseSection;
+  PieSectionData? _selectedIncomeSection;
 
   double _totalValueTransactionValue(
     Iterable<models.ValueTransaction> valueTransactions,
@@ -48,12 +49,12 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
   }
 
   List<PieSectionData> _transactionsByCategoriesPieSections(
-    String? parentCategoryId,
+    PieSectionData? parentSection,
     Iterable<models.Category> categories,
     Iterable<models.ValueTransaction> valueTransactions,
   ) {
     final baseCategories = categories.where(
-      (element) => element.parentCategoryId == parentCategoryId,
+      (element) => element.parentCategoryId == parentSection?.id,
     );
 
     var totalValue = 0.0;
@@ -75,6 +76,26 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
     }
 
     final List<PieSectionData> sections = [];
+
+    if (parentSection != null) {
+      final totalParentCategoryValue = _totalValueTransactionValue(
+        valueTransactions.where(
+          (valueTransaction) => valueTransaction.categoryId == parentSection.id,
+        ),
+      );
+      if (totalParentCategoryValue > 0 && totalValue > 0.0) {
+        totalValue += totalParentCategoryValue;
+        sections.add(
+          PieSectionData(
+            id: parentSection.id,
+            value: totalParentCategoryValue,
+            legendTitle: parentSection.legendTitle,
+            percentage: percentage(totalParentCategoryValue, totalValue),
+            disableLegend: true,
+          ),
+        );
+      }
+    }
 
     for (final index in Iterable.generate(totalCategoryValues.length)) {
       final percentage = totalValue == 0.0
@@ -212,13 +233,13 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
 
                     final expenseByCategoriesData =
                         _transactionsByCategoriesPieSections(
-                      _parentExpenseCategoryIds.last,
+                      _parentExpenseSections.last,
                       expenseCategories,
                       expenseValueTransactions,
                     );
                     final incomeByCategoriesData =
                         _transactionsByCategoriesPieSections(
-                      _parentIncomeCategoryIds.last,
+                      _parentIncomeSections.last,
                       incomeCategories,
                       incomeValueTransactions,
                     );
@@ -228,31 +249,39 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                         ValueTransactionsByCategoryChartCard(
                           title: localizations.spendingByCategories,
                           sections: expenseByCategoriesData,
-                          selectedSectionId: _selectedExpenseSectionId,
-                          onLegendItemClicked: (categoryId) {
+                          selectedSection: _selectedExpenseSection,
+                          parentSectionTitle:
+                              _parentExpenseSections.last?.legendTitle ??
+                                  localizations.total,
+                          parentSectionTotalValue:
+                              _parentExpenseSections.last?.value ??
+                                  totalExpense,
+                          onLegendItemClicked: (section) {
                             setState(() {
-                              _selectedExpenseSectionId = categoryId;
+                              _selectedExpenseSection = section;
                             });
                           },
-                          moreDetailsFn: _selectedExpenseSectionId == null ||
+                          moreDetailsFn: _selectedExpenseSection == null ||
+                                  _selectedExpenseSection?.disableLegend ==
+                                      true ||
                                   _transactionsByCategoriesPieSections(
-                                    _selectedExpenseSectionId,
+                                    _selectedExpenseSection,
                                     expenseCategories,
                                     expenseValueTransactions,
                                   ).isEmpty
                               ? null
                               : () {
                                   setState(() {
-                                    _parentExpenseCategoryIds
-                                        .add(_selectedExpenseSectionId);
-                                    _selectedExpenseSectionId = null;
+                                    _parentExpenseSections
+                                        .add(_selectedExpenseSection);
+                                    _selectedExpenseSection = null;
                                   });
                                 },
-                          goBackFn: _parentExpenseCategoryIds.last == null
+                          goBackFn: _parentExpenseSections.last == null
                               ? null
                               : () {
                                   setState(() {
-                                    _parentExpenseCategoryIds.removeLast();
+                                    _parentExpenseSections.removeLast();
                                   });
                                 },
                         ),
@@ -260,31 +289,38 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                         ValueTransactionsByCategoryChartCard(
                           title: localizations.incomeByCategories,
                           sections: incomeByCategoriesData,
-                          selectedSectionId: _selectedIncomeSectionId,
-                          onLegendItemClicked: (categoryId) {
+                          selectedSection: _selectedIncomeSection,
+                          parentSectionTitle:
+                              _parentIncomeSections.last?.legendTitle ??
+                                  localizations.total,
+                          parentSectionTotalValue:
+                              _parentIncomeSections.last?.value ?? totalIncome,
+                          onLegendItemClicked: (section) {
                             setState(() {
-                              _selectedIncomeSectionId = categoryId;
+                              _selectedIncomeSection = section;
                             });
                           },
-                          moreDetailsFn: _selectedIncomeSectionId == null ||
+                          moreDetailsFn: _selectedIncomeSection == null ||
+                                  _selectedIncomeSection?.disableLegend ==
+                                      true ||
                                   _transactionsByCategoriesPieSections(
-                                    _selectedIncomeSectionId,
+                                    _selectedIncomeSection,
                                     incomeCategories,
                                     incomeValueTransactions,
                                   ).isEmpty
                               ? null
                               : () {
                                   setState(() {
-                                    _parentIncomeCategoryIds
-                                        .add(_selectedIncomeSectionId);
-                                    _selectedIncomeSectionId = null;
+                                    _parentIncomeSections
+                                        .add(_selectedIncomeSection);
+                                    _selectedIncomeSection = null;
                                   });
                                 },
-                          goBackFn: _parentIncomeCategoryIds.last == null
+                          goBackFn: _parentIncomeSections.last == null
                               ? null
                               : () {
                                   setState(() {
-                                    _parentIncomeCategoryIds.removeLast();
+                                    _parentIncomeSections.removeLast();
                                   });
                                 },
                         ),

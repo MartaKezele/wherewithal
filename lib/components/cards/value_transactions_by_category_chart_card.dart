@@ -10,11 +10,12 @@ import '../../constants/spacers.dart';
 import '../../constants/styles/text_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/chart/chart_section_color.dart';
+import '../custom_expansion_panel.dart';
 import 'analytics_card.dart';
 import '../../extensions/button/text_button.dart';
 
-class ValueTransactionsByCategoryChartCard extends StatelessWidget
-    with GetItMixin {
+class ValueTransactionsByCategoryChartCard extends StatefulWidget
+    with GetItStatefulWidgetMixin {
   ValueTransactionsByCategoryChartCard({
     super.key,
     required this.title,
@@ -22,20 +23,34 @@ class ValueTransactionsByCategoryChartCard extends StatelessWidget
     required this.onLegendItemClicked,
     this.goBackFn,
     this.moreDetailsFn,
-    this.selectedSectionId,
+    this.selectedSection,
+    required this.parentSectionTitle,
+    required this.parentSectionTotalValue,
   });
 
   final String title;
 
   final List<PieSectionData> sections;
-  final void Function(String? categoryId) onLegendItemClicked;
+  final void Function(PieSectionData? section) onLegendItemClicked;
   final void Function()? goBackFn;
   final void Function()? moreDetailsFn;
-  final String? selectedSectionId;
+  final PieSectionData? selectedSection;
+  final String parentSectionTitle;
+  final double parentSectionTotalValue;
 
-  final colorContainerSize = 15.0;
-  final selectedSectionRadius = 55.0;
-  final unselectedSectionRadius = 40.0;
+  @override
+  State<ValueTransactionsByCategoryChartCard> createState() =>
+      _ValueTransactionsByCategoryChartCardState();
+}
+
+class _ValueTransactionsByCategoryChartCardState
+    extends State<ValueTransactionsByCategoryChartCard> with GetItStateMixin {
+  final _colorContainerSize = 15.0;
+  final _selectedSectionRadius = 55.0;
+  final _unselectedSectionRadius = 40.0;
+  final _numberOfShowcasedSections = 3;
+
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,131 +61,165 @@ class ValueTransactionsByCategoryChartCard extends StatelessWidget
           changeNotifier.currency?.symbol,
     );
 
+    final sectionListTiles = widget.sections
+        .asMap()
+        .map(
+          (index, section) => MapEntry(
+            index,
+            ListTile(
+              leadingAndTrailingTextStyle:
+                  Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w900,
+                      ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: PaddingSize.sm,
+                vertical: 0,
+              ),
+              selected: section == widget.selectedSection,
+              selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+              title: Text(section.legendTitle),
+              subtitle: Text(
+                '${section.value.toStringAsFixed(priceFractionDigits)} $currency',
+              ),
+              trailing: Text(
+                '${section.percentage.toStringAsFixed(priceFractionDigits)}%',
+              ),
+              leading: SizedBox(
+                height: _colorContainerSize,
+                width: _colorContainerSize,
+                child: Container(
+                  color: chartSectionColorFromIndex(index),
+                ),
+              ),
+              onTap: () => widget.onLegendItemClicked(section),
+            ),
+          ),
+        )
+        .values
+        .toList();
+
     return AnalyticsCard(
-      title: title,
-      child: SizedBox(
-        height: sections.isNotEmpty
-            ? MediaQuery.of(context).size.height / 2.25
-            : MediaQuery.of(context).size.height / 5,
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 3,
-              child: Column(
+      title: widget.title,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.parentSectionTitle,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              Text(
+                '${widget.parentSectionTotalValue.toStringAsFixed(priceFractionDigits)} $currency',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+              ),
+            ],
+          ),
+          HeightSpacer.md,
+          SizedBox(
+            width: MediaQuery.of(context).size.width - 4 * PaddingSize.xxl,
+            height: MediaQuery.of(context).size.width - 4 * PaddingSize.xxl,
+            child: PieChart(
+              PieChartData(
+                sections: widget.sections.isNotEmpty
+                    ? widget.sections
+                        .asMap()
+                        .map((index, section) {
+                          return MapEntry(
+                            index,
+                            PieChartSectionData(
+                              value: section.value,
+                              color: chartSectionColorFromIndex(index),
+                              showTitle: false,
+                              radius: section == widget.selectedSection
+                                  ? _selectedSectionRadius
+                                  : _unselectedSectionRadius,
+                            ),
+                          );
+                        })
+                        .values
+                        .toList()
+                    : [
+                        PieChartSectionData(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant
+                              .withOpacity(0.5),
+                          showTitle: false,
+                          radius: 22,
+                        ),
+                      ],
+              ),
+            ),
+          ),
+          if (widget.goBackFn != null || widget.moreDetailsFn != null)
+            Padding(
+              padding: const EdgeInsets.only(
+                top: PaddingSize.xxs,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: PieChart(
-                      PieChartData(
-                        sections: sections.isNotEmpty
-                            ? sections
-                                .asMap()
-                                .map((index, section) {
-                                  return MapEntry(
-                                    index,
-                                    PieChartSectionData(
-                                      value: section.value,
-                                      color: chartSectionColorFromIndex(index),
-                                      showTitle: false,
-                                      radius: section.id == selectedSectionId
-                                          ? selectedSectionRadius
-                                          : unselectedSectionRadius,
-                                    ),
-                                  );
-                                })
-                                .values
-                                .toList()
-                            : [
-                                PieChartSectionData(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant
-                                      .withOpacity(0.5),
-                                  showTitle: false,
-                                  radius: 22,
-                                ),
-                              ],
-                      ),
-                    ),
-                  ),
-                  if (goBackFn != null || moreDetailsFn != null)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: PaddingSize.xxs,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (goBackFn != null)
-                            TextButton.icon(
-                              onPressed: goBackFn,
-                              icon: const Icon(Icons.arrow_back),
-                              label: Text(localizations.goBack),
-                            ).colorStyle(TextButtonStyles.surfaceVariant),
-                          if (moreDetailsFn != null)
-                            TextButton.icon(
-                              onPressed: moreDetailsFn,
-                              icon: Text(localizations.moreDetails),
-                              label: const Icon(Icons.arrow_forward),
-                            ).colorStyle(TextButtonStyles.surfaceVariant),
-                        ],
-                      ),
-                    ),
+                  if (widget.goBackFn != null)
+                    TextButton.icon(
+                      onPressed: widget.goBackFn,
+                      icon: const Icon(Icons.arrow_back),
+                      label: Text(localizations.goBack),
+                    ).colorStyle(TextButtonStyles.surfaceVariant),
+                  if (widget.moreDetailsFn != null)
+                    TextButton.icon(
+                      onPressed: widget.moreDetailsFn,
+                      icon: Text(localizations.moreDetails),
+                      label: const Icon(Icons.arrow_forward),
+                    ).colorStyle(TextButtonStyles.surfaceVariant),
                 ],
               ),
             ),
-            HeightSpacer.xs,
-            if (sections.isEmpty)
-              Text(
-                localizations.noData,
-                style: Theme.of(context).textTheme.labelLarge,
-                textAlign: TextAlign.center,
-              ),
-            if (sections.isNotEmpty)
-              Expanded(
-                flex: 2,
-                child: Scrollbar(
-                  child: ListView.builder(
-                    itemCount: sections.length,
-                    itemBuilder: (context, index) {
-                      final section = sections[index];
-                      return ListTile(
-                        leadingAndTrailingTextStyle:
-                            Theme.of(context).textTheme.labelLarge?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: PaddingSize.sm,
-                          vertical: 0,
-                        ),
-                        selected: section.id == selectedSectionId,
-                        selectedColor:
-                            Theme.of(context).colorScheme.onPrimaryContainer,
-                        textColor:
-                            Theme.of(context).colorScheme.onSurfaceVariant,
-                        title: Text(section.legendTitle),
-                        subtitle: Text(
-                          '${section.value.toStringAsFixed(priceFractionDigits)} $currency',
-                        ),
-                        trailing: Text(
-                          '${section.percentage.toStringAsFixed(priceFractionDigits)}%',
-                        ),
-                        leading: SizedBox(
-                          height: colorContainerSize,
-                          width: colorContainerSize,
-                          child: Container(
-                            color: chartSectionColorFromIndex(index),
-                          ),
-                        ),
-                        onTap: () => onLegendItemClicked(section.id),
-                      );
-                    },
+          HeightSpacer.xxs,
+          if (widget.sections.isEmpty)
+            Text(
+              localizations.noData,
+              style: Theme.of(context).textTheme.labelLarge,
+              textAlign: TextAlign.center,
+            ),
+          if (widget.sections.isNotEmpty)
+            CustomExpansionPanelList(
+              expansionCallback: (_, isExpanded) {
+                setState(() {
+                  _isExpanded = isExpanded;
+                });
+              },
+              elevation: 0.0,
+              expandIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+              children: [
+                CustomExpansionPanel(
+                  backgroundColor: Colors.transparent,
+                  isExpanded: _isExpanded,
+                  showExpansionIcon:
+                      sectionListTiles.length <= _numberOfShowcasedSections
+                          ? false
+                          : true,
+                  headerBuilder: (context, isExpanded) {
+                    return Column(
+                      children: sectionListTiles
+                          .take(_numberOfShowcasedSections)
+                          .toList(),
+                    );
+                  },
+                  body: Column(
+                    children: sectionListTiles.length <=
+                            _numberOfShowcasedSections
+                        ? []
+                        : sectionListTiles.sublist(_numberOfShowcasedSections),
                   ),
                 ),
-              ),
-          ],
-        ),
+              ],
+            ),
+        ],
       ),
     );
   }

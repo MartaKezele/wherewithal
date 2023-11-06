@@ -1271,6 +1271,12 @@ class AppLocalizations {
       locale: localeName,
     );
   }
+  String get total {
+    return Intl.message(
+      'Total',
+      locale: localeName,
+    );
+  }
 
   String get failurePickingImages {
     return Intl.message(
