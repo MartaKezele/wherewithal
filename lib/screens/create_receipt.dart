@@ -4,33 +4,36 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../app_models/action_result.dart';
-import '../../app_models/product_item_data.dart';
-import '../../change_notifiers/auth.dart';
-import '../../change_notifiers/currency.dart';
-import '../../components/bottom_sheets/camera_gallery_bottom_sheet.dart';
-import '../../components/cards/product_item_card.dart';
-import '../../components/dialogs/confirm_dialog.dart';
-import '../../components/form/custom_form.dart';
-import '../../components/form/form_fields/date_form_field.dart';
-import '../../components/image_preview.dart';
-import '../../components/wrappers/loading_overlay_wrapper.dart';
-import '../../components/wrappers/screen.dart';
-import '../../config/fraction_digits.dart';
-import '../../constants/padding_size.dart';
-import '../../constants/spacers.dart';
-import '../../constants/styles/filled_button.dart';
-import '../../constants/styles/outlined_button.dart';
-import '../../l10n/app_localizations.dart';
-import '../../models/receipt_data.dart';
-import '../../models/receipt_product.dart';
-import '../../utils/form.dart';
-import '../../utils/overlay_banner.dart';
-import '../../utils/receipt_recognition_api.dart';
-import '../../models/models.dart' as models;
-import '../../extensions/button/filled_button.dart';
-import '../../extensions/button/outlined_button.dart';
-import '../../extensions/button/button_style_button.dart';
+import '../app_models/action_result.dart';
+import '../app_models/custom_dropdown_entry.dart';
+import '../app_models/product_item_data.dart';
+import '../change_notifiers/auth.dart';
+import '../change_notifiers/currency.dart';
+import '../components/bottom_sheets/camera_gallery_bottom_sheet.dart';
+import '../components/cards/product_item_card.dart';
+import '../components/dialogs/confirm_dialog.dart';
+import '../components/form/custom_form.dart';
+import '../components/form/form_fields/category_form_field.dart';
+import '../components/form/form_fields/date_form_field.dart';
+import '../components/image_preview.dart';
+import '../components/wrappers/loading_overlay_wrapper.dart';
+import '../components/wrappers/screen.dart';
+import '../config/fraction_digits.dart';
+import '../constants/padding_size.dart';
+import '../constants/spacers.dart';
+import '../constants/styles/filled_button.dart';
+import '../constants/styles/outlined_button.dart';
+import '../l10n/app_localizations.dart';
+import '../models/enums/transaction_types.dart';
+import '../models/receipt_data.dart';
+import '../models/receipt_product.dart';
+import '../utils/form.dart';
+import '../utils/overlay_banner.dart';
+import '../utils/receipt_recognition_api.dart';
+import '../models/models.dart' as models;
+import '../extensions/button/filled_button.dart';
+import '../extensions/button/outlined_button.dart';
+import '../extensions/button/button_style_button.dart';
 
 class CreateReceipt extends StatefulWidget with GetItStatefulWidgetMixin {
   CreateReceipt({
@@ -52,6 +55,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
   final List<ProductItemData> _productItems = [];
   DateTime? _dateTime;
   bool _saving = false;
+  models.Category? _category;
 
   void _setReceiptDate(ReceiptData receiptData) {
     final receiptDateTime = receiptData.receiptResponse?.dateTime;
@@ -216,18 +220,18 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
   models.ValueTransaction _itemToValueTransactionInfo(
     ProductItemData productItem,
   ) {
-    assert(productItem.category != null);
-    assert(_dateTime != null);
-
-    final category = productItem.category!;
+    final category = productItem.category ?? _category;
     final title = productItem.titleController.text.trim();
+
+    assert(_dateTime != null);
+    assert(category != null);
 
     return models.ValueTransaction(
       id: '',
       title: title.isNotEmpty ? title : null,
       value: double.parse(productItem.priceController.text.trim()),
       dateTime: _dateTime!,
-      categoryId: category.id,
+      categoryId: category!.id,
       categoryTitle: category.title,
       categoryTransactionType: category.transactionType,
       categoryReason: category.categoryReason,
@@ -296,6 +300,18 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
     });
   }
 
+  void _onCategorySelectionChanged(
+    List<CustomDropdownEntry<models.Category>> selection,
+  ) {
+    setState(() {
+      if (selection.isNotEmpty) {
+        _category = selection.first.value;
+      } else {
+        _category = null;
+      }
+    });
+  }
+
   @override
   void initState() {
     _dateTime = DateTime.now();
@@ -316,6 +332,18 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
       (CurrencyChangeNotifier changeNotifier) =>
           changeNotifier.currency?.symbol,
     );
+
+    final userId = watchOnly(
+      (AuthChangeNotifier changeNotifier) => changeNotifier.id,
+    );
+
+    models.CategoryQuery categoriesRef = models.usersRef
+        .doc(userId)
+        .categories
+        .whereTransactionType(
+          isEqualTo: TransactionTypes.expense.name,
+        )
+        .orderByTitle();
 
     return LoadingOverlayWrapper(
       loading: _loading,
@@ -385,6 +413,13 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                           },
                           dateTime: _dateTime,
                         ),
+                        CategoryFormField(
+                          onSelectionChanged: _onCategorySelectionChanged,
+                          selectedCategories: [
+                            if (_category != null) _category!
+                          ],
+                          categoriesRef: categoriesRef,
+                        ),
                         FilledButton.icon(
                           onPressed: () {
                             setState(() {
@@ -405,7 +440,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                             return ProductItemCard(
                               titleController: productItem.titleController,
                               priceValueController: productItem.priceController,
-                              category: productItem.category,
+                              category: productItem.category ?? _category,
                               onCategorySelectionChanged: (selection) {
                                 if (selection.isNotEmpty) {
                                   setState(() {
@@ -419,6 +454,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                                   _productItems.remove(productItem);
                                 });
                               },
+                              categoriesRef: categoriesRef,
                             );
                           }).toList(),
                         ),

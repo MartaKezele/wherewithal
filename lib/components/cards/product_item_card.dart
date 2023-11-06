@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../app_models/custom_dropdown_entry.dart';
-import '../../change_notifiers/auth.dart';
 import '../../constants/padding_size.dart';
 import '../../constants/styles/container.dart';
 import '../../constants/styles/icon_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/enums/transaction_types.dart';
-import '../form/form_fields/categories_form_field.dart';
+import '../form/form_fields/category_form_field.dart';
 import '../form/form_fields/price_value_form_field.dart';
 
 import '../../models/models.dart' as models;
@@ -22,6 +21,7 @@ class ProductItemCard extends StatelessWidget with GetItMixin {
     this.category,
     required this.onCategorySelectionChanged,
     required this.onRemove,
+    required this.categoriesRef,
   });
 
   final TextEditingController titleController;
@@ -30,22 +30,11 @@ class ProductItemCard extends StatelessWidget with GetItMixin {
   final void Function(List<CustomDropdownEntry<models.Category>>)
       onCategorySelectionChanged;
   final void Function() onRemove;
+  final models.CategoryQuery categoriesRef;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-
-    final userId = watchOnly(
-      (AuthChangeNotifier changeNotifier) => changeNotifier.id,
-    );
-
-    models.CategoryQuery categoriesRef = models.usersRef
-        .doc(userId)
-        .categories
-        .whereTransactionType(
-          isEqualTo: TransactionTypes.expense.name,
-        )
-        .orderByTitle();
 
     return Stack(
       children: [
@@ -80,10 +69,11 @@ class ProductItemCard extends StatelessWidget with GetItMixin {
                     controller: priceValueController,
                     transactionType: TransactionTypes.expense,
                   ),
-                  CategoriesFormField(
+                  CategoryFormField(
                     onSelectionChanged: onCategorySelectionChanged,
                     selectedCategories: [if (category != null) category!],
                     categoriesRef: categoriesRef,
+                    required: true,
                   ),
                 ],
               ),

@@ -7,7 +7,7 @@ import '../screens/home/categories/categories.dart';
 import '../screens/home/categories/category_view.dart';
 import '../screens/home/home.dart';
 import '../screens/home/insights/insights.dart';
-import '../screens/home/create_receipt.dart';
+import '../screens/create_receipt.dart';
 import '../screens/home/insights/value_transaction_view.dart';
 import '../screens/home/recurring_transactions.dart';
 import 'bottom_nav.dart';

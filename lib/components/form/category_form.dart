@@ -212,7 +212,7 @@ class CategoryFormState extends State<CategoryForm> {
         Visibility(
           visible: _selectedTransactionTypes.isNotEmpty &&
               _selectedTransactionTypes.first == TransactionTypes.expense,
-          child: CustomDropdown<CategoryReasons>(
+          child: CustomDropdown(
             options: categoryReasonOptions,
             selectedOptions: _selectedCategoryReasons
                 .map((categoryReason) => CustomDropdownEntry(

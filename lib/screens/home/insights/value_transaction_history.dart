@@ -140,7 +140,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                   },
                   dateTimeRange: _dateTimeRange,
                 ),
-                CustomDropdown<TransactionTypes>(
+                CustomDropdown(
                   multiselect: true,
                   options: [
                     ...TransactionTypes.values
@@ -209,7 +209,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                       (element) => element.data.parentCategoryId == null,
                     );
 
-                    return CustomDropdown<models.Category>(
+                    return CustomDropdown(
                       title: localizations.categories,
                       multiselect: true,
                       selectedOptions: _selectedCategories
@@ -237,7 +237,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                       _selectedTransactionTypes.contains(
                         TransactionTypes.expense,
                       ),
-                  child: CustomDropdown<CategoryReasons>(
+                  child: CustomDropdown(
                     multiselect: true,
                     options: [
                       ...CategoryReasons.values

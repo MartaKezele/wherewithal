@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app_models/custom_dropdown_entry.dart';
 import '../../constants/padding_size.dart';
+import 'custom_expansion_tile.dart';
 
 class DropdownTile<T> extends StatelessWidget {
   const DropdownTile({
@@ -51,8 +52,16 @@ class DropdownTile<T> extends StatelessWidget {
 
   void _radioOnChanged(T? value) {
     parentSetState(() {
-      selectedTiles.clear();
-      selectedTiles.add(dropdownEntry);
+      if (value == null) {
+        selectedTiles.clear();
+      } else if (selectedTiles
+          .map((element) => element.value)
+          .contains(value)) {
+        selectedTiles.clear();
+      } else {
+        selectedTiles.clear();
+        selectedTiles.add(dropdownEntry);
+      }
       onSelectionChanged(selectedTiles);
     });
   }
@@ -95,10 +104,11 @@ class DropdownTile<T> extends StatelessWidget {
         value: dropdownEntry.value,
         groupValue: selectedTiles.isEmpty ? null : selectedTiles.first.value,
         onChanged: _radioOnChanged,
+        toggleable: true,
       ),
     );
 
-    return ExpansionTile(
+    return CustomExpansionTile(
       shape: const BeveledRectangleBorder(),
       title: Text(dropdownEntry.title),
       iconColor: iconColor,
@@ -109,9 +119,10 @@ class DropdownTile<T> extends StatelessWidget {
           ? null
           : dropdownEntry.backgroundColor,
       leading: multiselect ? checkbox : radio,
+      onTap: () => multiselect
+          ? _checkboxOnChanged(!selectedTiles.contains(dropdownEntry))
+          : _radioOnChanged(dropdownEntry.value),
       children: subtiles,
     );
   }
 }
-
-

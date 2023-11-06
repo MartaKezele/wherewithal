@@ -11,7 +11,7 @@ import '../../models/models.dart' as models;
 import '../../utils/dropdown/transaction_type_dropdown.dart';
 import '../dropdown/custom_dropdown.dart';
 import 'custom_form.dart';
-import 'form_fields/categories_form_field.dart';
+import 'form_fields/category_form_field.dart';
 import 'form_fields/date_form_field.dart';
 import 'form_fields/price_value_form_field.dart';
 
@@ -249,7 +249,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
           title: localizations.transactionType,
           required: true,
         ),
-        CategoriesFormField(
+        CategoryFormField(
           onSelectionChanged: (selection) {
             setState(() {
               _selectedCategories = selection
@@ -259,6 +259,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
           },
           selectedCategories: _selectedCategories,
           categoriesRef: categoriesRef,
+          required: true,
         ),
       ],
     );

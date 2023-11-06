@@ -10,18 +10,20 @@ import '../../dropdown/custom_dropdown.dart';
 import '../../error_content.dart';
 import '../../loading_content.dart';
 
-class CategoriesFormField extends StatelessWidget {
-  const CategoriesFormField({
+class CategoryFormField extends StatelessWidget {
+  const CategoryFormField({
     super.key,
     required this.onSelectionChanged,
     required this.selectedCategories,
     required this.categoriesRef,
+    this.required = false,
   });
 
   final FirestoreListenable<models.CategoryQuerySnapshot> categoriesRef;
   final List<models.Category> selectedCategories;
   final void Function(List<CustomDropdownEntry<models.Category>>)
       onSelectionChanged;
+  final bool required;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +55,8 @@ class CategoriesFormField extends StatelessWidget {
           (element) => element.data.parentCategoryId == null,
         );
 
-        return CustomDropdown<models.Category>(
-          title: localizations.categories,
+        return CustomDropdown(
+          title: localizations.category,
           selectedOptions: selectedCategories
               .map((category) =>
                   categoryDropdownEntries(category, docs, context))
@@ -67,7 +69,7 @@ class CategoriesFormField extends StatelessWidget {
               context,
             );
           }).toList(),
-          required: true,
+          required: required,
         );
       },
     );
