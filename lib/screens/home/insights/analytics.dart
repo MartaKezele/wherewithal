@@ -1,11 +1,12 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:wherewithal/models/enums/category_reasons.dart';
 
 import '../../../app_models/pie_section_data.dart';
 import '../../../change_notifiers/auth.dart';
 import '../../../components/cards/cash_flow_card.dart';
-import '../../../components/cards/value_transactions_by_category_chart_card.dart';
+import '../../../components/cards/value_transactions_by_category_card.dart';
 import '../../../components/error_content.dart';
 import '../../../components/form/form_fields/date_range_form_field.dart';
 import '../../../components/loading_content.dart';
@@ -36,6 +37,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
   final List<PieSectionData?> _parentIncomeSections = [null];
   PieSectionData? _selectedExpenseSection;
   PieSectionData? _selectedIncomeSection;
+  PieSectionData? _selectedReasonSection;
 
   double _totalValueTransactionValue(
     Iterable<models.ValueTransaction> valueTransactions,
@@ -89,7 +91,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
           PieSectionData(
             id: parentSection.id,
             value: totalParentCategoryValue,
-            legendTitle: parentSection.legendTitle,
+            legendTitle: AppLocalizations.of(context).unspecified,
             percentage: percentage(totalParentCategoryValue, totalValue),
             disableLegend: true,
           ),
@@ -191,6 +193,42 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
           final totalIncome =
               _totalValueTransactionValue(incomeValueTransactions);
 
+          final List<PieSectionData> expenseByReasonSections = [];
+          var totalCategoryReasonsValue = 0.0;
+
+          for (final reason in CategoryReasons.values) {
+            final reasonValueTransactions = valueTransactions.where(
+                (valueTransaction) =>
+                    valueTransaction.categoryReason == reason.name);
+            final reasonValue =
+                _totalValueTransactionValue(reasonValueTransactions);
+
+            if (reasonValue > 0) {
+              totalCategoryReasonsValue += reasonValue;
+              expenseByReasonSections.add(
+                PieSectionData(
+                  id: reason.name,
+                  value: reasonValue,
+                  legendTitle: reason.localizedName(context),
+                  percentage: percentage(reasonValue, totalExpense),
+                ),
+              );
+            }
+          }
+
+          final unspecifiedValue = totalExpense - totalCategoryReasonsValue;
+
+          if (unspecifiedValue > 0.0) {
+            expenseByReasonSections.add(
+              PieSectionData(
+                id: 'unspecified',
+                value: unspecifiedValue,
+                legendTitle: localizations.unspecified,
+                percentage: percentage(unspecifiedValue, totalExpense),
+              ),
+            );
+          }
+
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -231,13 +269,13 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                           TransactionTypes.income.name,
                     );
 
-                    final expenseByCategoriesData =
+                    final expenseByCategoriesSections =
                         _transactionsByCategoriesPieSections(
                       _parentExpenseSections.last,
                       expenseCategories,
                       expenseValueTransactions,
                     );
-                    final incomeByCategoriesData =
+                    final incomeByCategoriesSections =
                         _transactionsByCategoriesPieSections(
                       _parentIncomeSections.last,
                       incomeCategories,
@@ -246,9 +284,9 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
 
                     return Column(
                       children: [
-                        ValueTransactionsByCategoryChartCard(
+                        ValueTransactionsByCategoryCard(
                           title: localizations.spendingByCategories,
-                          sections: expenseByCategoriesData,
+                          sections: expenseByCategoriesSections,
                           selectedSection: _selectedExpenseSection,
                           parentSectionTitle:
                               _parentExpenseSections.last?.legendTitle ??
@@ -286,9 +324,9 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                                 },
                         ),
                         HeightSpacer.md,
-                        ValueTransactionsByCategoryChartCard(
+                        ValueTransactionsByCategoryCard(
                           title: localizations.incomeByCategories,
-                          sections: incomeByCategoriesData,
+                          sections: incomeByCategoriesSections,
                           selectedSection: _selectedIncomeSection,
                           parentSectionTitle:
                               _parentIncomeSections.last?.legendTitle ??
@@ -327,6 +365,19 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                       ],
                     );
                   },
+                ),
+                HeightSpacer.md,
+                ValueTransactionsByCategoryCard(
+                  title: localizations.spendingByReason,
+                  sections: expenseByReasonSections,
+                  onLegendItemClicked: (section) {
+                    setState(() {
+                      _selectedReasonSection = section;
+                    });
+                  },
+                  parentSectionTitle: localizations.total,
+                  parentSectionTotalValue: totalExpense,
+                  selectedSection: _selectedReasonSection,
                 ),
                 HeightSpacer.xl,
               ],

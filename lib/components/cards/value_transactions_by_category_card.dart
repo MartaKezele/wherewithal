@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:wherewithal/components/charts/pie_chart_legend_list_tile.dart';
+import 'package:wherewithal/constants/styles/pie_chart.dart';
 
 import '../../app_models/pie_section_data.dart';
 import '../../change_notifiers/currency.dart';
@@ -14,9 +16,9 @@ import '../custom_expansion_panel.dart';
 import 'analytics_card.dart';
 import '../../extensions/button/text_button.dart';
 
-class ValueTransactionsByCategoryChartCard extends StatefulWidget
+class ValueTransactionsByCategoryCard extends StatefulWidget
     with GetItStatefulWidgetMixin {
-  ValueTransactionsByCategoryChartCard({
+  ValueTransactionsByCategoryCard({
     super.key,
     required this.title,
     required this.sections,
@@ -39,17 +41,12 @@ class ValueTransactionsByCategoryChartCard extends StatefulWidget
   final double parentSectionTotalValue;
 
   @override
-  State<ValueTransactionsByCategoryChartCard> createState() =>
-      _ValueTransactionsByCategoryChartCardState();
+  State<ValueTransactionsByCategoryCard> createState() =>
+      _ValueTransactionsByCategoryCardState();
 }
 
-class _ValueTransactionsByCategoryChartCardState
-    extends State<ValueTransactionsByCategoryChartCard> with GetItStateMixin {
-  final _colorContainerSize = 15.0;
-  final _selectedSectionRadius = 55.0;
-  final _unselectedSectionRadius = 40.0;
-  final _numberOfShowcasedSections = 3;
-
+class _ValueTransactionsByCategoryCardState
+    extends State<ValueTransactionsByCategoryCard> with GetItStateMixin {
   bool _isExpanded = false;
 
   @override
@@ -61,39 +58,20 @@ class _ValueTransactionsByCategoryChartCardState
           changeNotifier.currency?.symbol,
     );
 
-    final sectionListTiles = widget.sections
+    final legendListTiles = widget.sections
         .asMap()
         .map(
           (index, section) => MapEntry(
             index,
-            ListTile(
-              leadingAndTrailingTextStyle:
-                  Theme.of(context).textTheme.labelLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: PaddingSize.sm,
-                vertical: 0,
-              ),
+            PieChartLegendListTile(
               selected: section == widget.selectedSection,
-              selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-              title: Text(section.legendTitle),
-              subtitle: Text(
-                '${section.value.toStringAsFixed(priceFractionDigits)} $currency',
-              ),
-              trailing: Text(
-                '${section.percentage.toStringAsFixed(priceFractionDigits)}%',
-              ),
-              leading: SizedBox(
-                height: _colorContainerSize,
-                width: _colorContainerSize,
-                child: Container(
-                  color: chartSectionColorFromIndex(index),
-                ),
-              ),
+              title: section.legendTitle,
+              subtitle: '${section.value.toStringAsFixed(priceFractionDigits)} $currency',
+              trailing: '${section.percentage.toStringAsFixed(priceFractionDigits)}%',
+              legendColor: chartSectionColorFromIndex(index),
               onTap: () => widget.onLegendItemClicked(section),
             ),
+     
           ),
         )
         .values
@@ -121,8 +99,8 @@ class _ValueTransactionsByCategoryChartCardState
           ),
           HeightSpacer.md,
           SizedBox(
-            width: MediaQuery.of(context).size.width - 4 * PaddingSize.xxl,
-            height: MediaQuery.of(context).size.width - 4 * PaddingSize.xxl,
+            width: pieChartSize(context),
+            height: pieChartSize(context),
             child: PieChart(
               PieChartData(
                 sections: widget.sections.isNotEmpty
@@ -136,8 +114,8 @@ class _ValueTransactionsByCategoryChartCardState
                               color: chartSectionColorFromIndex(index),
                               showTitle: false,
                               radius: section == widget.selectedSection
-                                  ? _selectedSectionRadius
-                                  : _unselectedSectionRadius,
+                                  ? selectedSectionRadius
+                                  : unselectedSectionRadius,
                             ),
                           );
                         })
@@ -150,7 +128,7 @@ class _ValueTransactionsByCategoryChartCardState
                               .onSurfaceVariant
                               .withOpacity(0.5),
                           showTitle: false,
-                          radius: 22,
+                          radius: unselectedSectionRadius,
                         ),
                       ],
               ),
@@ -200,21 +178,21 @@ class _ValueTransactionsByCategoryChartCardState
                   backgroundColor: Colors.transparent,
                   isExpanded: _isExpanded,
                   showExpansionIcon:
-                      sectionListTiles.length <= _numberOfShowcasedSections
+                      legendListTiles.length <= numberOfShowcasedSections
                           ? false
                           : true,
                   headerBuilder: (context, isExpanded) {
                     return Column(
-                      children: sectionListTiles
-                          .take(_numberOfShowcasedSections)
+                      children: legendListTiles
+                          .take(numberOfShowcasedSections)
                           .toList(),
                     );
                   },
                   body: Column(
-                    children: sectionListTiles.length <=
-                            _numberOfShowcasedSections
+                    children: legendListTiles.length <=
+                            numberOfShowcasedSections
                         ? []
-                        : sectionListTiles.sublist(_numberOfShowcasedSections),
+                        : legendListTiles.sublist(numberOfShowcasedSections),
                   ),
                 ),
               ],

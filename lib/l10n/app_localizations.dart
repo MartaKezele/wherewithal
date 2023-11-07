@@ -1271,6 +1271,7 @@ class AppLocalizations {
       locale: localeName,
     );
   }
+
   String get total {
     return Intl.message(
       'Total',
@@ -1302,6 +1303,20 @@ class AppLocalizations {
   String get uploadedFiles {
     return Intl.message(
       'Uploaded files',
+      locale: localeName,
+    );
+  }
+
+  String get spendingByReason {
+    return Intl.message(
+      'Spending by reason',
+      locale: localeName,
+    );
+  }
+
+  String get unspecified {
+    return Intl.message(
+      'Unspecified',
       locale: localeName,
     );
   }
