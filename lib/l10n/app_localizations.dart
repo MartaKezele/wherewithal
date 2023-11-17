@@ -805,7 +805,35 @@ class AppLocalizations {
 
   String get deleteCategoryConfirmationMsg {
     return Intl.message(
-      'All subcategories will be deleted. This action is non-reversible.',
+      'All subcategories and transactions of this category will be deleted. This action is irreversible.',
+      locale: localeName,
+    );
+  }
+
+  String get setUpData {
+    return Intl.message(
+      'Set up data',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotSetUpData {
+    return Intl.message(
+      'Could not set up data',
+      locale: localeName,
+    );
+  }
+
+  String get dataIsSetUp {
+    return Intl.message(
+      'Data is set up',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotDeleteAccount {
+    return Intl.message(
+      'Could not delete account',
       locale: localeName,
     );
   }

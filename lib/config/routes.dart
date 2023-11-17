@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../change_notifiers/auth.dart';
+import '../screens/data_setup_screen.dart';
 import '../screens/home/budget.dart';
 import '../screens/home/categories/categories.dart';
 import '../screens/home/categories/category_view.dart';
@@ -119,6 +120,13 @@ class TopLevelRoutes {
     parentNavigatorKey: navigatorKey,
     path: '/create-receipt',
     builder: (context, state) => CreateReceipt(),
+  );
+
+  static final dataSetup = GoRoute(
+    path: '/data-setup',
+    builder: (context, state) {
+      return DataSetupScreen();
+    },
   );
 
   static final error = GoRoute(

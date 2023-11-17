@@ -139,6 +139,8 @@ abstract class UserDocumentReference
   Future<void> update({
     String uid,
     FieldValue uidFieldValue,
+    bool shouldSetUpData,
+    FieldValue shouldSetUpDataFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -148,6 +150,8 @@ abstract class UserDocumentReference
     Transaction transaction, {
     String uid,
     FieldValue uidFieldValue,
+    bool shouldSetUpData,
+    FieldValue shouldSetUpDataFieldValue,
   });
 }
 
@@ -192,14 +196,24 @@ class _$UserDocumentReference
   Future<void> update({
     Object? uid = _sentinel,
     FieldValue? uidFieldValue,
+    Object? shouldSetUpData = _sentinel,
+    FieldValue? shouldSetUpDataFieldValue,
   }) async {
     assert(
       uid == _sentinel || uidFieldValue == null,
       "Cannot specify both uid and uidFieldValue",
     );
+    assert(
+      shouldSetUpData == _sentinel || shouldSetUpDataFieldValue == null,
+      "Cannot specify both shouldSetUpData and shouldSetUpDataFieldValue",
+    );
     final json = {
       if (uid != _sentinel) _$UserFieldMap['uid']!: uid as String,
       if (uidFieldValue != null) _$UserFieldMap['uid']!: uidFieldValue,
+      if (shouldSetUpData != _sentinel)
+        _$UserFieldMap['shouldSetUpData']!: shouldSetUpData as bool,
+      if (shouldSetUpDataFieldValue != null)
+        _$UserFieldMap['shouldSetUpData']!: shouldSetUpDataFieldValue,
     };
 
     return reference.update(json);
@@ -209,14 +223,24 @@ class _$UserDocumentReference
     Transaction transaction, {
     Object? uid = _sentinel,
     FieldValue? uidFieldValue,
+    Object? shouldSetUpData = _sentinel,
+    FieldValue? shouldSetUpDataFieldValue,
   }) {
     assert(
       uid == _sentinel || uidFieldValue == null,
       "Cannot specify both uid and uidFieldValue",
     );
+    assert(
+      shouldSetUpData == _sentinel || shouldSetUpDataFieldValue == null,
+      "Cannot specify both shouldSetUpData and shouldSetUpDataFieldValue",
+    );
     final json = {
       if (uid != _sentinel) _$UserFieldMap['uid']!: uid as String,
       if (uidFieldValue != null) _$UserFieldMap['uid']!: uidFieldValue,
+      if (shouldSetUpData != _sentinel)
+        _$UserFieldMap['shouldSetUpData']!: shouldSetUpData as bool,
+      if (shouldSetUpDataFieldValue != null)
+        _$UserFieldMap['shouldSetUpData']!: shouldSetUpDataFieldValue,
     };
 
     transaction.update(reference, json);
@@ -328,6 +352,17 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
+  UserQuery whereShouldSetUpData({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  });
 
   UserQuery orderByDocumentId({
     bool descending = false,
@@ -347,6 +382,18 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     String startAfter,
     String endAt,
     String endBefore,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  });
+
+  UserQuery orderByShouldSetUpData({
+    bool descending = false,
+    bool startAt,
+    bool startAfter,
+    bool endAt,
+    bool endBefore,
     UserDocumentSnapshot? startAtDocument,
     UserDocumentSnapshot? endAtDocument,
     UserDocumentSnapshot? endBeforeDocument,
@@ -559,6 +606,35 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
+  UserQuery whereShouldSetUpData({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  }) {
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserFieldMap['shouldSetUpData']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
   UserQuery orderByDocumentId({
     bool descending = false,
     Object? startAt = _sentinel,
@@ -644,6 +720,78 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
   }) {
     final query = $referenceWithoutCursor.orderBy(_$UserFieldMap['uid']!,
         descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserQuery orderByShouldSetUpData({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$UserFieldMap['shouldSetUpData']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -4046,16 +4194,19 @@ void _$assertValueTransaction(ValueTransaction instance) {
 User _$UserFromJson(Map<String, dynamic> json) => User(
       id: json['id'] as String,
       uid: json['uid'] as String,
+      shouldSetUpData: json['shouldSetUpData'] as bool? ?? true,
     );
 
 const _$UserFieldMap = <String, String>{
   'id': 'id',
   'uid': 'uid',
+  'shouldSetUpData': 'shouldSetUpData',
 };
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
       'uid': instance.uid,
+      'shouldSetUpData': instance.shouldSetUpData,
     };
 
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(

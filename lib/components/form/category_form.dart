@@ -55,7 +55,6 @@ class CategoryFormState extends State<CategoryForm> {
     final localizations = AppLocalizations.of(context);
     final category = categoryInfo();
 
-    // TODO update category info in all transactions using cloud functions
     try {
       await models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)

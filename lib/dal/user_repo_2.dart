@@ -11,6 +11,4 @@ abstract class UserRepo2 {
   Future<ActionResult<User?>> retrieveById(String id);
 
   Future<ActionResult<User?>> retrieveByUid(String uid);
-
-  Future<ActionResult> delete(String uid);
 }

@@ -11,11 +11,13 @@ class User {
   User({
     required this.id,
     required this.uid,
+    this.shouldSetUpData = true,
   });
 
   @Id()
   final String id;
   final String uid;
+  final bool shouldSetUpData;
 }
 
 @firestoreSerializable

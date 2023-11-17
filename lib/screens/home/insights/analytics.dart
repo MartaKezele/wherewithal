@@ -1,7 +1,6 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:wherewithal/models/enums/category_reasons.dart';
 
 import '../../../app_models/pie_section_data.dart';
 import '../../../change_notifiers/auth.dart';
@@ -15,6 +14,7 @@ import '../../../config/date_time_picker.dart';
 import '../../../constants/padding_size.dart';
 import '../../../constants/spacers.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../models/enums/category_reasons.dart';
 import '../../../models/enums/transaction_types.dart';
 import '../../../models/models.dart' as models;
 import '../../../utils/categories.dart';

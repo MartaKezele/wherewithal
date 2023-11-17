@@ -1,17 +1,17 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:wherewithal/components/charts/pie_chart_legend_list_tile.dart';
-import 'package:wherewithal/constants/styles/pie_chart.dart';
 
 import '../../app_models/pie_section_data.dart';
 import '../../change_notifiers/currency.dart';
 import '../../config/fraction_digits.dart';
 import '../../constants/padding_size.dart';
 import '../../constants/spacers.dart';
+import '../../constants/styles/pie_chart.dart';
 import '../../constants/styles/text_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/chart/chart_section_color.dart';
+import '../charts/pie_chart_legend_list_tile.dart';
 import '../custom_expansion_panel.dart';
 import 'analytics_card.dart';
 import '../../extensions/button/text_button.dart';
@@ -66,12 +66,13 @@ class _ValueTransactionsByCategoryCardState
             PieChartLegendListTile(
               selected: section == widget.selectedSection,
               title: section.legendTitle,
-              subtitle: '${section.value.toStringAsFixed(priceFractionDigits)} $currency',
-              trailing: '${section.percentage.toStringAsFixed(priceFractionDigits)}%',
+              subtitle:
+                  '${section.value.toStringAsFixed(priceFractionDigits)} $currency',
+              trailing:
+                  '${section.percentage.toStringAsFixed(priceFractionDigits)}%',
               legendColor: chartSectionColorFromIndex(index),
               onTap: () => widget.onLegendItemClicked(section),
             ),
-     
           ),
         )
         .values
@@ -159,10 +160,16 @@ class _ValueTransactionsByCategoryCardState
             ),
           HeightSpacer.xxs,
           if (widget.sections.isEmpty)
-            Text(
-              localizations.noData,
-              style: Theme.of(context).textTheme.labelLarge,
-              textAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.only(
+                top: PaddingSize.sm,
+                bottom: PaddingSize.xxs,
+              ),
+              child: Text(
+                localizations.noData,
+                style: Theme.of(context).textTheme.labelLarge,
+                textAlign: TextAlign.center,
+              ),
             ),
           if (widget.sections.isNotEmpty)
             CustomExpansionPanelList(

@@ -1,7 +1,10 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../change_notifiers/auth.dart';
 import '../../change_notifiers/repo_factory.dart';
+import '../../config/keys/callable_clould_functions.dart';
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
 import '../user_repo_1.dart';
@@ -56,18 +59,29 @@ class FirebaseUserRepo1 extends UserRepo1 {
         );
       }
 
-      final deleteResult = await GetIt.I<RepoFactoryChangeNotifier>()
-          .repoFactory
-          .userRepo2
-          .delete(FirebaseAuth.instance.currentUser!.uid);
+      final result = await FirebaseFunctions.instance
+          .httpsCallable(CallableCloudFunctions.deleteFirestoreUserData)
+          .call(
+        {
+          CallableCloudFunctionsParams.userDocId:
+              GetIt.I<AuthChangeNotifier>().id,
+        },
+      );
 
-      if (deleteResult.success) {
-        await FirebaseAuth.instance.currentUser!.delete();
+      if (!result.data['success']) {
+        return ActionResult(
+          success: false,
+          messageTitle: localizations.couldNotDeleteAccount,
+        );
       }
 
+      await FirebaseAuth.instance.currentUser!.delete();
       await GetIt.I<RepoFactoryChangeNotifier>().repoFactory.authRepo.signOut();
 
-      return deleteResult;
+      return ActionResult(
+        success: true,
+        messageTitle: localizations.deletedAccount,
+      );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e, localizations);
     } catch (_) {
