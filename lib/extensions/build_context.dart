@@ -30,9 +30,7 @@ extension Navigation on BuildContext {
   }
 
   Future<T?> pushSettings<T extends Object?>() async {
-    return await push<T>(
-      TopLevelRoutes.settings.path,
-    );
+    return await push<T>(TopLevelRoutes.settings.path);
   }
 
   Future<T?> pushChangePassword<T extends Object?>() async {
@@ -76,11 +74,9 @@ extension Navigation on BuildContext {
   }
 
   Future<T?> pushCategory<T extends Object?>(String categoryId) async {
-    return await pushNamed<T>(
-      NamedChildRoutes.category.nonNullableName,
-      pathParameters: {
-        PathParamKeys.categoryId: categoryId,
-      },
+    return await push<T>(
+      TopLevelRoutes.category.path,
+      extra: categoryId,
     );
   }
 

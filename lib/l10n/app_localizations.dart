@@ -838,6 +838,13 @@ class AppLocalizations {
     );
   }
 
+  String get done {
+    return Intl.message(
+      'Done',
+      locale: localeName,
+    );
+  }
+
   String get userCouldNotBeFound {
     return Intl.message(
       'User could not be found.',

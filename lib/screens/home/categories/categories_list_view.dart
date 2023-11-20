@@ -2,14 +2,14 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-import '../change_notifiers/currency.dart';
-import '../constants/padding_size.dart';
-import '../models/enums/category_reasons.dart';
-import '../models/models.dart' as models;
-import 'error_content.dart';
-import 'loading_content.dart';
-import 'no_data_content.dart';
-import '../../../extensions/build_context.dart';
+import '../../../change_notifiers/currency.dart';
+import '../../../constants/padding_size.dart';
+import '../../../models/enums/category_reasons.dart';
+import '../../../models/models.dart' as models;
+import '../../../components/error_content.dart';
+import '../../../components/loading_content.dart';
+import '../../../components/no_data_content.dart';
+import '../../../../../extensions/build_context.dart';
 
 class CategoriesListView extends StatelessWidget with GetItMixin {
   CategoriesListView({

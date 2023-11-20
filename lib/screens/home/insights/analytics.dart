@@ -150,240 +150,245 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
         left: PaddingSize.xs,
         right: PaddingSize.xs,
       ),
-      child: FirestoreBuilder(
-        ref: valueTransactionsRef,
-        child: DateRangeFormField(
-          setDateTimeRange: _onDateTimeRangeChange,
-          dateTimeRange: _dateTimeRange,
-          required: true,
-          autoValidateMode: AutovalidateMode.always,
-        ),
-        builder: (context, snapshot, child) {
-          if (snapshot.hasError) {
-            return const ErrorContent();
-          }
-
-          if (!snapshot.hasData) {
-            return const LoadingContent();
-          }
-
-          final docs = snapshot.requireData.docs;
-
-          if (docs.isEmpty) {
-            return const NoDataContent();
-          }
-
-          final valueTransactions = docs.map((doc) => doc.data);
-
-          final expenseValueTransactions = valueTransactions.where(
-            (valueTransaction) =>
-                valueTransaction.categoryTransactionType ==
-                TransactionTypes.expense.name,
-          );
-
-          final incomeValueTransactions = valueTransactions.where(
-            (valueTransaction) =>
-                valueTransaction.categoryTransactionType ==
-                TransactionTypes.income.name,
-          );
-
-          final totalExpense =
-              _totalValueTransactionValue(expenseValueTransactions);
-
-          final totalIncome =
-              _totalValueTransactionValue(incomeValueTransactions);
-
-          final List<PieSectionData> expenseByReasonSections = [];
-          var totalCategoryReasonsValue = 0.0;
-
-          for (final reason in CategoryReasons.values) {
-            final reasonValueTransactions = valueTransactions.where(
-                (valueTransaction) =>
-                    valueTransaction.categoryReason == reason.name);
-            final reasonValue =
-                _totalValueTransactionValue(reasonValueTransactions);
-
-            if (reasonValue > 0) {
-              totalCategoryReasonsValue += reasonValue;
-              expenseByReasonSections.add(
-                PieSectionData(
-                  id: reason.name,
-                  value: reasonValue,
-                  legendTitle: reason.localizedName(context),
-                  percentage: percentage(reasonValue, totalExpense),
-                ),
-              );
-            }
-          }
-
-          final unspecifiedValue = totalExpense - totalCategoryReasonsValue;
-
-          if (unspecifiedValue > 0.0) {
-            expenseByReasonSections.add(
-              PieSectionData(
-                id: 'unspecified',
-                value: unspecifiedValue,
-                legendTitle: localizations.unspecified,
-                percentage: percentage(unspecifiedValue, totalExpense),
-              ),
-            );
-          }
-
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                if (child != null) child,
-                HeightSpacer.md,
-                CashFlowCard(
-                  expense: totalExpense,
-                  income: totalIncome,
-                ),
-                HeightSpacer.md,
-                FirestoreBuilder(
-                  ref: models.usersRef.doc(userId).categories,
-                  builder: (context, snapshot, child) {
-                    if (snapshot.hasError) {
-                      return const ErrorContent();
-                    }
-
-                    if (!snapshot.hasData) {
-                      return const LoadingContent();
-                    }
-
-                    final docs = snapshot.requireData.docs;
-
-                    if (docs.isEmpty) {
-                      return const NoDataContent();
-                    }
-
-                    final categories = docs.map((doc) => doc.data);
-
-                    final expenseCategories = categories.where(
-                      (category) =>
-                          category.transactionType ==
-                          TransactionTypes.expense.name,
-                    );
-                    final incomeCategories = categories.where(
-                      (category) =>
-                          category.transactionType ==
-                          TransactionTypes.income.name,
-                    );
-
-                    final expenseByCategoriesSections =
-                        _transactionsByCategoriesPieSections(
-                      _parentExpenseSections.last,
-                      expenseCategories,
-                      expenseValueTransactions,
-                    );
-                    final incomeByCategoriesSections =
-                        _transactionsByCategoriesPieSections(
-                      _parentIncomeSections.last,
-                      incomeCategories,
-                      incomeValueTransactions,
-                    );
-
-                    return Column(
-                      children: [
-                        ValueTransactionsByCategoryCard(
-                          title: localizations.spendingByCategories,
-                          sections: expenseByCategoriesSections,
-                          selectedSection: _selectedExpenseSection,
-                          parentSectionTitle:
-                              _parentExpenseSections.last?.legendTitle ??
-                                  localizations.total,
-                          parentSectionTotalValue:
-                              _parentExpenseSections.last?.value ??
-                                  totalExpense,
-                          onLegendItemClicked: (section) {
-                            setState(() {
-                              _selectedExpenseSection = section;
-                            });
-                          },
-                          moreDetailsFn: _selectedExpenseSection == null ||
-                                  _selectedExpenseSection?.disableLegend ==
-                                      true ||
-                                  _transactionsByCategoriesPieSections(
-                                    _selectedExpenseSection,
-                                    expenseCategories,
-                                    expenseValueTransactions,
-                                  ).isEmpty
-                              ? null
-                              : () {
-                                  setState(() {
-                                    _parentExpenseSections
-                                        .add(_selectedExpenseSection);
-                                    _selectedExpenseSection = null;
-                                  });
-                                },
-                          goBackFn: _parentExpenseSections.last == null
-                              ? null
-                              : () {
-                                  setState(() {
-                                    _parentExpenseSections.removeLast();
-                                  });
-                                },
-                        ),
-                        HeightSpacer.md,
-                        ValueTransactionsByCategoryCard(
-                          title: localizations.incomeByCategories,
-                          sections: incomeByCategoriesSections,
-                          selectedSection: _selectedIncomeSection,
-                          parentSectionTitle:
-                              _parentIncomeSections.last?.legendTitle ??
-                                  localizations.total,
-                          parentSectionTotalValue:
-                              _parentIncomeSections.last?.value ?? totalIncome,
-                          onLegendItemClicked: (section) {
-                            setState(() {
-                              _selectedIncomeSection = section;
-                            });
-                          },
-                          moreDetailsFn: _selectedIncomeSection == null ||
-                                  _selectedIncomeSection?.disableLegend ==
-                                      true ||
-                                  _transactionsByCategoriesPieSections(
-                                    _selectedIncomeSection,
-                                    incomeCategories,
-                                    incomeValueTransactions,
-                                  ).isEmpty
-                              ? null
-                              : () {
-                                  setState(() {
-                                    _parentIncomeSections
-                                        .add(_selectedIncomeSection);
-                                    _selectedIncomeSection = null;
-                                  });
-                                },
-                          goBackFn: _parentIncomeSections.last == null
-                              ? null
-                              : () {
-                                  setState(() {
-                                    _parentIncomeSections.removeLast();
-                                  });
-                                },
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                HeightSpacer.md,
-                ValueTransactionsByCategoryCard(
-                  title: localizations.spendingByReason,
-                  sections: expenseByReasonSections,
-                  onLegendItemClicked: (section) {
-                    setState(() {
-                      _selectedReasonSection = section;
-                    });
-                  },
-                  parentSectionTitle: localizations.total,
-                  parentSectionTotalValue: totalExpense,
-                  selectedSection: _selectedReasonSection,
-                ),
-                HeightSpacer.xl,
-              ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            DateRangeFormField(
+              setDateTimeRange: _onDateTimeRangeChange,
+              dateTimeRange: _dateTimeRange,
+              required: true,
+              autoValidateMode: AutovalidateMode.always,
             ),
-          );
-        },
+            HeightSpacer.md,
+            FirestoreBuilder(
+              ref: valueTransactionsRef,
+              builder: (context, snapshot, child) {
+                if (snapshot.hasError) {
+                  return const ErrorContent();
+                }
+
+                if (!snapshot.hasData) {
+                  return const LoadingContent();
+                }
+
+                final docs = snapshot.requireData.docs;
+
+                if (docs.isEmpty) {
+                  return const NoDataContent();
+                }
+
+                final valueTransactions = docs.map((doc) => doc.data);
+
+                final expenseValueTransactions = valueTransactions.where(
+                  (valueTransaction) =>
+                      valueTransaction.categoryTransactionType ==
+                      TransactionTypes.expense.name,
+                );
+
+                final incomeValueTransactions = valueTransactions.where(
+                  (valueTransaction) =>
+                      valueTransaction.categoryTransactionType ==
+                      TransactionTypes.income.name,
+                );
+
+                final totalExpense =
+                    _totalValueTransactionValue(expenseValueTransactions);
+
+                final totalIncome =
+                    _totalValueTransactionValue(incomeValueTransactions);
+
+                final List<PieSectionData> expenseByReasonSections = [];
+                var totalCategoryReasonsValue = 0.0;
+
+                for (final reason in CategoryReasons.values) {
+                  final reasonValueTransactions = valueTransactions.where(
+                      (valueTransaction) =>
+                          valueTransaction.categoryReason == reason.name);
+                  final reasonValue =
+                      _totalValueTransactionValue(reasonValueTransactions);
+
+                  if (reasonValue > 0) {
+                    totalCategoryReasonsValue += reasonValue;
+                    expenseByReasonSections.add(
+                      PieSectionData(
+                        id: reason.name,
+                        value: reasonValue,
+                        legendTitle: reason.localizedName(context),
+                        percentage: percentage(reasonValue, totalExpense),
+                      ),
+                    );
+                  }
+                }
+
+                final unspecifiedValue =
+                    totalExpense - totalCategoryReasonsValue;
+
+                if (unspecifiedValue > 0.0) {
+                  expenseByReasonSections.add(
+                    PieSectionData(
+                      id: 'unspecified',
+                      value: unspecifiedValue,
+                      legendTitle: localizations.unspecified,
+                      percentage: percentage(unspecifiedValue, totalExpense),
+                    ),
+                  );
+                }
+
+                return Column(
+                  children: [
+                    CashFlowCard(
+                      expense: totalExpense,
+                      income: totalIncome,
+                    ),
+                    HeightSpacer.md,
+                    FirestoreBuilder(
+                      ref: models.usersRef.doc(userId).categories,
+                      builder: (context, snapshot, child) {
+                        if (snapshot.hasError) {
+                          return const ErrorContent();
+                        }
+
+                        if (!snapshot.hasData) {
+                          return const LoadingContent();
+                        }
+
+                        final docs = snapshot.requireData.docs;
+
+                        if (docs.isEmpty) {
+                          return const NoDataContent();
+                        }
+
+                        final categories = docs.map((doc) => doc.data);
+
+                        final expenseCategories = categories.where(
+                          (category) =>
+                              category.transactionType ==
+                              TransactionTypes.expense.name,
+                        );
+                        final incomeCategories = categories.where(
+                          (category) =>
+                              category.transactionType ==
+                              TransactionTypes.income.name,
+                        );
+
+                        final expenseByCategoriesSections =
+                            _transactionsByCategoriesPieSections(
+                          _parentExpenseSections.last,
+                          expenseCategories,
+                          expenseValueTransactions,
+                        );
+                        final incomeByCategoriesSections =
+                            _transactionsByCategoriesPieSections(
+                          _parentIncomeSections.last,
+                          incomeCategories,
+                          incomeValueTransactions,
+                        );
+
+                        return Column(
+                          children: [
+                            ValueTransactionsByCategoryCard(
+                              title: localizations.spendingByCategories,
+                              sections: expenseByCategoriesSections,
+                              selectedSection: _selectedExpenseSection,
+                              parentSectionTitle:
+                                  _parentExpenseSections.last?.legendTitle ??
+                                      localizations.total,
+                              parentSectionTotalValue:
+                                  _parentExpenseSections.last?.value ??
+                                      totalExpense,
+                              onLegendItemClicked: (section) {
+                                setState(() {
+                                  _selectedExpenseSection = section;
+                                });
+                              },
+                              moreDetailsFn: _selectedExpenseSection == null ||
+                                      _selectedExpenseSection?.disableLegend ==
+                                          true ||
+                                      _transactionsByCategoriesPieSections(
+                                        _selectedExpenseSection,
+                                        expenseCategories,
+                                        expenseValueTransactions,
+                                      ).isEmpty
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        _parentExpenseSections
+                                            .add(_selectedExpenseSection);
+                                        _selectedExpenseSection = null;
+                                      });
+                                    },
+                              goBackFn: _parentExpenseSections.last == null
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        _parentExpenseSections.removeLast();
+                                      });
+                                    },
+                            ),
+                            HeightSpacer.md,
+                            ValueTransactionsByCategoryCard(
+                              title: localizations.incomeByCategories,
+                              sections: incomeByCategoriesSections,
+                              selectedSection: _selectedIncomeSection,
+                              parentSectionTitle:
+                                  _parentIncomeSections.last?.legendTitle ??
+                                      localizations.total,
+                              parentSectionTotalValue:
+                                  _parentIncomeSections.last?.value ??
+                                      totalIncome,
+                              onLegendItemClicked: (section) {
+                                setState(() {
+                                  _selectedIncomeSection = section;
+                                });
+                              },
+                              moreDetailsFn: _selectedIncomeSection == null ||
+                                      _selectedIncomeSection?.disableLegend ==
+                                          true ||
+                                      _transactionsByCategoriesPieSections(
+                                        _selectedIncomeSection,
+                                        incomeCategories,
+                                        incomeValueTransactions,
+                                      ).isEmpty
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        _parentIncomeSections
+                                            .add(_selectedIncomeSection);
+                                        _selectedIncomeSection = null;
+                                      });
+                                    },
+                              goBackFn: _parentIncomeSections.last == null
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        _parentIncomeSections.removeLast();
+                                      });
+                                    },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    HeightSpacer.md,
+                    ValueTransactionsByCategoryCard(
+                      title: localizations.spendingByReason,
+                      sections: expenseByReasonSections,
+                      onLegendItemClicked: (section) {
+                        setState(() {
+                          _selectedReasonSection = section;
+                        });
+                      },
+                      parentSectionTitle: localizations.total,
+                      parentSectionTotalValue: totalExpense,
+                      selectedSection: _selectedReasonSection,
+                    ),
+                    HeightSpacer.xl,
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

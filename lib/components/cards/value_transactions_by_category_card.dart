@@ -173,6 +173,7 @@ class _ValueTransactionsByCategoryCardState
             ),
           if (widget.sections.isNotEmpty)
             CustomExpansionPanelList(
+              expandedHeaderPadding: const EdgeInsets.all(0),
               expansionCallback: (_, isExpanded) {
                 setState(() {
                   _isExpanded = isExpanded;

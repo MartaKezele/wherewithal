@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app_models/action_result.dart';
 import '../../../change_notifiers/auth.dart';
-import '../../../components/categories_list_view.dart';
+import 'categories_list_view.dart';
 import '../../../components/dialogs/confirm_dialog.dart';
 import '../../../components/dialogs/scrollable_form_dialog.dart';
 import '../../../components/error_content.dart';

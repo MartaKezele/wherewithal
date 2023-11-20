@@ -92,7 +92,7 @@ class _ModalBottomSheetDropdownState<T>
             onPressed: () {
               context.pop();
             },
-            child: Text(localizations.close),
+            child: Text(localizations.done),
           ).colorStyle(OutlinedButtonStyles.primary),
         ),
       ],

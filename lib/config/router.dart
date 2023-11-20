@@ -7,12 +7,12 @@ import 'routes.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-final initialLocation = TopLevelRoutes.insights.path;
+final initialLocation = TopLevelRoutes.analytics.path;
 
 final router = GoRouter(
   initialLocation: initialLocation,
   routes: [
-    TopLevelRoutes.homeShellRoute,
+    homeShellRoute,
     TopLevelRoutes.settings,
     TopLevelRoutes.welcome,
     TopLevelRoutes.verifyEmail,
@@ -21,6 +21,7 @@ final router = GoRouter(
     TopLevelRoutes.createReceipt,
     TopLevelRoutes.error,
     TopLevelRoutes.dataSetup,
+    TopLevelRoutes.category,
   ],
   redirect: (context, state) async {
     final auth = GetIt.I<AuthChangeNotifier>();

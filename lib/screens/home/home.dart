@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app_models/action_result.dart';
-import '../../app_models/bottom_nav_item.dart';
+import '../../components/animated_branch_container.dart';
 import '../../components/bottom_sheets/add_bottom_sheet.dart';
 import '../../components/dialogs/scrollable_form_dialog.dart';
 import '../../components/form/category_form.dart';
 import '../../components/form/value_transaction_form.dart';
+import '../../config/routes.dart';
 import '../../constants/styles/container.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/enums/transaction_types.dart';
 import '../../utils/overlay_banner.dart';
-import '../../extensions/build_context.dart';
 
 class Home extends StatefulWidget {
   const Home({
     super.key,
-    required this.body,
-    required this.bottomNav,
+    required this.navigationShell,
+    required this.children,
   });
 
-  final Widget body;
-  final List<BottomNavItem> bottomNav;
+  final StatefulNavigationShell navigationShell;
+  final List<Widget> children;
 
   @override
   State<Home> createState() => _HomeState();
@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
   final _addTransactionFormKey = GlobalKey<ValueTransactionFormState>();
   final _addTransactionFormStateKey = GlobalKey<FormState>();
 
-  int _currentBottomNavIndex = 0;
   OverlayEntry? _resultBanner;
 
   void _onFabPressed() {
@@ -47,13 +46,6 @@ class _HomeState extends State<Home> {
         addIncome: () => _addTransaction(TransactionTypes.income),
       ),
     );
-  }
-
-  void _onBottomNavItemTap(index) {
-    context.go(widget.bottomNav[index].route.path);
-    setState(() {
-      _currentBottomNavIndex = index;
-    });
   }
 
   void _addCategory() async {
@@ -105,6 +97,13 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _onTap(BuildContext context, int index) {
+    widget.navigationShell.goBranch(
+      index,
+      initialLocation: index == widget.navigationShell.currentIndex,
+    );
+  }
+
   @override
   void dispose() {
     hideOverlayBanner(_resultBanner);
@@ -116,34 +115,24 @@ class _HomeState extends State<Home> {
     final localizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.bottomNav[_currentBottomNavIndex].label(context)),
-        actions: [
-          IconButton(
-            onPressed: () => context.pushSettings(),
-            icon: const Icon(Icons.settings_rounded),
-          ),
-        ],
+      body: AnimatedBranchContainer(
+        currentIndex: widget.navigationShell.currentIndex,
+        children: widget.children,
       ),
-      body: widget.body,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: _currentBottomNavIndex,
+        currentIndex: widget.navigationShell.currentIndex,
         showUnselectedLabels: false,
         showSelectedLabels: false,
-        onTap: _onBottomNavItemTap,
-        items: widget.bottomNav
-            .map(
-              (navItem) => BottomNavigationBarItem(
-                icon: Icon(
-                  navItem.icon,
-                ),
-                label: navItem.label(context),
-                tooltip: navItem.label(context),
-              ),
-            )
-            .toList(),
+        items: homeShellRoute.tabBranches.map((branch) {
+          return BottomNavigationBarItem(
+            icon: Icon(branch.icon),
+            label: branch.label(context),
+            tooltip: branch.label(context),
+          );
+        }).toList(),
+        onTap: (int index) => _onTap(context, index),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _onFabPressed,
