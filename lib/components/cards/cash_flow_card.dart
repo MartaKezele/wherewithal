@@ -34,6 +34,11 @@ class CashFlowCard extends StatelessWidget with GetItMixin {
     final titleTextStyle = Theme.of(context).textTheme.bodyLarge;
     final difference = income - expense;
 
+    double percentageOfIncomeSpent = 0.0;
+    if (income > 0) {
+      percentageOfIncomeSpent = (expense / income) * 100;
+    }
+
     return AnalyticsCard(
       title: localizations.cashFlow,
       child: Column(
@@ -94,6 +99,17 @@ class CashFlowCard extends StatelessWidget with GetItMixin {
                   ),
                 ],
               ),
+              if (income > 0)
+                TableRow(
+                  children: [
+                    Text(
+                        localizations.spentXPercentageOdIncome(
+                          percentageOfIncomeSpent,
+                        ),
+                        style: Theme.of(context).textTheme.bodyLarge),
+                    const Text(''),
+                  ],
+                ),
             ],
           ),
         ],

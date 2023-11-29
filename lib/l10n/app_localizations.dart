@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:wherewithal/config/fraction_digits.dart';
 
 import '../config/countries.dart';
 import 'messages_all.dart';
@@ -1639,6 +1640,17 @@ class AppLocalizations {
     return Intl.message(
       'Reminds about upcoming scheduled payments',
       locale: localeName,
+    );
+  }
+
+  String spentXPercentageOdIncome(double percentage) {
+    return Intl.message(
+      'You spent ${percentage.toStringAsFixed(priceFractionDigits)}% of your income in the selected period',
+      locale: localeName,
+      name: 'spentXPercentageOdIncome',
+      args: [
+        percentage,
+      ],
     );
   }
 
