@@ -486,46 +486,53 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
               ),
             ),
             HeightSpacer.sm,
-            FilledButton(
-              onPressed: _productItems.isEmpty
-                  ? null
-                  : () => executeFnIfFormValid(
-                        formKey: _formKey,
-                        fn: () async {
-                          showConfirmDialog(
-                            context: context,
-                            title: localizations.addReceiptTransactions,
-                            description: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  localizations.totalPrice,
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                Text(
-                                  '${_calculateTotalPrice().toStringAsFixed(priceFractionDigits)} $currency',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ],
-                            ),
-                            onOkPressed: () {
-                              context.pop();
-                              _save();
-                            },
-                          );
-                        },
-                      ),
-              child: Text(localizations.save),
+            Visibility(
+              // Visible only when keyboard is closed
+              visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+              child: FilledButton(
+                onPressed: _productItems.isEmpty
+                    ? null
+                    : () => executeFnIfFormValid(
+                          formKey: _formKey,
+                          fn: () async {
+                            showConfirmDialog(
+                              context: context,
+                              title: localizations.addReceiptTransactions,
+                              description: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    localizations.totalPrice,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  Text(
+                                    '${_calculateTotalPrice().toStringAsFixed(priceFractionDigits)} $currency',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ],
+                              ),
+                              onOkPressed: () {
+                                context.pop();
+                                _save();
+                              },
+                            );
+                          },
+                        ),
+                child: Text(localizations.save),
+              )
+                  .colorStyle(
+                    FilledButtonStyles.enterAppPrimary,
+                  )
+                  .loadingBtn(
+                    constructor: FilledButton.new,
+                    isLoading: _saving,
+                    colorStyle: FilledButtonStyles.enterAppPrimary,
+                  ),
             )
-                .colorStyle(
-                  FilledButtonStyles.enterAppPrimary,
-                )
-                .loadingBtn(
-                  constructor: FilledButton.new,
-                  isLoading: _saving,
-                  colorStyle: FilledButtonStyles.enterAppPrimary,
-                ),
           ],
         ),
       ),
