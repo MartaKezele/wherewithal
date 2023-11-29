@@ -138,11 +138,14 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
       (AuthChangeNotifier changeNotifier) => changeNotifier.id,
     );
 
-    models.ValueTransactionQuery valueTransactionsRef =
-        models.usersRef.doc(userId).valueTransactions.whereDateTime(
-              isGreaterThanOrEqualTo: _dateTimeRange?.start,
-              isLessThanOrEqualTo: _dateTimeRange?.end,
-            );
+    models.ValueTransactionQuery valueTransactionsRef = models.usersRef
+        .doc(userId)
+        .valueTransactions
+        .whereCronExpression(isNull: true)
+        .whereDateTime(
+          isGreaterThanOrEqualTo: _dateTimeRange?.start,
+          isLessThanOrEqualTo: _dateTimeRange?.end,
+        );
 
     return Padding(
       padding: const EdgeInsets.only(

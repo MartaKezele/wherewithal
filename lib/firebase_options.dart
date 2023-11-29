@@ -70,6 +70,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '837134992436',
     projectId: 'wherewithal-dc32d',
     storageBucket: 'wherewithal-dc32d.appspot.com',
+    androidClientId: '837134992436-7dt4gsdcd5g0skdk5iek6nj3jle6oegi.apps.googleusercontent.com',
     iosClientId: '837134992436-85p8dj5goth1qlbiqlig40ft9t3uugq7.apps.googleusercontent.com',
     iosBundleId: 'com.mak.wherewithal',
   );

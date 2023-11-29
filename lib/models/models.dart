@@ -8,16 +8,22 @@ part 'models.g.dart';
 
 @firestoreSerializable
 class User {
-  User({
+  User( {
     required this.id,
     required this.uid,
+    this.fcmToken,
+    this.fcmTokenTimestamp,
     this.shouldSetUpData = true,
+    this.recurringTransactionsNotifications = true,
   });
 
   @Id()
   final String id;
   final String uid;
+  final String? fcmToken;
+  final int? fcmTokenTimestamp;
   final bool shouldSetUpData;
+  final bool recurringTransactionsNotifications;
 }
 
 @firestoreSerializable
@@ -62,6 +68,7 @@ class ValueTransaction {
     required this.categoryTransactionType,
     this.categoryReason,
     this.parentCategoryId,
+    this.cronExpression,
   }) {
     _$assertValueTransaction(this);
   }
@@ -77,6 +84,7 @@ class ValueTransaction {
   final String categoryTransactionType;
   final String? categoryReason;
   final String? parentCategoryId;
+  final String? cronExpression;
 
   factory ValueTransaction.fromJson(Map<String, dynamic> json) {
     return ValueTransaction(
@@ -90,6 +98,7 @@ class ValueTransaction {
       categoryTransactionType: json['categoryTransactionType'] as String,
       categoryReason: json['categoryReason'] as String?,
       parentCategoryId: json['parentCategoryId'] as String?,
+      cronExpression: json['cronExpression'] as String?,
     );
   }
 

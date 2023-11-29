@@ -23,7 +23,6 @@ class DateFormatChangeNotifier extends ChangeNotifier {
     writeStringPref(
       SharedPrefsKeys.dateFormatPattern,
       value ?? '',
-    );
-    notifyListeners();
+    ).then((_) => notifyListeners());
   }
 }

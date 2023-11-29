@@ -5,7 +5,7 @@ import 'package:wherewithal/app_models/validation_result.dart';
 import '../config/password_validation.dart';
 import '../l10n/app_localizations.dart';
 
-ValidationResult passwordValid(
+ValidationResult _passwordValid(
   String? password,
   AppLocalizations localizations,
 ) {
@@ -27,7 +27,7 @@ ValidationResult passwordValid(
   return ValidationResult(success: true);
 }
 
-ValidationResult emailValid(
+ValidationResult _emailValid(
   String? email,
   AppLocalizations localizations,
 ) {
@@ -48,7 +48,7 @@ ValidationResult emailValid(
   return ValidationResult(success: true);
 }
 
-ValidationResult requiredTextValid(
+ValidationResult _requiredTextValid(
   String? text,
   AppLocalizations localizations,
 ) {
@@ -62,7 +62,7 @@ ValidationResult requiredTextValid(
   return ValidationResult(success: true);
 }
 
-ValidationResult requiredObjectValid(
+ValidationResult _requiredObjectValid(
   Object? object,
   AppLocalizations localizations,
 ) {
@@ -76,7 +76,7 @@ ValidationResult requiredObjectValid(
   return ValidationResult(success: true);
 }
 
-ValidationResult doubleValid(
+ValidationResult _doubleValid(
   String? text,
   AppLocalizations localizations,
 ) {
@@ -93,20 +93,65 @@ ValidationResult doubleValid(
   return ValidationResult(success: true);
 }
 
-ValidationResult requiredDoubleValid(
+ValidationResult _requiredDoubleValid(
   String? text,
   AppLocalizations localizations,
 ) {
-  final requiredTextValidResult = requiredTextValid(text, localizations);
+  final requiredTextValidResult = _requiredTextValid(text, localizations);
 
   if (requiredTextValidResult.success == false) {
     return requiredTextValidResult;
   }
 
-  return doubleValid(text, localizations);
+  return _doubleValid(text, localizations);
 }
 
-ValidationResult requiredDateTimeValid(
+ValidationResult _intValid({
+  String? text,
+  required AppLocalizations localizations,
+  int? min,
+  int? max,
+}) {
+  if (text != null && text.isNotEmpty) {
+    final number = int.tryParse(text);
+    if (number == null) {
+      return ValidationResult(
+        success: false,
+        message: localizations.numberNotValid,
+      );
+    }
+    if (min != null && max != null && (number < min || number > max)) {
+      return ValidationResult(
+        success: false,
+        message: localizations.intNumberIsNotWithinRange(min, max),
+      );
+    }
+  }
+
+  return ValidationResult(success: true);
+}
+
+ValidationResult _requiredIntValid({
+  String? text,
+  required AppLocalizations localizations,
+  int? min,
+  int? max,
+}) {
+  final requiredTextValidResult = _requiredTextValid(text, localizations);
+
+  if (requiredTextValidResult.success == false) {
+    return requiredTextValidResult;
+  }
+
+  return _intValid(
+    text: text,
+    localizations: localizations,
+    min: min,
+    max: max,
+  );
+}
+
+ValidationResult _requiredDateTimeValid(
   DateTime? dateTime,
   AppLocalizations localizations,
 ) {
@@ -120,7 +165,7 @@ ValidationResult requiredDateTimeValid(
   return ValidationResult(success: true);
 }
 
-ValidationResult requiredDateTimeRangeValid(
+ValidationResult _requiredDateTimeRangeValid(
   DateTimeRange? dateTimeRange,
   AppLocalizations localizations,
 ) {
@@ -138,49 +183,77 @@ String? emailValidator(
   String? email,
   AppLocalizations localizations,
 ) {
-  return emailValid(email, localizations).message;
+  return _emailValid(email, localizations).message;
 }
 
 String? passwordValidator(
   String? password,
   AppLocalizations localizations,
 ) {
-  return passwordValid(password, localizations).message;
+  return _passwordValid(password, localizations).message;
 }
 
 String? requiredTextValidator(
   String? text,
   AppLocalizations localizations,
 ) {
-  return requiredTextValid(text, localizations).message;
+  return _requiredTextValid(text, localizations).message;
 }
 
 String? doubleValidator(
   String? text,
   AppLocalizations localizations,
 ) {
-  return doubleValid(text, localizations).message;
+  return _doubleValid(text, localizations).message;
 }
 
 String? requiredDoubleValidator(
   String? text,
   AppLocalizations localizations,
 ) {
-  return requiredDoubleValid(text, localizations).message;
+  return _requiredDoubleValid(text, localizations).message;
+}
+
+String? intValidator({
+  String? text,
+  required AppLocalizations localizations,
+  int? min,
+  int? max,
+}) {
+  return _intValid(
+    text: text,
+    localizations: localizations,
+    min: min,
+    max: max,
+  ).message;
+}
+
+String? requiredIntValidator({
+  String? text,
+  required AppLocalizations localizations,
+  int? min,
+  int? max,
+}) {
+  return _requiredIntValid(
+    text: text,
+    localizations: localizations,
+    min: min,
+    max: max,
+  ).message;
 }
 
 String? requiredObjectValidator(
   Object? object,
   AppLocalizations localizations,
 ) {
-  return requiredObjectValid(object, localizations).message;
+  return _requiredObjectValid(object, localizations).message;
 }
 
 String? requiredDateTimeValidator(
   DateTime? dateTime,
   AppLocalizations localizations,
 ) {
-  return requiredDateTimeValid(
+  return _requiredDateTimeValid(
     dateTime,
     localizations,
   ).message;
@@ -190,7 +263,7 @@ String? requiredDateTimeRangeValidator(
   DateTimeRange? dateTimeRange,
   AppLocalizations localizations,
 ) {
-  return requiredDateTimeRangeValid(
+  return _requiredDateTimeRangeValid(
     dateTimeRange,
     localizations,
   ).message;

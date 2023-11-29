@@ -6,8 +6,13 @@ import {
     onDocumentDeleted,
 } from 'firebase-functions/v2/firestore';
 import firebase_tools from 'firebase-tools';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
+import { logger } from 'firebase-functions';
+import parser from 'cron-parser';
 
 admin.initializeApp();
+
+const FCM_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 60; // 60 days
 
 async function _createCategories(
     parentCategoryId,
@@ -157,5 +162,95 @@ export const createFirestoreUser = functions.https.onCall(async (data, context) 
         }
     }
 });
+
+// Scheduled functions
+export const recurringTransactionReminders = onSchedule('0 2 * * *', async (_) => {
+    const users = (await admin
+        .firestore()
+        .collection('users')
+        .get())
+        .docs;
+
+    for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        const fcmToken = user.data().fcmToken;
+        const fcmTokenTimestamp = user.data().fcmTokenTimestamp;
+        if (user.data().recurringTransactionsNotifications == true &&
+            fcmToken != null &&
+            fcmTokenTimestamp != null &&
+            Date.now() - fcmTokenTimestamp <= FCM_TOKEN_EXPIRATION_TIME) {
+            const recurringTransactions = (await admin
+                .firestore()
+                .collection('users')
+                .doc(user.id)
+                .collection('valueTransactions')
+                .where('cronExpression', '!=', null)
+                .get())
+                .docs;
+
+            for (let j = 0; j < recurringTransactions.length; j++) {
+                const recurringTransaction = recurringTransactions[j];
+                const cronExpression = recurringTransaction.data().cronExpression;
+
+                if (cronExpression != '') {
+                    const yesterday = new Date(Date.now());
+                    yesterday.setHours(0, 0, 0, 0);
+                    yesterday.setDate(yesterday.getDate() - 1);
+
+                    try {
+                        const interval = parser.parseExpression(
+                            cronExpression,
+                            {
+                                currentDate: yesterday,
+                            }
+                        );
+                        const nextCronJob = interval.next();
+                        const currentDate = new Date(Date.now());
+
+                        if (nextCronJob.getDay() == currentDate.getDay() &&
+                            nextCronJob.getMonth() == currentDate.getMonth() &&
+                            nextCronJob.getFullYear() == currentDate.getFullYear()) {
+                            const message = {
+                                notification: {
+                                    title: 'Add scheduled transaction',
+                                    body: `${recurringTransaction.data().title ?? recurringTransaction.data().categoryTitle}, ${recurringTransaction.data().value}`,
+                                },
+                                data: {
+                                    type: 'addRecurringTransaction',
+                                    valueTransactionId: recurringTransaction.id,
+                                },
+                                token: fcmToken,
+                            };
+
+                            admin.messaging().send(message)
+                                .then((response) => {
+                                    logger.log(`Notification sent: ${response}`);
+                                })
+                                .catch((err) => {
+                                    logger.log(err);
+                                    if (err == 'messaging/registration-token-not-registered') {
+                                        user.ref.update({
+                                            fcmToken: null,
+                                            fcmTokenTimestamp: null,
+                                        });
+                                    }
+                                });
+                        }
+                    } catch (err) {
+                        logger.error(err);
+                    }
+                }
+            }
+        }
+    }
+});
+
+export const pruneTokens = onSchedule('0 0 * * *', async (_) => {
+    const staleTokensResult = await admin.firestore().collection('users')
+        .where('timestamp', '<', Date.now() - FCM_TOKEN_EXPIRATION_TIME)
+        .get();
+    staleTokensResult.forEach(function (doc) { doc.ref.delete(); });
+});
+
 
 

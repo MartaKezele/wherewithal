@@ -81,4 +81,50 @@ class FirestoreUserRepo2 extends UserRepo2 {
       return genericFailureResult(localizations);
     }
   }
+
+  @override
+  Future<ActionResult> signOut(String uid) async {
+    try {
+      final userSnapshot =
+          await models.usersRef.whereUid(isEqualTo: uid).limit(1).get();
+
+      if (userSnapshot.docs.isEmpty) {
+        return ActionResult(
+          success: false,
+          messageTitle: localizations.userCouldNotBeFound,
+        );
+      }
+
+      userSnapshot.docs.first.reference.update(
+        fcmToken: null,
+        fcmTokenTimestamp: DateTime.now().millisecondsSinceEpoch,
+      );
+
+      return ActionResult(
+        success: true,
+        messageTitle: localizations.signedOut,
+      );
+    } catch (_) {
+      return genericFailureResult(localizations);
+    }
+  }
+
+  @override
+  Future<ActionResult> updateNotifications({
+    required String id,
+    required bool recurringTransactionsNotifications,
+  }) async {
+    try {
+      await models.usersRef.doc(id).update(
+            recurringTransactionsNotifications:
+                recurringTransactionsNotifications,
+          );
+      return ActionResult(
+        success: true,
+        messageTitle: localizations.updatedNotificationPreferences,
+      );
+    } catch (_) {
+      return genericFailureResult(localizations);
+    }
+  }
 }

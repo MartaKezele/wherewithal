@@ -139,8 +139,14 @@ abstract class UserDocumentReference
   Future<void> update({
     String uid,
     FieldValue uidFieldValue,
+    String? fcmToken,
+    FieldValue fcmTokenFieldValue,
+    int? fcmTokenTimestamp,
+    FieldValue fcmTokenTimestampFieldValue,
     bool shouldSetUpData,
     FieldValue shouldSetUpDataFieldValue,
+    bool recurringTransactionsNotifications,
+    FieldValue recurringTransactionsNotificationsFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -150,8 +156,14 @@ abstract class UserDocumentReference
     Transaction transaction, {
     String uid,
     FieldValue uidFieldValue,
+    String? fcmToken,
+    FieldValue fcmTokenFieldValue,
+    int? fcmTokenTimestamp,
+    FieldValue fcmTokenTimestampFieldValue,
     bool shouldSetUpData,
     FieldValue shouldSetUpDataFieldValue,
+    bool recurringTransactionsNotifications,
+    FieldValue recurringTransactionsNotificationsFieldValue,
   });
 }
 
@@ -196,24 +208,57 @@ class _$UserDocumentReference
   Future<void> update({
     Object? uid = _sentinel,
     FieldValue? uidFieldValue,
+    Object? fcmToken = _sentinel,
+    FieldValue? fcmTokenFieldValue,
+    Object? fcmTokenTimestamp = _sentinel,
+    FieldValue? fcmTokenTimestampFieldValue,
     Object? shouldSetUpData = _sentinel,
     FieldValue? shouldSetUpDataFieldValue,
+    Object? recurringTransactionsNotifications = _sentinel,
+    FieldValue? recurringTransactionsNotificationsFieldValue,
   }) async {
     assert(
       uid == _sentinel || uidFieldValue == null,
       "Cannot specify both uid and uidFieldValue",
     );
     assert(
+      fcmToken == _sentinel || fcmTokenFieldValue == null,
+      "Cannot specify both fcmToken and fcmTokenFieldValue",
+    );
+    assert(
+      fcmTokenTimestamp == _sentinel || fcmTokenTimestampFieldValue == null,
+      "Cannot specify both fcmTokenTimestamp and fcmTokenTimestampFieldValue",
+    );
+    assert(
       shouldSetUpData == _sentinel || shouldSetUpDataFieldValue == null,
       "Cannot specify both shouldSetUpData and shouldSetUpDataFieldValue",
+    );
+    assert(
+      recurringTransactionsNotifications == _sentinel ||
+          recurringTransactionsNotificationsFieldValue == null,
+      "Cannot specify both recurringTransactionsNotifications and recurringTransactionsNotificationsFieldValue",
     );
     final json = {
       if (uid != _sentinel) _$UserFieldMap['uid']!: uid as String,
       if (uidFieldValue != null) _$UserFieldMap['uid']!: uidFieldValue,
+      if (fcmToken != _sentinel)
+        _$UserFieldMap['fcmToken']!: fcmToken as String?,
+      if (fcmTokenFieldValue != null)
+        _$UserFieldMap['fcmToken']!: fcmTokenFieldValue,
+      if (fcmTokenTimestamp != _sentinel)
+        _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestamp as int?,
+      if (fcmTokenTimestampFieldValue != null)
+        _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestampFieldValue,
       if (shouldSetUpData != _sentinel)
         _$UserFieldMap['shouldSetUpData']!: shouldSetUpData as bool,
       if (shouldSetUpDataFieldValue != null)
         _$UserFieldMap['shouldSetUpData']!: shouldSetUpDataFieldValue,
+      if (recurringTransactionsNotifications != _sentinel)
+        _$UserFieldMap['recurringTransactionsNotifications']!:
+            recurringTransactionsNotifications as bool,
+      if (recurringTransactionsNotificationsFieldValue != null)
+        _$UserFieldMap['recurringTransactionsNotifications']!:
+            recurringTransactionsNotificationsFieldValue,
     };
 
     return reference.update(json);
@@ -223,24 +268,57 @@ class _$UserDocumentReference
     Transaction transaction, {
     Object? uid = _sentinel,
     FieldValue? uidFieldValue,
+    Object? fcmToken = _sentinel,
+    FieldValue? fcmTokenFieldValue,
+    Object? fcmTokenTimestamp = _sentinel,
+    FieldValue? fcmTokenTimestampFieldValue,
     Object? shouldSetUpData = _sentinel,
     FieldValue? shouldSetUpDataFieldValue,
+    Object? recurringTransactionsNotifications = _sentinel,
+    FieldValue? recurringTransactionsNotificationsFieldValue,
   }) {
     assert(
       uid == _sentinel || uidFieldValue == null,
       "Cannot specify both uid and uidFieldValue",
     );
     assert(
+      fcmToken == _sentinel || fcmTokenFieldValue == null,
+      "Cannot specify both fcmToken and fcmTokenFieldValue",
+    );
+    assert(
+      fcmTokenTimestamp == _sentinel || fcmTokenTimestampFieldValue == null,
+      "Cannot specify both fcmTokenTimestamp and fcmTokenTimestampFieldValue",
+    );
+    assert(
       shouldSetUpData == _sentinel || shouldSetUpDataFieldValue == null,
       "Cannot specify both shouldSetUpData and shouldSetUpDataFieldValue",
+    );
+    assert(
+      recurringTransactionsNotifications == _sentinel ||
+          recurringTransactionsNotificationsFieldValue == null,
+      "Cannot specify both recurringTransactionsNotifications and recurringTransactionsNotificationsFieldValue",
     );
     final json = {
       if (uid != _sentinel) _$UserFieldMap['uid']!: uid as String,
       if (uidFieldValue != null) _$UserFieldMap['uid']!: uidFieldValue,
+      if (fcmToken != _sentinel)
+        _$UserFieldMap['fcmToken']!: fcmToken as String?,
+      if (fcmTokenFieldValue != null)
+        _$UserFieldMap['fcmToken']!: fcmTokenFieldValue,
+      if (fcmTokenTimestamp != _sentinel)
+        _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestamp as int?,
+      if (fcmTokenTimestampFieldValue != null)
+        _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestampFieldValue,
       if (shouldSetUpData != _sentinel)
         _$UserFieldMap['shouldSetUpData']!: shouldSetUpData as bool,
       if (shouldSetUpDataFieldValue != null)
         _$UserFieldMap['shouldSetUpData']!: shouldSetUpDataFieldValue,
+      if (recurringTransactionsNotifications != _sentinel)
+        _$UserFieldMap['recurringTransactionsNotifications']!:
+            recurringTransactionsNotifications as bool,
+      if (recurringTransactionsNotificationsFieldValue != null)
+        _$UserFieldMap['recurringTransactionsNotifications']!:
+            recurringTransactionsNotificationsFieldValue,
     };
 
     transaction.update(reference, json);
@@ -352,7 +430,40 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
+  UserQuery whereFcmToken({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  UserQuery whereFcmTokenTimestamp({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int?>? whereIn,
+    List<int?>? whereNotIn,
+  });
   UserQuery whereShouldSetUpData({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  });
+  UserQuery whereRecurringTransactionsNotifications({
     bool? isEqualTo,
     bool? isNotEqualTo,
     bool? isLessThan,
@@ -388,7 +499,43 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     UserDocumentSnapshot? startAfterDocument,
   });
 
+  UserQuery orderByFcmToken({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  });
+
+  UserQuery orderByFcmTokenTimestamp({
+    bool descending = false,
+    int? startAt,
+    int? startAfter,
+    int? endAt,
+    int? endBefore,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  });
+
   UserQuery orderByShouldSetUpData({
+    bool descending = false,
+    bool startAt,
+    bool startAfter,
+    bool endAt,
+    bool endBefore,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  });
+
+  UserQuery orderByRecurringTransactionsNotifications({
     bool descending = false,
     bool startAt,
     bool startAfter,
@@ -606,6 +753,64 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
+  UserQuery whereFcmToken({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserFieldMap['fcmToken']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserQuery whereFcmTokenTimestamp({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int?>? whereIn,
+    List<int?>? whereNotIn,
+  }) {
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserFieldMap['fcmTokenTimestamp']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
   UserQuery whereShouldSetUpData({
     bool? isEqualTo,
     bool? isNotEqualTo,
@@ -621,6 +826,35 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$UserFieldMap['shouldSetUpData']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserQuery whereRecurringTransactionsNotifications({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  }) {
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserFieldMap['recurringTransactionsNotifications']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -779,6 +1013,150 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
+  UserQuery orderByFcmToken({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$UserFieldMap['fcmToken']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserQuery orderByFcmTokenTimestamp({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$UserFieldMap['fcmTokenTimestamp']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
   UserQuery orderByShouldSetUpData({
     bool descending = false,
     Object? startAt = _sentinel,
@@ -792,6 +1170,79 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
   }) {
     final query = $referenceWithoutCursor
         .orderBy(_$UserFieldMap['shouldSetUpData']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserQuery orderByRecurringTransactionsNotifications({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserFieldMap['recurringTransactionsNotifications']!,
+        descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -1089,6 +1540,8 @@ abstract class ValueTransactionDocumentReference
     FieldValue categoryReasonFieldValue,
     String? parentCategoryId,
     FieldValue parentCategoryIdFieldValue,
+    String? cronExpression,
+    FieldValue cronExpressionFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -1112,6 +1565,8 @@ abstract class ValueTransactionDocumentReference
     FieldValue categoryReasonFieldValue,
     String? parentCategoryId,
     FieldValue parentCategoryIdFieldValue,
+    String? cronExpression,
+    FieldValue cronExpressionFieldValue,
   });
 }
 
@@ -1166,6 +1621,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
     FieldValue? categoryReasonFieldValue,
     Object? parentCategoryId = _sentinel,
     FieldValue? parentCategoryIdFieldValue,
+    Object? cronExpression = _sentinel,
+    FieldValue? cronExpressionFieldValue,
   }) async {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -1200,6 +1657,10 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       parentCategoryId == _sentinel || parentCategoryIdFieldValue == null,
       "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
     );
+    assert(
+      cronExpression == _sentinel || cronExpressionFieldValue == null,
+      "Cannot specify both cronExpression and cronExpressionFieldValue",
+    );
     final json = {
       if (title != _sentinel)
         _$ValueTransactionFieldMap['title']!: title as String?,
@@ -1238,6 +1699,11 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       if (parentCategoryIdFieldValue != null)
         _$ValueTransactionFieldMap['parentCategoryId']!:
             parentCategoryIdFieldValue,
+      if (cronExpression != _sentinel)
+        _$ValueTransactionFieldMap['cronExpression']!:
+            cronExpression as String?,
+      if (cronExpressionFieldValue != null)
+        _$ValueTransactionFieldMap['cronExpression']!: cronExpressionFieldValue,
     };
 
     return reference.update(json);
@@ -1261,6 +1727,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
     FieldValue? categoryReasonFieldValue,
     Object? parentCategoryId = _sentinel,
     FieldValue? parentCategoryIdFieldValue,
+    Object? cronExpression = _sentinel,
+    FieldValue? cronExpressionFieldValue,
   }) {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -1295,6 +1763,10 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       parentCategoryId == _sentinel || parentCategoryIdFieldValue == null,
       "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
     );
+    assert(
+      cronExpression == _sentinel || cronExpressionFieldValue == null,
+      "Cannot specify both cronExpression and cronExpressionFieldValue",
+    );
     final json = {
       if (title != _sentinel)
         _$ValueTransactionFieldMap['title']!: title as String?,
@@ -1333,6 +1805,11 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       if (parentCategoryIdFieldValue != null)
         _$ValueTransactionFieldMap['parentCategoryId']!:
             parentCategoryIdFieldValue,
+      if (cronExpression != _sentinel)
+        _$ValueTransactionFieldMap['cronExpression']!:
+            cronExpression as String?,
+      if (cronExpressionFieldValue != null)
+        _$ValueTransactionFieldMap['cronExpression']!: cronExpressionFieldValue,
     };
 
     transaction.update(reference, json);
@@ -1522,6 +1999,17 @@ abstract class ValueTransactionQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
+  ValueTransactionQuery whereCronExpression({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
 
   ValueTransactionQuery orderByDocumentId({
     bool descending = false,
@@ -1620,6 +2108,18 @@ abstract class ValueTransactionQuery
   });
 
   ValueTransactionQuery orderByParentCategoryId({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    ValueTransactionDocumentSnapshot? startAtDocument,
+    ValueTransactionDocumentSnapshot? endAtDocument,
+    ValueTransactionDocumentSnapshot? endBeforeDocument,
+    ValueTransactionDocumentSnapshot? startAfterDocument,
+  });
+
+  ValueTransactionQuery orderByCronExpression({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -2031,6 +2531,35 @@ class _$ValueTransactionQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$ValueTransactionFieldMap['parentCategoryId']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  ValueTransactionQuery whereCronExpression({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$ValueTransactionQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$ValueTransactionFieldMap['cronExpression']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -2639,6 +3168,79 @@ class _$ValueTransactionQuery
   }) {
     final query = $referenceWithoutCursor.orderBy(
         _$ValueTransactionFieldMap['parentCategoryId']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$ValueTransactionQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  ValueTransactionQuery orderByCronExpression({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    ValueTransactionDocumentSnapshot? startAtDocument,
+    ValueTransactionDocumentSnapshot? endAtDocument,
+    ValueTransactionDocumentSnapshot? endBeforeDocument,
+    ValueTransactionDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$ValueTransactionFieldMap['cronExpression']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -4194,19 +4796,30 @@ void _$assertValueTransaction(ValueTransaction instance) {
 User _$UserFromJson(Map<String, dynamic> json) => User(
       id: json['id'] as String,
       uid: json['uid'] as String,
+      fcmToken: json['fcmToken'] as String?,
+      fcmTokenTimestamp: json['fcmTokenTimestamp'] as int?,
       shouldSetUpData: json['shouldSetUpData'] as bool? ?? true,
+      recurringTransactionsNotifications:
+          json['recurringTransactionsNotifications'] as bool? ?? true,
     );
 
 const _$UserFieldMap = <String, String>{
   'id': 'id',
   'uid': 'uid',
+  'fcmToken': 'fcmToken',
+  'fcmTokenTimestamp': 'fcmTokenTimestamp',
   'shouldSetUpData': 'shouldSetUpData',
+  'recurringTransactionsNotifications': 'recurringTransactionsNotifications',
 };
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
       'uid': instance.uid,
+      'fcmToken': instance.fcmToken,
+      'fcmTokenTimestamp': instance.fcmTokenTimestamp,
       'shouldSetUpData': instance.shouldSetUpData,
+      'recurringTransactionsNotifications':
+          instance.recurringTransactionsNotifications,
     };
 
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
@@ -4248,6 +4861,7 @@ ValueTransaction _$ValueTransactionFromJson(Map<String, dynamic> json) =>
       categoryTransactionType: json['categoryTransactionType'] as String,
       categoryReason: json['categoryReason'] as String?,
       parentCategoryId: json['parentCategoryId'] as String?,
+      cronExpression: json['cronExpression'] as String?,
     );
 
 const _$ValueTransactionFieldMap = <String, String>{
@@ -4260,6 +4874,7 @@ const _$ValueTransactionFieldMap = <String, String>{
   'categoryTransactionType': 'categoryTransactionType',
   'categoryReason': 'categoryReason',
   'parentCategoryId': 'parentCategoryId',
+  'cronExpression': 'cronExpression',
 };
 
 Map<String, dynamic> _$ValueTransactionToJson(ValueTransaction instance) =>
@@ -4273,4 +4888,5 @@ Map<String, dynamic> _$ValueTransactionToJson(ValueTransaction instance) =>
       'categoryTransactionType': instance.categoryTransactionType,
       'categoryReason': instance.categoryReason,
       'parentCategoryId': instance.parentCategoryId,
+      'cronExpression': instance.cronExpression,
     };

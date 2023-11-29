@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../app_models/action_result.dart';
 import '../app_models/custom_dropdown_entry.dart';
@@ -27,6 +28,7 @@ import '../l10n/app_localizations.dart';
 import '../models/enums/transaction_types.dart';
 import '../models/receipt_data.dart';
 import '../models/receipt_product.dart';
+import '../utils/android.dart';
 import '../utils/form.dart';
 import '../utils/overlay_banner.dart';
 import '../utils/receipt_recognition_api.dart';
@@ -101,32 +103,103 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
   Future<void> _pickAndHandleGalleryImages(
     AppLocalizations localizations,
   ) async {
-    try {
-      await _imagePicker.pickMultiImage().then((imageFiles) async {
-        if (imageFiles.isNotEmpty) {
+    PermissionStatus permissionStatus;
+
+    if (await androidVersion() < 33) {
+      permissionStatus = await Permission.storage.request();
+    } else {
+      permissionStatus = await Permission.photos.request();
+    }
+    if (permissionStatus == PermissionStatus.permanentlyDenied) {
+      await openAppSettings();
+    }
+
+    if (permissionStatus == PermissionStatus.granted) {
+      try {
+        await _imagePicker.pickMultiImage().then((imageFiles) async {
+          if (imageFiles.isNotEmpty) {
+            setState(() {
+              _loading = true;
+              _loadingMessage = localizations.processingReceipts;
+            });
+            await processReceipts(
+              imageFiles: imageFiles,
+              localizations: localizations,
+            ).then((results) async {
+              if (results.any((actionResult) => actionResult.success)) {
+                for (final result in results) {
+                  _receiptResults.add(result);
+                  if (result.success && result.data != null) {
+                    _setReceiptDate(result.data!);
+                    _addProductItemsFromReceipt(
+                      result.data!.imageFile,
+                      result.data!.receiptResponse?.productItems,
+                    );
+                  }
+                }
+              } else {
+                _resultBanner = showActionResultOverlayBanner(
+                  context,
+                  results.first,
+                );
+              }
+              setState(() {
+                _loading = false;
+                _loadingMessage = null;
+              });
+            });
+          }
+        });
+      } catch (e) {
+        setState(() {
+          _loading = false;
+          _loadingMessage = null;
+        });
+
+        // ignore: use_build_context_synchronously
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          ActionResult(
+            success: false,
+            messageTitle: localizations.failurePickingImages,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _takeAndHandleCameraImage(
+    AppLocalizations localizations,
+  ) async {
+    final permissionStatus = await Permission.camera.request();
+    if (permissionStatus == PermissionStatus.permanentlyDenied) {
+      await openAppSettings();
+    }
+    if (permissionStatus == PermissionStatus.granted) {
+      try {
+        final XFile? pickedFile = await _imagePicker.pickImage(
+          source: ImageSource.camera,
+        );
+        if (pickedFile != null) {
           setState(() {
             _loading = true;
             _loadingMessage = localizations.processingReceipts;
           });
-          await processReceipts(
-            imageFiles: imageFiles,
+          await processReceipt(
+            imageFile: pickedFile,
             localizations: localizations,
-          ).then((results) async {
-            if (results.any((actionResult) => actionResult.success)) {
-              for (final result in results) {
-                _receiptResults.add(result);
-                if (result.success && result.data != null) {
-                  _setReceiptDate(result.data!);
-                  _addProductItemsFromReceipt(
-                    result.data!.imageFile,
-                    result.data!.receiptResponse?.productItems,
-                  );
-                }
-              }
+          ).then((result) {
+            if (result.success && result.data != null) {
+              _receiptResults.add(result);
+              _setReceiptDate(result.data!);
+              _addProductItemsFromReceipt(
+                result.data!.imageFile,
+                result.data!.receiptResponse?.productItems,
+              );
             } else {
               _resultBanner = showActionResultOverlayBanner(
                 context,
-                results.first,
+                result,
               );
             }
             setState(() {
@@ -135,72 +208,20 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
             });
           });
         }
-      });
-    } catch (e) {
-      setState(() {
-        _loading = false;
-        _loadingMessage = null;
-      });
-
-      // ignore: use_build_context_synchronously
-      _resultBanner = showActionResultOverlayBanner(
-        context,
-        ActionResult(
-          success: false,
-          messageTitle: localizations.failurePickingImages,
-        ),
-      );
-    }
-  }
-
-  Future<void> _takeAndHandleCameraImage(
-    AppLocalizations localizations,
-  ) async {
-    try {
-      final XFile? pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.camera,
-      );
-      if (pickedFile != null) {
+      } catch (e) {
         setState(() {
-          _loading = true;
-          _loadingMessage = localizations.processingReceipts;
+          _loading = false;
+          _loadingMessage = null;
         });
-        await processReceipt(
-          imageFile: pickedFile,
-          localizations: localizations,
-        ).then((result) {
-          if (result.success && result.data != null) {
-            _receiptResults.add(result);
-            _setReceiptDate(result.data!);
-            _addProductItemsFromReceipt(
-              result.data!.imageFile,
-              result.data!.receiptResponse?.productItems,
-            );
-          } else {
-            _resultBanner = showActionResultOverlayBanner(
-              context,
-              result,
-            );
-          }
-          setState(() {
-            _loading = false;
-            _loadingMessage = null;
-          });
-        });
+        // ignore: use_build_context_synchronously
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          ActionResult(
+            success: false,
+            messageTitle: localizations.failureCapturingImage,
+          ),
+        );
       }
-    } catch (e) {
-      setState(() {
-        _loading = false;
-        _loadingMessage = null;
-      });
-      // ignore: use_build_context_synchronously
-      _resultBanner = showActionResultOverlayBanner(
-        context,
-        ActionResult(
-          success: false,
-          messageTitle: localizations.failureCapturingImage,
-        ),
-      );
     }
   }
 

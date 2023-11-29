@@ -14,6 +14,8 @@ class CustomDropdown<T> extends StatelessWidget {
     required this.onSelectionChanged,
     required this.title,
     this.required = false,
+    this.enabled = true,
+    this.showSelectAllOption,
   }) : _textController = TextEditingController(
             text: selectedOptions
                 .map((dropdownEntry) => dropdownEntry.title)
@@ -23,8 +25,10 @@ class CustomDropdown<T> extends StatelessWidget {
   final List<CustomDropdownEntry<T>> options;
   final List<CustomDropdownEntry<T>> selectedOptions;
   final bool multiselect;
+  final bool? showSelectAllOption;
   final void Function(List<CustomDropdownEntry<T>>) onSelectionChanged;
   final bool required;
+  final bool enabled;
 
   final TextEditingController _textController;
 
@@ -33,10 +37,12 @@ class CustomDropdown<T> extends StatelessWidget {
     final localizations = AppLocalizations.of(context);
 
     if (selectedOptions.isEmpty && multiselect) {
-      _textController.text = AppLocalizations.of(context).all;
+      _textController.text =
+          showSelectAllOption == true ? localizations.all : localizations.none;
     }
 
     return TextFormField(
+      enabled: enabled,
       readOnly: true,
       controller: _textController,
       maxLines: null,
@@ -55,22 +61,25 @@ class CustomDropdown<T> extends StatelessWidget {
               return null;
             }
           : null,
-      onTap: () {
-        showModalBottomSheet(
-          useRootNavigator: true,
-          useSafeArea: true,
-          context: context,
-          shape: containerShape,
-          builder: (context) {
-            return ModalBottomSheetDropdown(
-              multiselect: multiselect,
-              onSelectionChanged: onSelectionChanged,
-              options: options,
-              selectedOptions: selectedOptions,
-            );
-          },
-        );
-      },
+      onTap: enabled
+          ? () {
+              showModalBottomSheet(
+                useRootNavigator: true,
+                useSafeArea: true,
+                context: context,
+                shape: containerShape,
+                builder: (context) {
+                  return ModalBottomSheetDropdown(
+                    multiselect: multiselect,
+                    showSelectAllOption: showSelectAllOption,
+                    onSelectionChanged: onSelectionChanged,
+                    options: options,
+                    selectedOptions: selectedOptions,
+                  );
+                },
+              );
+            }
+          : null,
     );
   }
 }

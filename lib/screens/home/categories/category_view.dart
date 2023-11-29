@@ -106,7 +106,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
   }
 
   void _showCreateSubcategoryDialog(models.Category parentCategory) async {
-    await showScrollableFormDialog<ActionResult>(
+    await showScrollableFormDialog(
       context: context,
       title: AppLocalizations.of(context).addSubcategory,
       form: CategoryForm(

@@ -33,24 +33,24 @@ enum TransactionTypes {
 
   String localizedName(BuildContext context) {
     return switch (this) {
-      TransactionTypes.expense => AppLocalizations.of(context).expense,
-      TransactionTypes.income => AppLocalizations.of(context).income,
+      expense => AppLocalizations.of(context).expense,
+      income => AppLocalizations.of(context).income,
     };
   }
 
   Color foregroundColor(BuildContext context) {
     return switch (this) {
-      TransactionTypes.expense =>
+      expense =>
         Theme.of(context).colorScheme.onErrorContainer,
-      TransactionTypes.income =>
+      income =>
         Theme.of(context).colorScheme.onTertiaryContainer,
     };
   }
 
   Color backgroundColor(BuildContext context) {
     return switch (this) {
-      TransactionTypes.expense => Theme.of(context).colorScheme.errorContainer,
-      TransactionTypes.income =>
+      expense => Theme.of(context).colorScheme.errorContainer,
+      income =>
         Theme.of(context).colorScheme.tertiaryContainer,
     };
   }

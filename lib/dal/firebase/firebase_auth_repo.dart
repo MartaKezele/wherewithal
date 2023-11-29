@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../change_notifiers/repo_factory.dart';
 import '../../config/auth_provider.dart' as config;
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 
+// TODO: check this out: https://firebase.google.com/docs/auth/extend-with-blocking-functions?gen=2nd
 class FirebaseAuthRepo extends AuthRepo {
   FirebaseAuthRepo(super.localizations);
 
@@ -176,8 +179,13 @@ class FirebaseAuthRepo extends AuthRepo {
   @override
   Future<ActionResult> signOut() async {
     try {
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
+      if (uid != null) {
+        GetIt.I<RepoFactoryChangeNotifier>().repoFactory.userRepo2.signOut(uid);
+      }
       return ActionResult(
         success: true,
         messageTitle: localizations.signedOut,

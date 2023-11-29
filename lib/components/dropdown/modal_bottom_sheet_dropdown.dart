@@ -18,11 +18,13 @@ class ModalBottomSheetDropdown<T> extends StatefulWidget {
     required this.selectedOptions,
     required this.multiselect,
     required this.onSelectionChanged,
+    this.showSelectAllOption = true,
   });
 
   final List<CustomDropdownEntry<T>> options;
   final List<CustomDropdownEntry<T>> selectedOptions;
   final bool multiselect;
+  final bool? showSelectAllOption;
   final void Function(List<CustomDropdownEntry<T>>) onSelectionChanged;
 
   @override
@@ -66,7 +68,8 @@ class _ModalBottomSheetDropdownState<T>
               ? const NoDataContent()
               : ListView(
                   children: [
-                    if (widget.multiselect == true)
+                    if (widget.multiselect == true &&
+                        widget.showSelectAllOption == true)
                       AllDropdownTile(
                         selectedTiles: _selectedOptions,
                         parentSetState: setState,

@@ -1,17 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'dart:convert';
 
-import '../../app_models/action_result.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../change_notifiers/auth.dart';
 import '../../components/animated_branch_container.dart';
 import '../../components/bottom_sheets/add_bottom_sheet.dart';
 import '../../components/dialogs/scrollable_form_dialog.dart';
 import '../../components/form/category_form.dart';
 import '../../components/form/value_transaction_form.dart';
+import '../../config/keys/shared_prefs.dart';
 import '../../config/routes.dart';
 import '../../constants/styles/container.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/enums/transaction_types.dart';
+import '../../models/models.dart' as models;
+import '../../utils/firebase_messages.dart';
 import '../../utils/overlay_banner.dart';
+import '../../utils/prefs.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -34,6 +44,8 @@ class _HomeState extends State<Home> {
   final _addTransactionFormKey = GlobalKey<ValueTransactionFormState>();
   final _addTransactionFormStateKey = GlobalKey<FormState>();
 
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   OverlayEntry? _resultBanner;
 
   void _onFabPressed() {
@@ -42,14 +54,18 @@ class _HomeState extends State<Home> {
       useSafeArea: true,
       builder: (BuildContext context) => AddBottomSheet(
         addCategory: _addCategory,
-        addExpense: () => _addTransaction(TransactionTypes.expense),
-        addIncome: () => _addTransaction(TransactionTypes.income),
+        addExpense: () => _addValueTransaction(
+          transactionType: TransactionTypes.expense,
+        ),
+        addIncome: () => _addValueTransaction(
+          transactionType: TransactionTypes.income,
+        ),
       ),
     );
   }
 
   void _addCategory() async {
-    await showScrollableFormDialog<ActionResult>(
+    await showScrollableFormDialog(
       context: context,
       title: AppLocalizations.of(context).addCategory,
       form: CategoryForm(
@@ -72,14 +88,20 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void _addTransaction(TransactionTypes transactionType) async {
-    await showScrollableFormDialog<ActionResult>(
+  void _addValueTransaction({
+    TransactionTypes? transactionType,
+    models.ValueTransaction? valueTransaction,
+    bool allowRecurring = true,
+  }) async {
+    await showScrollableFormDialog(
       context: context,
       title: AppLocalizations.of(context).addTransaction,
       form: ValueTransactionForm(
         key: _addTransactionFormKey,
         formKey: _addTransactionFormStateKey,
         transactionType: transactionType,
+        valueTransaction: valueTransaction,
+        allowRecurring: allowRecurring,
       ),
       onSubmit: () {
         assert(_addTransactionFormKey.currentState != null);
@@ -102,6 +124,131 @@ class _HomeState extends State<Home> {
       index,
       initialLocation: index == widget.navigationShell.currentIndex,
     );
+  }
+
+  Future<void> setupInteractedMessage() async {
+    FirebaseMessaging.instance.getInitialMessage().then((initialMessage) {
+      if (initialMessage != null) {
+        _handleNotification(initialMessage.data);
+      }
+
+      // Also handle any interaction when the app is in the background via a
+      // Stream listener
+      FirebaseMessaging.onMessageOpenedApp.listen(
+        (message) => _handleNotification(message.data),
+      );
+    });
+  }
+
+  Future<void> _handleNotification(
+    Map<String, dynamic> messageData,
+  ) async {
+    assert(messageData['type'] != null);
+
+    switch (messageData['type']) {
+      case 'addRecurringTransaction':
+        assert(messageData['valueTransactionId'] != null);
+
+        final valueTransaction = (await models.usersRef
+                .doc(GetIt.I<AuthChangeNotifier>().id)
+                .valueTransactions
+                .doc(messageData['valueTransactionId'])
+                .get())
+            .data;
+
+        final nonRecurringTransaction = valueTransaction != null
+            ? models.ValueTransaction(
+                id: '',
+                title: valueTransaction.title,
+                dateTime: DateTime.now(),
+                value: valueTransaction.value,
+                categoryId: valueTransaction.categoryId,
+                categoryTitle: valueTransaction.categoryTitle,
+                categoryTransactionType:
+                    valueTransaction.categoryTransactionType,
+                categoryReason: valueTransaction.categoryReason,
+                parentCategoryId: valueTransaction.parentCategoryId,
+              )
+            : null;
+
+        _addValueTransaction(
+          valueTransaction: nonRecurringTransaction,
+          allowRecurring: false,
+        );
+        break;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final notificationsPermissionPref =
+          await fetchStringPref(SharedPrefsKeys.notificationsPermission);
+      if (notificationsPermissionPref == null) {
+        final permissionStatus = await Permission.notification.request();
+        writeStringPref(
+          SharedPrefsKeys.notificationsPermission,
+          permissionStatus.isGranted ? true.toString() : false.toString(),
+        );
+      }
+    });
+
+    setupInteractedMessage();
+
+    const initializationSettingsAndroid =
+        AndroidInitializationSettings('notification_icon');
+
+    const initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (notificationResponse) {
+        switch (notificationResponse.notificationResponseType) {
+          case NotificationResponseType.selectedNotification:
+            if (notificationResponse.payload != null) {
+              _handleNotification(jsonDecode(notificationResponse.payload!));
+            }
+            break;
+          default:
+        }
+      },
+      onDidReceiveBackgroundNotificationResponse: firebaseMessagingHandler,
+    );
+
+    const channel = AndroidNotificationChannel(
+      'high_importance_channel',
+      'High Importance Notifications',
+      importance: Importance.max,
+    );
+
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel)
+        .then((_) {
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        final notification = message.notification;
+        final android = message.notification?.android;
+
+        if (notification != null && android != null) {
+          flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            payload: jsonEncode(message.data),
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+              ),
+            ),
+          );
+        }
+      });
+    });
   }
 
   @override

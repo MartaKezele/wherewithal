@@ -10,6 +10,7 @@ import '../constants/styles/icon_button.dart';
 import '../constants/styles/image_preview.dart';
 import '../../extensions/button/icon_button.dart';
 
+// TODO permission to view images
 class ImagePreview extends StatelessWidget {
   const ImagePreview({
     super.key,

@@ -90,6 +90,13 @@ class _DataSetupScreenState extends State<DataSetupScreen>
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 

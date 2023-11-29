@@ -845,6 +845,166 @@ class AppLocalizations {
     );
   }
 
+  String get daily {
+    return Intl.message(
+      'Daily',
+      locale: localeName,
+    );
+  }
+
+  String get weekly {
+    return Intl.message(
+      'Weekly',
+      locale: localeName,
+    );
+  }
+
+  String get monthly {
+    return Intl.message(
+      'Monthly',
+      locale: localeName,
+    );
+  }
+
+  String get yearly {
+    return Intl.message(
+      'Yearly',
+      locale: localeName,
+    );
+  }
+
+  String get recurrenceInterval {
+    return Intl.message(
+      'Recurrence interval',
+      locale: localeName,
+    );
+  }
+
+  String get recurrence {
+    return Intl.message(
+      'Recurrence',
+      locale: localeName,
+    );
+  }
+
+  String get every {
+    return Intl.message(
+      'Every',
+      locale: localeName,
+    );
+  }
+
+  String get repeat {
+    return Intl.message(
+      'Repeat',
+      locale: localeName,
+    );
+  }
+
+  String get monday {
+    return Intl.message(
+      'Monday',
+      locale: localeName,
+    );
+  }
+
+  String get tuesday {
+    return Intl.message(
+      'Tuesday',
+      locale: localeName,
+    );
+  }
+
+  String get wednesday {
+    return Intl.message(
+      'Wednesday',
+      locale: localeName,
+    );
+  }
+
+  String get thursday {
+    return Intl.message(
+      'Thursday',
+      locale: localeName,
+    );
+  }
+
+  String get friday {
+    return Intl.message(
+      'Friday',
+      locale: localeName,
+    );
+  }
+
+  String get saturday {
+    return Intl.message(
+      'Saturday',
+      locale: localeName,
+    );
+  }
+
+  String get sunday {
+    return Intl.message(
+      'Sunday',
+      locale: localeName,
+    );
+  }
+
+  String day(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Day',
+      other: 'Days',
+      name: 'dayPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String weekDay(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Weekday',
+      other: 'Weekdays',
+      name: 'weekDayPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String week(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Week',
+      other: 'Weeks',
+      name: 'weekPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String month(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Month',
+      other: 'Months',
+      name: 'monthPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String year(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Year',
+      other: 'Years',
+      name: 'yearPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
   String get userCouldNotBeFound {
     return Intl.message(
       'User could not be found.',
@@ -1356,6 +1516,97 @@ class AppLocalizations {
     );
   }
 
+  String get january {
+    return Intl.message(
+      'January',
+      locale: localeName,
+    );
+  }
+
+  String get february {
+    return Intl.message(
+      'February',
+      locale: localeName,
+    );
+  }
+
+  String get march {
+    return Intl.message(
+      'March',
+      locale: localeName,
+    );
+  }
+
+  String get april {
+    return Intl.message(
+      'April',
+      locale: localeName,
+    );
+  }
+
+  String get may {
+    return Intl.message(
+      'May',
+      locale: localeName,
+    );
+  }
+
+  String get june {
+    return Intl.message(
+      'June',
+      locale: localeName,
+    );
+  }
+
+  String get july {
+    return Intl.message(
+      'July',
+      locale: localeName,
+    );
+  }
+
+  String get august {
+    return Intl.message(
+      'August',
+      locale: localeName,
+    );
+  }
+
+  String get september {
+    return Intl.message(
+      'September',
+      locale: localeName,
+    );
+  }
+
+  String get october {
+    return Intl.message(
+      'October',
+      locale: localeName,
+    );
+  }
+
+  String get november {
+    return Intl.message(
+      'November',
+      locale: localeName,
+    );
+  }
+
+  String get december {
+    return Intl.message(
+      'December',
+      locale: localeName,
+    );
+  }
+
+  String get repeatsEveryDay {
+    return Intl.message(
+      'Repeats every day',
+      locale: localeName,
+    );
+  }
+
   String get fetchedReceiptRecognitionQuota {
     return Intl.message(
       'Fetched receipt recognition quota',
@@ -1366,6 +1617,27 @@ class AppLocalizations {
   String get failureFetchingReceiptRecognitionQuota {
     return Intl.message(
       'Failure fetching receipt recognition quota',
+      locale: localeName,
+    );
+  }
+
+  String get updatedNotificationPreferences {
+    return Intl.message(
+      'Updated notification preferences',
+      locale: localeName,
+    );
+  }
+
+  String get recurringTransactionsNotifications {
+    return Intl.message(
+      'Recurring transactions notifications',
+      locale: localeName,
+    );
+  }
+
+  String get remindsAboutUpcomingScheduledPayments {
+    return Intl.message(
+      'Reminds about upcoming scheduled payments',
       locale: localeName,
     );
   }
@@ -1454,6 +1726,46 @@ class AppLocalizations {
       locale: localeName,
       name: 'minCharacters',
       args: [howMany],
+    );
+  }
+
+  String intNumberIsNotWithinRange(int min, int max) {
+    return Intl.message(
+      'Number is not within range $min - $max',
+      locale: localeName,
+      name: 'intNumberIsNotWithinRange',
+      args: [min, max],
+    );
+  }
+
+  String repeatsEveryWeekOn(String weekDays) {
+    return Intl.message(
+      'Repeats every week on $weekDays',
+      locale: localeName,
+      name: 'repeatsEveryWeekOn',
+      args: [weekDays],
+    );
+  }
+
+  String repeatsEveryMonthOnDay(int day) {
+    return Intl.message(
+      'Repeats every month on day $day',
+      locale: localeName,
+      name: 'repeatsEveryMonthOnDay',
+      args: [day],
+    );
+  }
+
+  String repeatsEveryYearOnDayOfMonth(
+    int day,
+    int monthNumber,
+    String monthName,
+  ) {
+    return Intl.message(
+      'Repeats every year on day $day of month $monthNumber ($monthName)',
+      locale: localeName,
+      name: 'repeatsEveryYearOnDayOfMonth',
+      args: [day, monthNumber, monthName],
     );
   }
 }

@@ -11,4 +11,11 @@ abstract class UserRepo2 {
   Future<ActionResult<User?>> retrieveById(String id);
 
   Future<ActionResult<User?>> retrieveByUid(String uid);
+
+  Future<ActionResult> signOut(String uid);
+
+  Future<ActionResult> updateNotifications({
+    required String id,
+    required bool recurringTransactionsNotifications,
+  });
 }

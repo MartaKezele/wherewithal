@@ -16,6 +16,7 @@ import '../screens/create_receipt.dart';
 import '../screens/home/insights/analytics.dart';
 import '../screens/home/insights/value_transaction_history.dart';
 import '../screens/home/insights/value_transaction_view.dart';
+import '../screens/home/insights/value_transactions_list_view.dart';
 import 'keys/path_param.dart';
 import 'keys/query_param.dart';
 import '../app_models/named_go_route.dart';
@@ -189,15 +190,29 @@ class TopLevelRoutes {
 
   static final expenseRecurringTransactions = GoRoute(
     path: '/expense-recurring-transactions',
-    builder: (context, state) => const Placeholder(
-      child: Text('Expense recurring transactions'),
+    builder: (context, state) => ValueTransactionsListView(
+      ref: models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .valueTransactions
+          .whereCronExpression(isNull: false)
+          .whereCategoryTransactionType(
+            isEqualTo: TransactionTypes.expense.name,
+          ),
+      ctx: context,
     ),
   );
 
   static final incomeRecurringTransactions = GoRoute(
     path: '/income-recurring-transactions',
-    builder: (context, state) => const Placeholder(
-      child: Text('Income recurring transactions'),
+    builder: (context, state) => ValueTransactionsListView(
+      ref: models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .valueTransactions
+          .whereCronExpression(isNull: false)
+          .whereCategoryTransactionType(
+            isEqualTo: TransactionTypes.income.name,
+          ),
+      ctx: context,
     ),
   );
 
@@ -354,7 +369,7 @@ class NamedChildRoutes {
     parentNavigatorKey: navigatorKey,
     nonNullableName: 'notifications',
     path: 'notifications',
-    builder: (context, state) => const Notifications(),
+    builder: (context, state) => Notifications(),
   );
 
   static final changePassword = NamedGoRoute(
