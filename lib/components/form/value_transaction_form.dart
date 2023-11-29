@@ -9,7 +9,6 @@ import '../../app_models/months.dart';
 import '../../app_models/recurrence_intervals.dart';
 import '../../app_models/week_days.dart';
 import '../../change_notifiers/auth.dart';
-import '../../constants/spacers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/enums/transaction_types.dart';
 import '../../models/models.dart' as models;
@@ -48,7 +47,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<models.Category> _selectedCategories = [];
 
-  bool _recurring = false;
+  RecurrenceIntervals? _selectedRecurrenceInterval;
   CronRecurrenceInterval? _selectedCron;
 
   models.ValueTransaction _valueTransactionInfo() {
@@ -69,7 +68,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
       categoryTransactionType: _selectedTransactionTypes.first.name,
       categoryReason: _selectedCategories.first.categoryReason,
       parentCategoryId: _selectedCategories.first.parentCategoryId,
-      cronExpression: _recurring ? _selectedCron?.cronExpression : null,
+      cronExpression: _selectedCron?.cronExpression,
     );
   }
 
@@ -171,24 +170,23 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
     });
   }
 
-  void _onRecurringChanged(bool value) {
-    setState(() {
-      _recurring = value;
-      if (value == false) {
-        _selectedCron = null;
-      } else {
-        _dateTime = DateTime.now();
-        _selectedCron = CronRecurrenceInterval();
-      }
-    });
-  }
-
   void _onRecurrenceIntervalChanged(
     List<CustomDropdownEntry<RecurrenceIntervals?>> selection,
   ) {
     setState(() {
       if (selection.isNotEmpty) {
+        _selectedRecurrenceInterval = selection.first.value;
+
+        if (_selectedRecurrenceInterval != RecurrenceIntervals.oneTime &&
+            _selectedCron == null) {
+          _dateTime = DateTime.now();
+          _selectedCron = CronRecurrenceInterval();
+        }
+
         switch (selection.first.value) {
+          case RecurrenceIntervals.oneTime:
+            _selectedCron = null;
+            break;
           case RecurrenceIntervals.day:
             _selectedCron?.day = null;
             _selectedCron?.weekDays = [];
@@ -263,11 +261,13 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
 
     _dateTime = widget.valueTransaction?.dateTime ?? DateTime.now();
 
-    _recurring = widget.valueTransaction?.cronExpression != null;
-    if (_recurring) {
+    if (widget.valueTransaction?.cronExpression != null) {
       _selectedCron = CronRecurrenceInterval.fromCronExpression(
         widget.valueTransaction!.cronExpression!,
       );
+      _selectedRecurrenceInterval = _selectedCron?.recurrenceInterval;
+    } else {
+      _selectedRecurrenceInterval = RecurrenceIntervals.oneTime;
     }
 
     super.initState();
@@ -352,14 +352,27 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
           categoriesRef: categoriesRef,
           required: true,
         ),
-        if (widget.allowRecurring)
-          SwitchListTile(
-            contentPadding: const EdgeInsets.all(0),
-            title: Text(localizations.recurrence),
-            value: _recurring,
-            onChanged: _onRecurringChanged,
-          ),
-        if (!_recurring || !widget.allowRecurring)
+        CustomDropdown(
+          required: true,
+          options: RecurrenceIntervals.values
+              .map(
+                (recurrenceInterval) => CustomDropdownEntry(
+                  value: recurrenceInterval,
+                  title: recurrenceInterval.localizedName2(context),
+                ),
+              )
+              .toList(),
+          selectedOptions: [
+            if (_selectedRecurrenceInterval != null)
+              CustomDropdownEntry(
+                value: _selectedRecurrenceInterval,
+                title: _selectedRecurrenceInterval!.localizedName2(context),
+              ),
+          ],
+          onSelectionChanged: _onRecurrenceIntervalChanged,
+          title: localizations.repeat,
+        ),
+        if (_selectedRecurrenceInterval == RecurrenceIntervals.oneTime)
           DateFormField(
             required: true,
             setDateTime: (dateTime) {
@@ -369,114 +382,87 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
             },
             dateTime: _dateTime,
           ),
-        if (_recurring && widget.allowRecurring)
-          Column(
-            children: [
-              CustomDropdown(
-                required: _recurring,
-                options: RecurrenceIntervals.values
+        if (_selectedRecurrenceInterval == RecurrenceIntervals.week)
+          CustomDropdown<WeekDays>(
+            multiselect: true,
+            showSelectAllOption: false,
+            required:
+                _selectedCron?.recurrenceInterval == RecurrenceIntervals.week,
+            options: WeekDays.values
+                .map(
+                  (weekDay) => CustomDropdownEntry(
+                    value: weekDay,
+                    title: weekDay.localizedName(context),
+                  ),
+                )
+                .toList(),
+            selectedOptions: _selectedCron?.weekDays == null
+                ? []
+                : _selectedCron!.weekDays
                     .map(
-                      (recurrenceInterval) => CustomDropdownEntry(
-                        value: recurrenceInterval,
-                        title: recurrenceInterval.localizedName2(context),
+                      (weekDay) => CustomDropdownEntry(
+                        value: weekDay,
+                        title: weekDay.localizedName(context),
                       ),
                     )
                     .toList(),
-                selectedOptions: [
-                  if (_selectedCron?.recurrenceInterval != null)
-                    CustomDropdownEntry(
-                      value: _selectedCron?.recurrenceInterval,
-                      title: _selectedCron!.recurrenceInterval!
-                          .localizedName2(context),
-                    ),
-                ],
-                onSelectionChanged: _onRecurrenceIntervalChanged,
-                title: localizations.repeat,
-              ),
-              if (_selectedCron != null &&
-                  _selectedCron!.recurrenceInterval == RecurrenceIntervals.week)
-                CustomDropdown<WeekDays>(
-                  multiselect: true,
-                  showSelectAllOption: false,
-                  required: _selectedCron?.recurrenceInterval ==
-                      RecurrenceIntervals.week,
-                  options: WeekDays.values
-                      .map(
-                        (weekDay) => CustomDropdownEntry(
-                          value: weekDay,
-                          title: weekDay.localizedName(context),
-                        ),
-                      )
-                      .toList(),
-                  selectedOptions: _selectedCron?.weekDays == null
-                      ? []
-                      : _selectedCron!.weekDays
-                          .map(
-                            (weekDay) => CustomDropdownEntry(
-                              value: weekDay,
-                              title: weekDay.localizedName(context),
-                            ),
-                          )
-                          .toList(),
-                  onSelectionChanged: _onWeekDayChanged,
-                  title: localizations.weekDay(1),
-                ),
-              if (_selectedCron != null &&
-                  _selectedCron!.recurrenceInterval == RecurrenceIntervals.year)
-                CustomDropdown(
-                  options: Months.values
-                      .map(
-                        (month) => CustomDropdownEntry(
-                          value: month,
-                          title: month.localizedName(context),
-                        ),
-                      )
-                      .toList(),
-                  selectedOptions: [
-                    if (_selectedCron?.month != null)
-                      CustomDropdownEntry(
-                        value: _selectedCron!.month,
-                        title: _selectedCron!.month!.localizedName(context),
-                      ),
-                  ],
-                  onSelectionChanged: _onMonthChanged,
-                  title: localizations.month(1),
-                ),
-              if ([RecurrenceIntervals.month, RecurrenceIntervals.year]
-                  .contains(_selectedCron?.recurrenceInterval))
-                CustomDropdown(
-                  options: List.generate(
-                    _selectedCron?.month?.numberOfDays ??
-                        Months.february.numberOfDays,
-                    (index) => CustomDropdownEntry(
-                      value: index + 1,
-                      title: '${index + 1}',
-                    ),
+            onSelectionChanged: _onWeekDayChanged,
+            title: localizations.weekDay(1),
+          ),
+        if (_selectedRecurrenceInterval == RecurrenceIntervals.year)
+          CustomDropdown(
+            options: Months.values
+                .map(
+                  (month) => CustomDropdownEntry(
+                    value: month,
+                    title: month.localizedName(context),
                   ),
-                  selectedOptions: [
-                    if (_selectedCron?.day != null)
-                      CustomDropdownEntry(
-                        value: _selectedCron!.day,
-                        title: _selectedCron!.day!.toString(),
-                      ),
-                  ],
-                  onSelectionChanged: _onDayChanged,
-                  title: localizations.day(1),
+                )
+                .toList(),
+            selectedOptions: [
+              if (_selectedCron?.month != null)
+                CustomDropdownEntry(
+                  value: _selectedCron!.month,
+                  title: _selectedCron!.month!.localizedName(context),
                 ),
-              HeightSpacer.sm,
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  _selectedCron?.localizedMessage(
-                        context,
-                      ) ??
-                      '',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontStyle: FontStyle.italic,
-                      ),
-                ),
-              ),
             ],
+            onSelectionChanged: _onMonthChanged,
+            title: localizations.month(1),
+          ),
+        if ([RecurrenceIntervals.month, RecurrenceIntervals.year]
+            .contains(_selectedRecurrenceInterval))
+          CustomDropdown(
+            options: List.generate(
+              _selectedCron?.month?.numberOfDays ??
+                  Months.february.numberOfDays,
+              (index) => CustomDropdownEntry(
+                value: index + 1,
+                title: '${index + 1}',
+              ),
+            ),
+            selectedOptions: [
+              if (_selectedCron?.day != null)
+                CustomDropdownEntry(
+                  value: _selectedCron!.day,
+                  title: _selectedCron!.day!.toString(),
+                ),
+            ],
+            onSelectionChanged: _onDayChanged,
+            title: localizations.day(1),
+          ),
+        if (_selectedRecurrenceInterval != null &&
+            _selectedRecurrenceInterval != RecurrenceIntervals.oneTime)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              _selectedCron?.localizedMessage(
+                    context,
+                  ) ??
+                  '',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontStyle: FontStyle.italic,
+                  ),
+            ),
           ),
       ],
     );

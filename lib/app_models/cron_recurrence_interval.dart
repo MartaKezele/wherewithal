@@ -50,7 +50,8 @@ class CronRecurrenceInterval {
 
   RecurrenceIntervals? get recurrenceInterval {
     for (final interval in RecurrenceIntervals.values) {
-      if (RegExp(interval.regExpPattern).hasMatch(cronExpression)) {
+      if (interval.regExpPattern != null &&
+          RegExp(interval.regExpPattern!).hasMatch(cronExpression)) {
         return interval;
       }
     }
@@ -88,6 +89,7 @@ class CronRecurrenceInterval {
               month!.number,
               month!.localizedName(context),
             ),
+      RecurrenceIntervals.oneTime => null,
       null => null,
     };
   }

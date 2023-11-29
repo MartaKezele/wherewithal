@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wherewithal/config/fraction_digits.dart';
 
 import '../config/countries.dart';
+import '../config/fraction_digits.dart';
 import 'messages_all.dart';
 
 class AppLocalizations {
@@ -1639,6 +1639,11 @@ class AppLocalizations {
   String get remindsAboutUpcomingScheduledPayments {
     return Intl.message(
       'Reminds about upcoming scheduled payments',
+      locale: localeName,
+    );
+  }  String get oneTime {
+    return Intl.message(
+      'One time',
       locale: localeName,
     );
   }
