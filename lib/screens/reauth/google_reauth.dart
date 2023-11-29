@@ -138,7 +138,7 @@ class _GoogleReauthState extends State<GoogleReauth> with GetItStateMixin {
             visible:
                 _showRetryBtn && authProviders.contains(AuthProvider.password),
             child: TextButton(
-              onPressed: () => context.pushReplacement(
+              onPressed: () => context.push(
                   '${TopLevelRoutes.passwordReauth.path}?${QueryParamKeys.nextRouteName}=${widget.nextRouteName}'),
               child: Text(localizations.reauthenticateWithPassword),
             ).colorStyle(TextButtonStyles.primary),

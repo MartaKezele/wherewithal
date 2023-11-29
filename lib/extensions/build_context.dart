@@ -100,10 +100,4 @@ extension Navigation on BuildContext {
       NamedChildRoutes.signIn.nonNullableName,
     );
   }
-
-  void goToProfile() async {
-    return goNamed(
-      NamedChildRoutes.profile.nonNullableName,
-    );
-  }
 }
