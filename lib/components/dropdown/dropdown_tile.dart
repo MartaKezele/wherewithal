@@ -111,6 +111,8 @@ class DropdownTile<T> extends StatelessWidget {
     return CustomExpansionTile(
       shape: const BeveledRectangleBorder(),
       title: Text(dropdownEntry.title),
+      initiallyExpanded: selectedTiles.any((selectedDropdownEntry) =>
+          dropdownEntry.subEntries.contains(selectedDropdownEntry)),
       iconColor: iconColor,
       collapsedIconColor: collapsedIconColor,
       textColor: dropdownEntry.foregroundColor,

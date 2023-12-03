@@ -154,21 +154,23 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
                   ).colorStyle(OutlinedButtonStyles.primary)
               ],
             ),
-            AuthProviderCard(
-              title: localizations.password,
-              buttons: [
-                if (!authProviders.contains(AuthProvider.password))
-                  OutlinedButton(
-                    onPressed: () => context.pushConfigurePasswordAuth(),
-                    child: Text(localizations.configure),
-                  ).colorStyle(OutlinedButtonStyles.primary),
-                if (authProviders.contains(AuthProvider.password))
-                  OutlinedButton(
-                    onPressed: () => context.pushChangePassword(),
-                    child: Text(localizations.changePassword),
-                  ).colorStyle(OutlinedButtonStyles.primary),
-              ],
-            ),
+            if (authProviders.contains(AuthProvider.password))
+              AuthProviderCard(
+                title: localizations.password,
+                buttons: [
+                  // TODO enable when linking password auth is fixed
+                  // if (!authProviders.contains(AuthProvider.password))
+                  //   OutlinedButton(
+                  //     onPressed: () => context.pushConfigurePasswordAuth(),
+                  //     child: Text(localizations.configure),
+                  //   ).colorStyle(OutlinedButtonStyles.primary),
+                  if (authProviders.contains(AuthProvider.password))
+                    OutlinedButton(
+                      onPressed: () => context.pushChangePassword(),
+                      child: Text(localizations.changePassword),
+                    ).colorStyle(OutlinedButtonStyles.primary),
+                ],
+              ),
             HeightSpacer.md,
             FilledButton(
               onPressed: () => context.pushDeleteAccount(),
