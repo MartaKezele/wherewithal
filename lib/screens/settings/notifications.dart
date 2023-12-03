@@ -50,7 +50,11 @@ class _NotificationsState extends State<Notifications> with GetItStateMixin {
       ),
       body: FirestoreBuilder(
         ref: models.usersRef.doc(userId),
-        builder: (context, snapshot, child) {
+        builder: (
+          context,
+          snapshot,
+          child,
+        ) {
           if (snapshot.hasError) {
             return errorContent;
           }

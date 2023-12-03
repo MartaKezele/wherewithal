@@ -147,15 +147,15 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
     final bgColor = Theme.of(context).colorScheme.surfaceVariant;
     final fgColor = Theme.of(context).colorScheme.onSurfaceVariant;
 
-    return FirestoreBuilder<models.CategoryDocumentSnapshot>(
+    return FirestoreBuilder(
       ref: models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
           .categories
           .doc(widget.id),
       builder: (
         context,
-        AsyncSnapshot<models.CategoryDocumentSnapshot> snapshot,
-        Widget? child,
+        snapshot,
+        child,
       ) {
         if (snapshot.hasError) {
           return Scaffold(

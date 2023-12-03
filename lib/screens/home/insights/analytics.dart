@@ -10,7 +10,6 @@ import '../../../components/error_content.dart';
 import '../../../components/form/form_fields/date_range_form_field.dart';
 import '../../../components/loading_content.dart';
 import '../../../components/no_data_content.dart';
-import '../../../config/date_time_picker.dart';
 import '../../../constants/padding_size.dart';
 import '../../../constants/spacers.dart';
 import '../../../l10n/app_localizations.dart';
@@ -18,6 +17,7 @@ import '../../../models/enums/category_reasons.dart';
 import '../../../models/enums/transaction_types.dart';
 import '../../../models/models.dart' as models;
 import '../../../utils/categories.dart';
+import '../../../utils/date_time.dart';
 import '../../../utils/percentage.dart';
 
 class Analytics extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -30,7 +30,7 @@ class Analytics extends StatefulWidget with GetItStatefulWidgetMixin {
 class _AnalyticsState extends State<Analytics> with GetItStateMixin {
   DateTimeRange? _dateTimeRange = DateTimeRange(
     start: beginningOfThisMonth(),
-    end: endOfDay(DateTime.now()),
+    end: endOfThisMonth(),
   );
 
   final List<PieSectionData?> _parentExpenseSections = [null];
@@ -165,7 +165,11 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
             HeightSpacer.md,
             FirestoreBuilder(
               ref: valueTransactionsRef,
-              builder: (context, snapshot, child) {
+              builder: (
+                context,
+                snapshot,
+                child,
+              ) {
                 if (snapshot.hasError) {
                   return const ErrorContent();
                 }
@@ -246,7 +250,11 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                     HeightSpacer.md,
                     FirestoreBuilder(
                       ref: models.usersRef.doc(userId).categories,
-                      builder: (context, snapshot, child) {
+                      builder: (
+                        context,
+                        snapshot,
+                        child,
+                      ) {
                         if (snapshot.hasError) {
                           return const ErrorContent();
                         }

@@ -1641,10 +1641,112 @@ class AppLocalizations {
       'Reminds about upcoming scheduled payments',
       locale: localeName,
     );
-  }  String get oneTime {
+  }
+
+  String get oneTime {
     return Intl.message(
       'One time',
       locale: localeName,
+    );
+  }
+
+  String get addBudget {
+    return Intl.message(
+      'Add budget',
+      locale: localeName,
+    );
+  }
+
+  String get createdBudget {
+    return Intl.message(
+      'Created budget',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotCreateBudget {
+    return Intl.message(
+      'Could not create budget',
+      locale: localeName,
+    );
+  }
+
+  String get startDate {
+    return Intl.message(
+      'Start date',
+      locale: localeName,
+    );
+  }
+
+  String get endDate {
+    return Intl.message(
+      'End date',
+      locale: localeName,
+    );
+  }
+
+  String get updatedBudget {
+    return Intl.message(
+      'Updated budget',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotUpdateBudget {
+    return Intl.message(
+      'Could not update budget',
+      locale: localeName,
+    );
+  }
+
+  String get deletedBudget {
+    return Intl.message(
+      'Deleted budget',
+      locale: localeName,
+    );
+  }
+
+  String deleteBudgetConfirmationMsg(String budgetTitle) {
+    return Intl.message(
+      'Are you sure you want to delete budget $budgetTitle',
+      locale: localeName,
+      name: 'deleteBudgetConfirmationsMsg',
+      args: [
+        budgetTitle,
+      ],
+    );
+  }
+
+  String couldNotFetchDataForBudget(String budgetTitle) {
+    return Intl.message(
+      'Could not fetch data for budget $budgetTitle',
+      locale: localeName,
+      name: 'couldNotFetchDataForBudget',
+      args: [
+        budgetTitle,
+      ],
+    );
+  }
+
+  String couldNotDeleteBudgetWithTitle(String budgetTitle) {
+    return Intl.message(
+      'Could not delete budget $budgetTitle',
+      locale: localeName,
+      name: 'couldNotDeleteBudgetWithTitle',
+      args: [
+        budgetTitle,
+      ],
+    );
+  }
+
+  String deletedBudgetWithTitle(String budgetTitle) {
+    return Intl.message(
+      'Deleted budget $budgetTitle',
+      locale: localeName,
+      name: 'deletedBudgetWithTitle',
+      args: [
+        budgetTitle,
+      ],
     );
   }
 

@@ -14,11 +14,13 @@ class AddBottomSheet extends StatefulWidget {
     required this.addCategory,
     required this.addExpense,
     required this.addIncome,
+    required this.addBudget,
   });
 
   final void Function() addCategory;
   final void Function() addExpense;
   final void Function() addIncome;
+  final void Function() addBudget;
 
   @override
   State<AddBottomSheet> createState() => _AddBottomSheetState();
@@ -29,123 +31,149 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
-    return Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          child: FilledButton(
-            onPressed: () {
-              context.pop();
-              context.pushCreateReceipt();
-            },
-            child: Text(localizations.receipt),
-          )
-              .iconOnTop(
-                icon: Icons.receipt_long_rounded,
-                colorStyle: FilledButtonStyles.primaryContainer,
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton(
+                onPressed: () {
+                  context.pop();
+                  widget.addCategory();
+                },
+                child: Text(localizations.category),
               )
-              .bottomSheetStyle(
-                constructor: FilledButton.new,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(
-                      containerBorderRadius,
+                  .iconOnTop(
+                    icon: Icons.category_rounded,
+                    colorStyle: FilledButtonStyles.inverseSurface,
+                  )
+                  .bottomSheetStyle(
+                    constructor: FilledButton.new,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(
+                          containerBorderRadius,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-        ),
-        Expanded(
-          child: FilledButton(
-            onPressed: () {
-              context.pop();
-              showModalBottomSheet(
-                context: context,
-                useSafeArea: true,
-                builder: (BuildContext context) => Row(
-                  children: [
-                    Expanded(
-                      child: FilledButton(
-                        onPressed: () {
-                          context.pop();
-                          widget.addExpense();
-                        },
-                        child: Text(localizations.expense),
-                      )
-                          .iconOnTop(
-                            icon: Icons.remove_rounded,
-                            colorStyle: FilledButtonStyles.error,
-                          )
-                          .bottomSheetStyle(
-                            constructor: FilledButton.new,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(
-                                  containerBorderRadius,
-                                ),
-                              ),
-                            ),
-                          ),
-                    ),
-                    Expanded(
-                      child: FilledButton(
-                        onPressed: () {
-                          context.pop();
-                          widget.addIncome();
-                        },
-                        child: Text(localizations.income),
-                      )
-                          .iconOnTop(
-                            icon: Icons.add_rounded,
-                            colorStyle: FilledButtonStyles.success,
-                          )
-                          .bottomSheetStyle(
-                            constructor: FilledButton.new,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(
-                                  containerBorderRadius,
-                                ),
-                              ),
-                            ),
-                          ),
-                    ),
-                  ],
-                ),
-              );
-            },
-            child: Text(localizations.transaction),
-          )
-              .iconOnTop(
-                icon: Icons.wallet_rounded,
-                colorStyle: FilledButtonStyles.inverseSurface,
+            ),
+            Expanded(
+              child: FilledButton(
+                onPressed: () {
+                  context.pop();
+                  widget.addBudget();
+                },
+                child: Text(localizations.budget),
               )
-              .bottomSheetStyle(
-                constructor: FilledButton.new,
-                shape: const RoundedRectangleBorder(),
-              ),
-        ),
-        Expanded(
-          child: FilledButton(
-            onPressed: () {
-              context.pop();
-              widget.addCategory();
-            },
-            child: Text(localizations.category),
-          )
-              .iconOnTop(
-                icon: Icons.category_rounded,
-                colorStyle: FilledButtonStyles.secondaryContainer,
-              )
-              .bottomSheetStyle(
-                constructor: FilledButton.new,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(
-                      containerBorderRadius,
+                  .iconOnTop(
+                    icon: Icons.savings_rounded,
+                    colorStyle: FilledButtonStyles.primaryContainer,
+                  )
+                  .bottomSheetStyle(
+                    constructor: FilledButton.new,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(
+                          containerBorderRadius,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton(
+                onPressed: () {
+                  context.pop();
+                  context.pushCreateReceipt();
+                },
+                child: Text(localizations.receipt),
+              )
+                  .iconOnTop(
+                    icon: Icons.receipt_long_rounded,
+                    colorStyle: FilledButtonStyles.primaryContainer,
+                  )
+                  .bottomSheetStyle(
+                    constructor: FilledButton.new,
+                    shape: const RoundedRectangleBorder(),
+                  ),
+            ),
+            Expanded(
+              child: FilledButton(
+                onPressed: () {
+                  context.pop();
+                  showModalBottomSheet(
+                    context: context,
+                    useSafeArea: true,
+                    builder: (BuildContext context) => Row(
+                      children: [
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: () {
+                              context.pop();
+                              widget.addExpense();
+                            },
+                            child: Text(localizations.expense),
+                          )
+                              .iconOnTop(
+                                icon: Icons.remove_rounded,
+                                colorStyle: FilledButtonStyles.error,
+                              )
+                              .bottomSheetStyle(
+                                constructor: FilledButton.new,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(
+                                      containerBorderRadius,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                        ),
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: () {
+                              context.pop();
+                              widget.addIncome();
+                            },
+                            child: Text(localizations.income),
+                          )
+                              .iconOnTop(
+                                icon: Icons.add_rounded,
+                                colorStyle: FilledButtonStyles.success,
+                              )
+                              .bottomSheetStyle(
+                                constructor: FilledButton.new,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(
+                                      containerBorderRadius,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Text(localizations.transaction),
+              )
+                  .iconOnTop(
+                    icon: Icons.wallet_rounded,
+                    colorStyle: FilledButtonStyles.inverseSurface,
+                  )
+                  .bottomSheetStyle(
+                    constructor: FilledButton.new,
+                    shape: const RoundedRectangleBorder(),
+                  ),
+            ),
+          ],
         ),
       ],
     );

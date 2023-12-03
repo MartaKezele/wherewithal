@@ -65,7 +65,7 @@ class CronRecurrenceInterval {
     return '0 0 ${day ?? '*'} ${month?.number ?? '*'} $weekDaysStr';
   }
 
-  String? localizedMessage(
+  String? repeatsLocalizedMessage(
     BuildContext context,
   ) {
     final weekDaysStr = weekDays

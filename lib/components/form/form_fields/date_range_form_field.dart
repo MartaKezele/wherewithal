@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../change_notifiers/date_format.dart';
 import '../../../config/date_time_picker.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../utils/date_time.dart';
 import '../../../utils/form_field_validators.dart';
 
 class DateRangeFormField extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -78,8 +79,8 @@ class _DateFormFieldState extends State<DateRangeFormField>
         final dateTimeRange = await showDateRangePicker(
           context: context,
           initialDateRange: widget.dateTimeRange,
-          firstDate: firstDate,
-          lastDate: endOfDay(DateTime.now()),
+          firstDate: datePickerFirstDate,
+          lastDate: datePickerLastDate,
         );
         DateTimeRange? adjustedDateTimeRange;
 

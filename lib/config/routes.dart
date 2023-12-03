@@ -4,12 +4,13 @@ import 'package:go_router/go_router.dart';
 
 import '../app_models/tab_stateful_shell_branch.dart';
 import '../change_notifiers/auth.dart';
+import '../screens/home/budget/budget_view.dart';
 import '../screens/home/categories/categories_list_view.dart';
 import '../components/wrappers/tabbed_root_screen.dart';
 import '../models/enums/transaction_types.dart';
 import '../models/models.dart' as models;
 import '../screens/data_setup_screen.dart';
-import '../screens/home/budget.dart';
+import '../screens/home/budget/budget.dart';
 import '../screens/home/categories/category_view.dart';
 import '../screens/home/home.dart';
 import '../screens/create_receipt.dart';
@@ -233,7 +234,10 @@ class TopLevelRoutes {
 
   static final budget = GoRoute(
     path: '/budget',
-    builder: (context, state) => const Budget(),
+    builder: (context, state) => Budget(),
+    routes: [
+      NamedChildRoutes.budgetView,
+    ],
   );
 
   static final welcome = GoRoute(
@@ -451,6 +455,20 @@ class NamedChildRoutes {
 
       return ValueTransactionView(
         id: valueTransactionId!,
+      );
+    },
+  );
+  static final budgetView = NamedGoRoute(
+    parentNavigatorKey: navigatorKey,
+    nonNullableName: 'budget-view',
+    path: 'budget-view/:${PathParamKeys.budgetId}',
+    builder: (context, state) {
+      final budgetId = state.pathParameters[PathParamKeys.budgetId];
+
+      assert(budgetId != null);
+
+      return BudgetView(
+        id: budgetId!,
       );
     },
   );

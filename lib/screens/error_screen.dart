@@ -15,7 +15,6 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO finish error screen
     return Screen(
       appBar: AppBar(),
       body: Column(

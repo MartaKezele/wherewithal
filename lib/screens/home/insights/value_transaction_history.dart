@@ -8,12 +8,12 @@ import '../../../components/dropdown/custom_dropdown.dart';
 import '../../../components/error_content.dart';
 import '../../../components/form/form_fields/date_range_form_field.dart';
 import '../../../components/loading_content.dart';
-import '../../../config/date_time_picker.dart';
 import '../../../constants/padding_size.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/enums/category_reasons.dart';
 import '../../../models/enums/transaction_types.dart';
 import '../../../models/models.dart' as models;
+import '../../../utils/date_time.dart';
 import '../../../utils/dropdown/category_dropdown.dart';
 import '../../../utils/dropdown/transaction_type_dropdown.dart';
 import 'value_transactions_list_view.dart';
@@ -31,7 +31,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   DateTimeRange? _dateTimeRange = DateTimeRange(
     start: beginningOfThisWeek(),
-    end: endOfDay(DateTime.now()),
+    end: endOfThisWeek(),
   );
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<CategoryReasons> _selectedCategoryReasons = [];
@@ -169,12 +169,12 @@ class _TransactionHistoryState extends State<TransactionHistory>
                   },
                   title: localizations.transactionType,
                 ),
-                FirestoreBuilder<models.CategoryQuerySnapshot>(
+                FirestoreBuilder(
                   ref: categoriesRef,
                   builder: (
                     context,
-                    AsyncSnapshot<models.CategoryQuerySnapshot> snapshot,
-                    Widget? child,
+                    snapshot,
+                    child,
                   ) {
                     if (snapshot.hasError) {
                       return Padding(

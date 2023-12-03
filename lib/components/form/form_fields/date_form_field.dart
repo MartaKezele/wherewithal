@@ -12,11 +12,13 @@ class DateFormField extends StatelessWidget with GetItMixin {
     required this.setDateTime,
     this.dateTime,
     this.required = false,
+    this.title,
   });
 
   final void Function(DateTime? dateTime) setDateTime;
   final DateTime? dateTime;
   final bool required;
+  final String? title;
 
   final initialDate = DateTime.now();
 
@@ -37,7 +39,7 @@ class DateFormField extends StatelessWidget with GetItMixin {
         text: dateTimeText,
       ),
       decoration: InputDecoration(
-        label: Text('${localizations.date}${required ? '*' : ''}'),
+        label: Text('${title ?? localizations.date}${required ? '*' : ''}'),
       ),
       validator: required == true
           ? (_) => requiredDateTimeValidator(
@@ -53,8 +55,8 @@ class DateFormField extends StatelessWidget with GetItMixin {
         final pickedDateTime = await showDatePicker(
           context: context,
           initialDate: dateTime ?? initialDate,
-          firstDate: firstDate,
-          lastDate: endOfDay(DateTime.now()),
+          firstDate: datePickerFirstDate,
+          lastDate: datePickerLastDate,
         );
         setDateTime(pickedDateTime);
         FocusManager.instance.primaryFocus?.unfocus();

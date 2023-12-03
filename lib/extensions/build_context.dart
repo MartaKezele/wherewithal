@@ -89,6 +89,15 @@ extension Navigation on BuildContext {
     );
   }
 
+  Future<T?> pushBudgetView<T extends Object?>(String budgetId) async {
+    return await pushNamed<T>(
+      NamedChildRoutes.budgetView.nonNullableName,
+      pathParameters: {
+        PathParamKeys.budgetId: budgetId,
+      },
+    );
+  }
+
   void goToCreateAccount() {
     goNamed(
       NamedChildRoutes.createAccount.nonNullableName,

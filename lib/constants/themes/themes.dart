@@ -6,6 +6,7 @@ import '../color_schemes/light.dart';
 import 'app_bar.dart';
 import 'bottom_navigation_bar.dart';
 import 'button.dart';
+import 'card.dart';
 import 'dialog.dart';
 import 'floating_action_button.dart';
 import 'list_tile.dart';
@@ -36,6 +37,7 @@ ThemeData lightColorTheme(BuildContext context) => _themeData.copyWith(
       textButtonTheme: textButtonTheme,
       tabBarTheme: lightTabBarTheme,
       dialogTheme: lightDialogTheme,
+      cardTheme: lightCardTheme,
     );
 
 ThemeData darkColorTheme(BuildContext context) => _themeData.copyWith(
@@ -51,4 +53,5 @@ ThemeData darkColorTheme(BuildContext context) => _themeData.copyWith(
       textButtonTheme: textButtonTheme,
       tabBarTheme: darkTabBarTheme,
       dialogTheme: darkDialogTheme,
+      cardTheme: darkCardTheme,
     );

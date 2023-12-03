@@ -2,7 +2,6 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-import '../../../change_notifiers/currency.dart';
 import '../../../constants/padding_size.dart';
 import '../../../models/enums/category_reasons.dart';
 import '../../../models/models.dart' as models;
@@ -25,11 +24,6 @@ class CategoriesListView extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final String? currency = watchOnly(
-      (CurrencyChangeNotifier changeNotifier) =>
-          changeNotifier.currency?.symbol,
-    );
-
     return FirestoreBuilder(
       ref: ref,
       builder: (
@@ -69,14 +63,6 @@ class CategoriesListView extends StatelessWidget with GetItMixin {
             return ListTile(
               title: Text(category.title),
               subtitle: Text(categoryNeedString),
-              trailing: category.budget != null
-                  ? Text(
-                      '${category.budget.toString()} $currency',
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: foregroundColor,
-                          ),
-                    )
-                  : null,
               textColor: foregroundColor,
               onTap: () => context.pushCategory(category.id),
             );

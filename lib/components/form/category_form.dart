@@ -31,7 +31,6 @@ class CategoryForm extends StatefulWidget {
 
 class CategoryFormState extends State<CategoryForm> {
   late final TextEditingController _titleController;
-  late final TextEditingController _budgetController;
 
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<CategoryReasons> _selectedCategoryReasons = [];
@@ -47,7 +46,6 @@ class CategoryFormState extends State<CategoryForm> {
           ? null
           : _selectedCategoryReasons.first.name,
       parentCategoryId: widget.category?.parentCategoryId,
-      budget: double.tryParse(_budgetController.text),
     );
   }
 
@@ -64,7 +62,6 @@ class CategoryFormState extends State<CategoryForm> {
             title: category.title,
             transactionType: category.transactionType,
             categoryReason: category.categoryReason,
-            budget: category.budget,
           );
 
       return ActionResult(
@@ -125,12 +122,6 @@ class CategoryFormState extends State<CategoryForm> {
   @override
   void initState() {
     _titleController = TextEditingController(text: widget.category?.title);
-    _budgetController = TextEditingController(
-      text: widget.category?.budget != null
-          ? widget.category!.budget.toString()
-          : null,
-    );
-
     super.initState();
   }
 
@@ -145,7 +136,6 @@ class CategoryFormState extends State<CategoryForm> {
   @override
   void dispose() {
     _titleController.dispose();
-    _budgetController.dispose();
     super.dispose();
   }
 
@@ -183,13 +173,6 @@ class CategoryFormState extends State<CategoryForm> {
           validator: (title) => requiredTextValidator(
             title,
             AppLocalizations.of(context),
-          ),
-        ),
-        TextFormField(
-          controller: _budgetController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            label: Text(localizations.budget),
           ),
         ),
         CustomDropdown(

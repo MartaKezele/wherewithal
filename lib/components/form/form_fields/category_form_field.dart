@@ -29,12 +29,12 @@ class CategoryFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
-    return FirestoreBuilder<models.CategoryQuerySnapshot>(
+    return FirestoreBuilder(
       ref: categoriesRef,
       builder: (
         context,
-        AsyncSnapshot<models.CategoryQuerySnapshot> snapshot,
-        Widget? child,
+        snapshot,
+        child,
       ) {
         if (snapshot.hasError) {
           return Padding(

@@ -455,7 +455,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              _selectedCron?.localizedMessage(
+              _selectedCron?.repeatsLocalizedMessage(
                     context,
                   ) ??
                   '',

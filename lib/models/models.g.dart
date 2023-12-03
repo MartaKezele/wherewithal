@@ -123,6 +123,10 @@ abstract class UserDocumentReference
     reference,
   );
 
+  late final BudgetCollectionReference budgets = _$BudgetCollectionReference(
+    reference,
+  );
+
   @override
   Stream<UserDocumentSnapshot> snapshots();
 
@@ -187,6 +191,10 @@ class _$UserDocumentReference
 
   late final CategoryCollectionReference categories =
       _$CategoryCollectionReference(
+    reference,
+  );
+
+  late final BudgetCollectionReference budgets = _$BudgetCollectionReference(
     reference,
   );
 
@@ -3533,8 +3541,6 @@ abstract class CategoryDocumentReference
     FieldValue categoryReasonFieldValue,
     String? parentCategoryId,
     FieldValue parentCategoryIdFieldValue,
-    double? budget,
-    FieldValue budgetFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -3550,8 +3556,6 @@ abstract class CategoryDocumentReference
     FieldValue categoryReasonFieldValue,
     String? parentCategoryId,
     FieldValue parentCategoryIdFieldValue,
-    double? budget,
-    FieldValue budgetFieldValue,
   });
 }
 
@@ -3597,8 +3601,6 @@ class _$CategoryDocumentReference
     FieldValue? categoryReasonFieldValue,
     Object? parentCategoryId = _sentinel,
     FieldValue? parentCategoryIdFieldValue,
-    Object? budget = _sentinel,
-    FieldValue? budgetFieldValue,
   }) async {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -3616,10 +3618,6 @@ class _$CategoryDocumentReference
       parentCategoryId == _sentinel || parentCategoryIdFieldValue == null,
       "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
     );
-    assert(
-      budget == _sentinel || budgetFieldValue == null,
-      "Cannot specify both budget and budgetFieldValue",
-    );
     final json = {
       if (title != _sentinel) _$CategoryFieldMap['title']!: title as String,
       if (titleFieldValue != null)
@@ -3636,9 +3634,6 @@ class _$CategoryDocumentReference
         _$CategoryFieldMap['parentCategoryId']!: parentCategoryId as String?,
       if (parentCategoryIdFieldValue != null)
         _$CategoryFieldMap['parentCategoryId']!: parentCategoryIdFieldValue,
-      if (budget != _sentinel) _$CategoryFieldMap['budget']!: budget as double?,
-      if (budgetFieldValue != null)
-        _$CategoryFieldMap['budget']!: budgetFieldValue,
     };
 
     return reference.update(json);
@@ -3654,8 +3649,6 @@ class _$CategoryDocumentReference
     FieldValue? categoryReasonFieldValue,
     Object? parentCategoryId = _sentinel,
     FieldValue? parentCategoryIdFieldValue,
-    Object? budget = _sentinel,
-    FieldValue? budgetFieldValue,
   }) {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -3673,10 +3666,6 @@ class _$CategoryDocumentReference
       parentCategoryId == _sentinel || parentCategoryIdFieldValue == null,
       "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
     );
-    assert(
-      budget == _sentinel || budgetFieldValue == null,
-      "Cannot specify both budget and budgetFieldValue",
-    );
     final json = {
       if (title != _sentinel) _$CategoryFieldMap['title']!: title as String,
       if (titleFieldValue != null)
@@ -3693,9 +3682,6 @@ class _$CategoryDocumentReference
         _$CategoryFieldMap['parentCategoryId']!: parentCategoryId as String?,
       if (parentCategoryIdFieldValue != null)
         _$CategoryFieldMap['parentCategoryId']!: parentCategoryIdFieldValue,
-      if (budget != _sentinel) _$CategoryFieldMap['budget']!: budget as double?,
-      if (budgetFieldValue != null)
-        _$CategoryFieldMap['budget']!: budgetFieldValue,
     };
 
     transaction.update(reference, json);
@@ -3841,17 +3827,6 @@ abstract class CategoryQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
-  CategoryQuery whereBudget({
-    double? isEqualTo,
-    double? isNotEqualTo,
-    double? isLessThan,
-    double? isLessThanOrEqualTo,
-    double? isGreaterThan,
-    double? isGreaterThanOrEqualTo,
-    bool? isNull,
-    List<double?>? whereIn,
-    List<double?>? whereNotIn,
-  });
 
   CategoryQuery orderByDocumentId({
     bool descending = false,
@@ -3907,18 +3882,6 @@ abstract class CategoryQuery
     String? startAfter,
     String? endAt,
     String? endBefore,
-    CategoryDocumentSnapshot? startAtDocument,
-    CategoryDocumentSnapshot? endAtDocument,
-    CategoryDocumentSnapshot? endBeforeDocument,
-    CategoryDocumentSnapshot? startAfterDocument,
-  });
-
-  CategoryQuery orderByBudget({
-    bool descending = false,
-    double? startAt,
-    double? startAfter,
-    double? endAt,
-    double? endBefore,
     CategoryDocumentSnapshot? startAtDocument,
     CategoryDocumentSnapshot? endAtDocument,
     CategoryDocumentSnapshot? endBeforeDocument,
@@ -4206,35 +4169,6 @@ class _$CategoryQuery extends QueryReference<Category, CategoryQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$CategoryFieldMap['parentCategoryId']!,
-        isEqualTo: isEqualTo,
-        isNotEqualTo: isNotEqualTo,
-        isLessThan: isLessThan,
-        isLessThanOrEqualTo: isLessThanOrEqualTo,
-        isGreaterThan: isGreaterThan,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
-        isNull: isNull,
-        whereIn: whereIn,
-        whereNotIn: whereNotIn,
-      ),
-      $queryCursor: $queryCursor,
-    );
-  }
-
-  CategoryQuery whereBudget({
-    double? isEqualTo,
-    double? isNotEqualTo,
-    double? isLessThan,
-    double? isLessThanOrEqualTo,
-    double? isGreaterThan,
-    double? isGreaterThanOrEqualTo,
-    bool? isNull,
-    List<double?>? whereIn,
-    List<double?>? whereNotIn,
-  }) {
-    return _$CategoryQuery(
-      _collection,
-      $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$CategoryFieldMap['budget']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -4611,78 +4545,6 @@ class _$CategoryQuery extends QueryReference<Category, CategoryQuerySnapshot>
     );
   }
 
-  CategoryQuery orderByBudget({
-    bool descending = false,
-    Object? startAt = _sentinel,
-    Object? startAfter = _sentinel,
-    Object? endAt = _sentinel,
-    Object? endBefore = _sentinel,
-    CategoryDocumentSnapshot? startAtDocument,
-    CategoryDocumentSnapshot? endAtDocument,
-    CategoryDocumentSnapshot? endBeforeDocument,
-    CategoryDocumentSnapshot? startAfterDocument,
-  }) {
-    final query = $referenceWithoutCursor.orderBy(_$CategoryFieldMap['budget']!,
-        descending: descending);
-    var queryCursor = $queryCursor;
-
-    if (startAtDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        startAt: const [],
-        startAtDocumentSnapshot: startAtDocument.snapshot,
-      );
-    }
-    if (startAfterDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        startAfter: const [],
-        startAfterDocumentSnapshot: startAfterDocument.snapshot,
-      );
-    }
-    if (endAtDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        endAt: const [],
-        endAtDocumentSnapshot: endAtDocument.snapshot,
-      );
-    }
-    if (endBeforeDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        endBefore: const [],
-        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
-      );
-    }
-
-    if (startAt != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
-        startAtDocumentSnapshot: null,
-      );
-    }
-    if (startAfter != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
-        startAfterDocumentSnapshot: null,
-      );
-    }
-    if (endAt != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
-        endAtDocumentSnapshot: null,
-      );
-    }
-    if (endBefore != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
-        endBeforeDocumentSnapshot: null,
-      );
-    }
-
-    return _$CategoryQuery(
-      _collection,
-      $referenceWithoutCursor: query,
-      $queryCursor: queryCursor,
-    );
-  }
-
   @override
   bool operator ==(Object other) {
     return other is _$CategoryQuery &&
@@ -4777,11 +4639,1529 @@ class CategoryQueryDocumentSnapshot
   }
 }
 
+/// A collection reference object can be used for adding documents,
+/// getting document references, and querying for documents
+/// (using the methods inherited from Query).
+abstract class BudgetCollectionReference
+    implements
+        BudgetQuery,
+        FirestoreCollectionReference<Budget, BudgetQuerySnapshot> {
+  factory BudgetCollectionReference(
+    DocumentReference<User> parent,
+  ) = _$BudgetCollectionReference;
+
+  static Budget fromFirestore(
+    DocumentSnapshot<Map<String, Object?>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    return _$BudgetFromJson({'id': snapshot.id, ...?snapshot.data()});
+  }
+
+  static Map<String, Object?> toFirestore(
+    Budget value,
+    SetOptions? options,
+  ) {
+    return {..._$BudgetToJson(value)}..remove('id');
+  }
+
+  @override
+  CollectionReference<Budget> get reference;
+
+  /// A reference to the containing [UserDocumentReference] if this is a subcollection.
+  UserDocumentReference get parent;
+
+  @override
+  BudgetDocumentReference doc([String? id]);
+
+  /// Add a new document to this collection with the specified data,
+  /// assigning it a document ID automatically.
+  Future<BudgetDocumentReference> add(Budget value);
+}
+
+class _$BudgetCollectionReference extends _$BudgetQuery
+    implements BudgetCollectionReference {
+  factory _$BudgetCollectionReference(
+    DocumentReference<User> parent,
+  ) {
+    return _$BudgetCollectionReference._(
+      UserDocumentReference(parent),
+      parent.collection('budgets').withConverter(
+            fromFirestore: BudgetCollectionReference.fromFirestore,
+            toFirestore: BudgetCollectionReference.toFirestore,
+          ),
+    );
+  }
+
+  _$BudgetCollectionReference._(
+    this.parent,
+    CollectionReference<Budget> reference,
+  ) : super(reference, $referenceWithoutCursor: reference);
+
+  @override
+  final UserDocumentReference parent;
+
+  String get path => reference.path;
+
+  @override
+  CollectionReference<Budget> get reference =>
+      super.reference as CollectionReference<Budget>;
+
+  @override
+  BudgetDocumentReference doc([String? id]) {
+    assert(
+      id == null || id.split('/').length == 1,
+      'The document ID cannot be from a different collection',
+    );
+    return BudgetDocumentReference(
+      reference.doc(id),
+    );
+  }
+
+  @override
+  Future<BudgetDocumentReference> add(Budget value) {
+    return reference.add(value).then((ref) => BudgetDocumentReference(ref));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$BudgetCollectionReference &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+abstract class BudgetDocumentReference
+    extends FirestoreDocumentReference<Budget, BudgetDocumentSnapshot> {
+  factory BudgetDocumentReference(DocumentReference<Budget> reference) =
+      _$BudgetDocumentReference;
+
+  DocumentReference<Budget> get reference;
+
+  /// A reference to the [BudgetCollectionReference] containing this document.
+  BudgetCollectionReference get parent {
+    return _$BudgetCollectionReference(
+      reference.parent.parent!.withConverter<User>(
+        fromFirestore: UserCollectionReference.fromFirestore,
+        toFirestore: UserCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<BudgetDocumentSnapshot> snapshots();
+
+  @override
+  Future<BudgetDocumentSnapshot> get([GetOptions? options]);
+
+  @override
+  Future<void> delete();
+
+  /// Updates data on the document. Data will be merged with any existing
+  /// document data.
+  ///
+  /// If no document exists yet, the update will fail.
+  Future<void> update({
+    String title,
+    FieldValue titleFieldValue,
+    List<String> categoryIds,
+    FieldValue categoryIdsFieldValue,
+    String? cronExpression,
+    FieldValue cronExpressionFieldValue,
+    DateTime? startDateTime,
+    FieldValue startDateTimeFieldValue,
+    DateTime? endDateTime,
+    FieldValue endDateTimeFieldValue,
+    double budget,
+    FieldValue budgetFieldValue,
+  });
+
+  /// Updates fields in the current document using the transaction API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void transactionUpdate(
+    Transaction transaction, {
+    String title,
+    FieldValue titleFieldValue,
+    List<String> categoryIds,
+    FieldValue categoryIdsFieldValue,
+    String? cronExpression,
+    FieldValue cronExpressionFieldValue,
+    DateTime? startDateTime,
+    FieldValue startDateTimeFieldValue,
+    DateTime? endDateTime,
+    FieldValue endDateTimeFieldValue,
+    double budget,
+    FieldValue budgetFieldValue,
+  });
+}
+
+class _$BudgetDocumentReference
+    extends FirestoreDocumentReference<Budget, BudgetDocumentSnapshot>
+    implements BudgetDocumentReference {
+  _$BudgetDocumentReference(this.reference);
+
+  @override
+  final DocumentReference<Budget> reference;
+
+  /// A reference to the [BudgetCollectionReference] containing this document.
+  BudgetCollectionReference get parent {
+    return _$BudgetCollectionReference(
+      reference.parent.parent!.withConverter<User>(
+        fromFirestore: UserCollectionReference.fromFirestore,
+        toFirestore: UserCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<BudgetDocumentSnapshot> snapshots() {
+    return reference.snapshots().map(BudgetDocumentSnapshot._);
+  }
+
+  @override
+  Future<BudgetDocumentSnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(BudgetDocumentSnapshot._);
+  }
+
+  @override
+  Future<BudgetDocumentSnapshot> transactionGet(Transaction transaction) {
+    return transaction.get(reference).then(BudgetDocumentSnapshot._);
+  }
+
+  Future<void> update({
+    Object? title = _sentinel,
+    FieldValue? titleFieldValue,
+    Object? categoryIds = _sentinel,
+    FieldValue? categoryIdsFieldValue,
+    Object? cronExpression = _sentinel,
+    FieldValue? cronExpressionFieldValue,
+    Object? startDateTime = _sentinel,
+    FieldValue? startDateTimeFieldValue,
+    Object? endDateTime = _sentinel,
+    FieldValue? endDateTimeFieldValue,
+    Object? budget = _sentinel,
+    FieldValue? budgetFieldValue,
+  }) async {
+    assert(
+      title == _sentinel || titleFieldValue == null,
+      "Cannot specify both title and titleFieldValue",
+    );
+    assert(
+      categoryIds == _sentinel || categoryIdsFieldValue == null,
+      "Cannot specify both categoryIds and categoryIdsFieldValue",
+    );
+    assert(
+      cronExpression == _sentinel || cronExpressionFieldValue == null,
+      "Cannot specify both cronExpression and cronExpressionFieldValue",
+    );
+    assert(
+      startDateTime == _sentinel || startDateTimeFieldValue == null,
+      "Cannot specify both startDateTime and startDateTimeFieldValue",
+    );
+    assert(
+      endDateTime == _sentinel || endDateTimeFieldValue == null,
+      "Cannot specify both endDateTime and endDateTimeFieldValue",
+    );
+    assert(
+      budget == _sentinel || budgetFieldValue == null,
+      "Cannot specify both budget and budgetFieldValue",
+    );
+    final json = {
+      if (title != _sentinel) _$BudgetFieldMap['title']!: title as String,
+      if (titleFieldValue != null) _$BudgetFieldMap['title']!: titleFieldValue,
+      if (categoryIds != _sentinel)
+        _$BudgetFieldMap['categoryIds']!: categoryIds as List<String>,
+      if (categoryIdsFieldValue != null)
+        _$BudgetFieldMap['categoryIds']!: categoryIdsFieldValue,
+      if (cronExpression != _sentinel)
+        _$BudgetFieldMap['cronExpression']!: cronExpression as String?,
+      if (cronExpressionFieldValue != null)
+        _$BudgetFieldMap['cronExpression']!: cronExpressionFieldValue,
+      if (startDateTime != _sentinel)
+        _$BudgetFieldMap['startDateTime']!: startDateTime as DateTime?,
+      if (startDateTimeFieldValue != null)
+        _$BudgetFieldMap['startDateTime']!: startDateTimeFieldValue,
+      if (endDateTime != _sentinel)
+        _$BudgetFieldMap['endDateTime']!: endDateTime as DateTime?,
+      if (endDateTimeFieldValue != null)
+        _$BudgetFieldMap['endDateTime']!: endDateTimeFieldValue,
+      if (budget != _sentinel) _$BudgetFieldMap['budget']!: budget as double,
+      if (budgetFieldValue != null)
+        _$BudgetFieldMap['budget']!: budgetFieldValue,
+    };
+
+    return reference.update(json);
+  }
+
+  void transactionUpdate(
+    Transaction transaction, {
+    Object? title = _sentinel,
+    FieldValue? titleFieldValue,
+    Object? categoryIds = _sentinel,
+    FieldValue? categoryIdsFieldValue,
+    Object? cronExpression = _sentinel,
+    FieldValue? cronExpressionFieldValue,
+    Object? startDateTime = _sentinel,
+    FieldValue? startDateTimeFieldValue,
+    Object? endDateTime = _sentinel,
+    FieldValue? endDateTimeFieldValue,
+    Object? budget = _sentinel,
+    FieldValue? budgetFieldValue,
+  }) {
+    assert(
+      title == _sentinel || titleFieldValue == null,
+      "Cannot specify both title and titleFieldValue",
+    );
+    assert(
+      categoryIds == _sentinel || categoryIdsFieldValue == null,
+      "Cannot specify both categoryIds and categoryIdsFieldValue",
+    );
+    assert(
+      cronExpression == _sentinel || cronExpressionFieldValue == null,
+      "Cannot specify both cronExpression and cronExpressionFieldValue",
+    );
+    assert(
+      startDateTime == _sentinel || startDateTimeFieldValue == null,
+      "Cannot specify both startDateTime and startDateTimeFieldValue",
+    );
+    assert(
+      endDateTime == _sentinel || endDateTimeFieldValue == null,
+      "Cannot specify both endDateTime and endDateTimeFieldValue",
+    );
+    assert(
+      budget == _sentinel || budgetFieldValue == null,
+      "Cannot specify both budget and budgetFieldValue",
+    );
+    final json = {
+      if (title != _sentinel) _$BudgetFieldMap['title']!: title as String,
+      if (titleFieldValue != null) _$BudgetFieldMap['title']!: titleFieldValue,
+      if (categoryIds != _sentinel)
+        _$BudgetFieldMap['categoryIds']!: categoryIds as List<String>,
+      if (categoryIdsFieldValue != null)
+        _$BudgetFieldMap['categoryIds']!: categoryIdsFieldValue,
+      if (cronExpression != _sentinel)
+        _$BudgetFieldMap['cronExpression']!: cronExpression as String?,
+      if (cronExpressionFieldValue != null)
+        _$BudgetFieldMap['cronExpression']!: cronExpressionFieldValue,
+      if (startDateTime != _sentinel)
+        _$BudgetFieldMap['startDateTime']!: startDateTime as DateTime?,
+      if (startDateTimeFieldValue != null)
+        _$BudgetFieldMap['startDateTime']!: startDateTimeFieldValue,
+      if (endDateTime != _sentinel)
+        _$BudgetFieldMap['endDateTime']!: endDateTime as DateTime?,
+      if (endDateTimeFieldValue != null)
+        _$BudgetFieldMap['endDateTime']!: endDateTimeFieldValue,
+      if (budget != _sentinel) _$BudgetFieldMap['budget']!: budget as double,
+      if (budgetFieldValue != null)
+        _$BudgetFieldMap['budget']!: budgetFieldValue,
+    };
+
+    transaction.update(reference, json);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is BudgetDocumentReference &&
+        other.runtimeType == runtimeType &&
+        other.parent == parent &&
+        other.id == id;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, parent, id);
+}
+
+abstract class BudgetQuery
+    implements QueryReference<Budget, BudgetQuerySnapshot> {
+  @override
+  BudgetQuery limit(int limit);
+
+  @override
+  BudgetQuery limitToLast(int limit);
+
+  /// Perform an order query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of order queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.orderByFieldPath(
+  ///   FieldPath.fromString('title'),
+  ///   startAt: 'title',
+  /// );
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.orderByTitle(startAt: 'title');
+  /// ```
+  BudgetQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt,
+    Object? startAfter,
+    Object? endAt,
+    Object? endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+
+  /// Perform a where query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of where queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.whereFieldPath(FieldPath.fromString('title'), isEqualTo: 'title');
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.whereTitle(isEqualTo: 'title');
+  /// ```
+  BudgetQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  });
+
+  BudgetQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  BudgetQuery whereTitle({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  BudgetQuery whereCategoryIds({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  });
+  BudgetQuery whereCronExpression({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  BudgetQuery whereStartDateTime({
+    DateTime? isEqualTo,
+    DateTime? isNotEqualTo,
+    DateTime? isLessThan,
+    DateTime? isLessThanOrEqualTo,
+    DateTime? isGreaterThan,
+    DateTime? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<DateTime?>? whereIn,
+    List<DateTime?>? whereNotIn,
+  });
+  BudgetQuery whereEndDateTime({
+    DateTime? isEqualTo,
+    DateTime? isNotEqualTo,
+    DateTime? isLessThan,
+    DateTime? isLessThanOrEqualTo,
+    DateTime? isGreaterThan,
+    DateTime? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<DateTime?>? whereIn,
+    List<DateTime?>? whereNotIn,
+  });
+  BudgetQuery whereBudget({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double>? whereIn,
+    List<double>? whereNotIn,
+  });
+
+  BudgetQuery orderByDocumentId({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+
+  BudgetQuery orderByTitle({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+
+  BudgetQuery orderByCategoryIds({
+    bool descending = false,
+    List<String> startAt,
+    List<String> startAfter,
+    List<String> endAt,
+    List<String> endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+
+  BudgetQuery orderByCronExpression({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+
+  BudgetQuery orderByStartDateTime({
+    bool descending = false,
+    DateTime? startAt,
+    DateTime? startAfter,
+    DateTime? endAt,
+    DateTime? endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+
+  BudgetQuery orderByEndDateTime({
+    bool descending = false,
+    DateTime? startAt,
+    DateTime? startAfter,
+    DateTime? endAt,
+    DateTime? endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+
+  BudgetQuery orderByBudget({
+    bool descending = false,
+    double startAt,
+    double startAfter,
+    double endAt,
+    double endBefore,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  });
+}
+
+class _$BudgetQuery extends QueryReference<Budget, BudgetQuerySnapshot>
+    implements BudgetQuery {
+  _$BudgetQuery(
+    this._collection, {
+    required Query<Budget> $referenceWithoutCursor,
+    $QueryCursor $queryCursor = const $QueryCursor(),
+  }) : super(
+          $referenceWithoutCursor: $referenceWithoutCursor,
+          $queryCursor: $queryCursor,
+        );
+
+  final CollectionReference<Object?> _collection;
+
+  @override
+  Stream<BudgetQuerySnapshot> snapshots([SnapshotOptions? options]) {
+    return reference.snapshots().map(BudgetQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  Future<BudgetQuerySnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(BudgetQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  BudgetQuery limit(int limit) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limit(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  BudgetQuery limitToLast(int limit) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limitToLast(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query =
+        $referenceWithoutCursor.orderBy(fieldPath, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BudgetQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        fieldPath,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+        isNull: isNull,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        FieldPath.documentId,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery whereTitle({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BudgetFieldMap['title']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery whereCategoryIds({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    List<String>? arrayContainsAny,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BudgetFieldMap['categoryIds']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery whereCronExpression({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BudgetFieldMap['cronExpression']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery whereStartDateTime({
+    DateTime? isEqualTo,
+    DateTime? isNotEqualTo,
+    DateTime? isLessThan,
+    DateTime? isLessThanOrEqualTo,
+    DateTime? isGreaterThan,
+    DateTime? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<DateTime?>? whereIn,
+    List<DateTime?>? whereNotIn,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BudgetFieldMap['startDateTime']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery whereEndDateTime({
+    DateTime? isEqualTo,
+    DateTime? isNotEqualTo,
+    DateTime? isLessThan,
+    DateTime? isLessThanOrEqualTo,
+    DateTime? isGreaterThan,
+    DateTime? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<DateTime?>? whereIn,
+    List<DateTime?>? whereNotIn,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BudgetFieldMap['endDateTime']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery whereBudget({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double>? whereIn,
+    List<double>? whereNotIn,
+  }) {
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BudgetFieldMap['budget']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BudgetQuery orderByDocumentId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BudgetQuery orderByTitle({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$BudgetFieldMap['title']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BudgetQuery orderByCategoryIds({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BudgetFieldMap['categoryIds']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BudgetQuery orderByCronExpression({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BudgetFieldMap['cronExpression']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BudgetQuery orderByStartDateTime({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BudgetFieldMap['startDateTime']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BudgetQuery orderByEndDateTime({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BudgetFieldMap['endDateTime']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BudgetQuery orderByBudget({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BudgetDocumentSnapshot? startAtDocument,
+    BudgetDocumentSnapshot? endAtDocument,
+    BudgetDocumentSnapshot? endBeforeDocument,
+    BudgetDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$BudgetFieldMap['budget']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BudgetQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$BudgetQuery &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+class BudgetDocumentSnapshot extends FirestoreDocumentSnapshot<Budget> {
+  BudgetDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final DocumentSnapshot<Budget> snapshot;
+
+  @override
+  BudgetDocumentReference get reference {
+    return BudgetDocumentReference(
+      snapshot.reference,
+    );
+  }
+
+  @override
+  final Budget? data;
+}
+
+class BudgetQuerySnapshot
+    extends FirestoreQuerySnapshot<Budget, BudgetQueryDocumentSnapshot> {
+  BudgetQuerySnapshot._(
+    this.snapshot,
+    this.docs,
+    this.docChanges,
+  );
+
+  factory BudgetQuerySnapshot._fromQuerySnapshot(
+    QuerySnapshot<Budget> snapshot,
+  ) {
+    final docs = snapshot.docs.map(BudgetQueryDocumentSnapshot._).toList();
+
+    final docChanges = snapshot.docChanges.map((change) {
+      return _decodeDocumentChange(
+        change,
+        BudgetDocumentSnapshot._,
+      );
+    }).toList();
+
+    return BudgetQuerySnapshot._(
+      snapshot,
+      docs,
+      docChanges,
+    );
+  }
+
+  static FirestoreDocumentChange<BudgetDocumentSnapshot>
+      _decodeDocumentChange<T>(
+    DocumentChange<T> docChange,
+    BudgetDocumentSnapshot Function(DocumentSnapshot<T> doc) decodeDoc,
+  ) {
+    return FirestoreDocumentChange<BudgetDocumentSnapshot>(
+      type: docChange.type,
+      oldIndex: docChange.oldIndex,
+      newIndex: docChange.newIndex,
+      doc: decodeDoc(docChange.doc),
+    );
+  }
+
+  final QuerySnapshot<Budget> snapshot;
+
+  @override
+  final List<BudgetQueryDocumentSnapshot> docs;
+
+  @override
+  final List<FirestoreDocumentChange<BudgetDocumentSnapshot>> docChanges;
+}
+
+class BudgetQueryDocumentSnapshot extends FirestoreQueryDocumentSnapshot<Budget>
+    implements BudgetDocumentSnapshot {
+  BudgetQueryDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final QueryDocumentSnapshot<Budget> snapshot;
+
+  @override
+  final Budget data;
+
+  @override
+  BudgetDocumentReference get reference {
+    return BudgetDocumentReference(snapshot.reference);
+  }
+}
+
 // **************************************************************************
 // ValidatorGenerator
 // **************************************************************************
 
-void _$assertCategory(Category instance) {
+void _$assertBudget(Budget instance) {
   const Min(0).validate(instance.budget, 'budget');
 }
 
@@ -4828,7 +6208,6 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
       transactionType: json['transactionType'] as String,
       categoryReason: json['categoryReason'] as String?,
       parentCategoryId: json['parentCategoryId'] as String?,
-      budget: (json['budget'] as num?)?.toDouble(),
     );
 
 const _$CategoryFieldMap = <String, String>{
@@ -4837,7 +6216,6 @@ const _$CategoryFieldMap = <String, String>{
   'transactionType': 'transactionType',
   'categoryReason': 'categoryReason',
   'parentCategoryId': 'parentCategoryId',
-  'budget': 'budget',
 };
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
@@ -4846,8 +6224,55 @@ Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'transactionType': instance.transactionType,
       'categoryReason': instance.categoryReason,
       'parentCategoryId': instance.parentCategoryId,
+    };
+
+Budget _$BudgetFromJson(Map<String, dynamic> json) => Budget(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      categoryIds: (json['categoryIds'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      cronExpression: json['cronExpression'] as String?,
+      startDateTime: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['startDateTime'], const FirestoreDateTimeConverter().fromJson),
+      endDateTime: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['endDateTime'], const FirestoreDateTimeConverter().fromJson),
+      budget: (json['budget'] as num).toDouble(),
+    );
+
+const _$BudgetFieldMap = <String, String>{
+  'id': 'id',
+  'title': 'title',
+  'categoryIds': 'categoryIds',
+  'cronExpression': 'cronExpression',
+  'startDateTime': 'startDateTime',
+  'endDateTime': 'endDateTime',
+  'budget': 'budget',
+};
+
+Map<String, dynamic> _$BudgetToJson(Budget instance) => <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'categoryIds': instance.categoryIds,
+      'cronExpression': instance.cronExpression,
+      'startDateTime': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.startDateTime, const FirestoreDateTimeConverter().toJson),
+      'endDateTime': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.endDateTime, const FirestoreDateTimeConverter().toJson),
       'budget': instance.budget,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 ValueTransaction _$ValueTransactionFromJson(Map<String, dynamic> json) =>
     ValueTransaction(

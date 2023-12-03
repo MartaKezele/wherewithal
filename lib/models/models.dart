@@ -8,7 +8,7 @@ part 'models.g.dart';
 
 @firestoreSerializable
 class User {
-  User( {
+  User({
     required this.id,
     required this.uid,
     this.fcmToken,
@@ -34,10 +34,7 @@ class Category {
     required this.transactionType,
     this.categoryReason,
     this.parentCategoryId,
-    this.budget,
-  }) {
-    _$assertCategory(this);
-  }
+  });
 
   @Id()
   final String id;
@@ -45,12 +42,42 @@ class Category {
   final String transactionType;
   final String? categoryReason;
   final String? parentCategoryId;
-  @Min(0)
-  final double? budget;
 
   @override
   bool operator ==(Object other) =>
       other is Category && other.runtimeType == runtimeType && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
+}
+
+@firestoreSerializable
+class Budget {
+  Budget({
+    required this.id,
+    required this.title,
+    required this.categoryIds,
+    this.cronExpression,
+    this.startDateTime,
+    this.endDateTime,
+    required this.budget,
+  }) {
+    _$assertBudget(this);
+  }
+
+  @Id()
+  final String id;
+  final String title;
+  final List<String> categoryIds;
+  final String? cronExpression;
+  final DateTime? startDateTime;
+  final DateTime? endDateTime;
+  @Min(0)
+  final double budget;
+
+  @override
+  bool operator ==(Object other) =>
+      other is Budget && other.runtimeType == runtimeType && other.id == id;
 
   @override
   int get hashCode => id.hashCode;
@@ -118,5 +145,8 @@ class ValueTransaction {
 )
 @Collection<Category>(
   '${FirestoreCollections.users}/*/${FirestoreCollections.categories}',
+)
+@Collection<Budget>(
+  '${FirestoreCollections.users}/*/${FirestoreCollections.budgets}',
 )
 final usersRef = UserCollectionReference();

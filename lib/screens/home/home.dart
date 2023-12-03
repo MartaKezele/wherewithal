@@ -11,6 +11,7 @@ import '../../change_notifiers/auth.dart';
 import '../../components/animated_branch_container.dart';
 import '../../components/bottom_sheets/add_bottom_sheet.dart';
 import '../../components/dialogs/scrollable_form_dialog.dart';
+import '../../components/form/budget_form.dart';
 import '../../components/form/category_form.dart';
 import '../../components/form/value_transaction_form.dart';
 import '../../config/keys/shared_prefs.dart';
@@ -44,6 +45,9 @@ class _HomeState extends State<Home> {
   final _addTransactionFormKey = GlobalKey<ValueTransactionFormState>();
   final _addTransactionFormStateKey = GlobalKey<FormState>();
 
+  final _addBudgetFormKey = GlobalKey<BudgetFormState>();
+  final _addBudgetFormStateKey = GlobalKey<FormState>();
+
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   OverlayEntry? _resultBanner;
@@ -60,6 +64,7 @@ class _HomeState extends State<Home> {
         addIncome: () => _addValueTransaction(
           transactionType: TransactionTypes.income,
         ),
+        addBudget: _addBudget,
       ),
     );
   }
@@ -109,6 +114,30 @@ class _HomeState extends State<Home> {
       },
       submitBtnText: AppLocalizations.of(context).save,
       formKey: _addTransactionFormStateKey,
+    ).then((result) {
+      if (result != null) {
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          result,
+        );
+      }
+    });
+  }
+
+  void _addBudget() async {
+    await showScrollableFormDialog(
+      context: context,
+      title: AppLocalizations.of(context).addBudget,
+      form: BudgetForm(
+        key: _addBudgetFormKey,
+        formKey: _addBudgetFormStateKey,
+      ),
+      formKey: _addBudgetFormStateKey,
+      onSubmit: () {
+        assert(_addBudgetFormKey.currentState != null);
+        return _addBudgetFormKey.currentState!.addBudget();
+      },
+      submitBtnText: AppLocalizations.of(context).save,
     ).then((result) {
       if (result != null) {
         _resultBanner = showActionResultOverlayBanner(

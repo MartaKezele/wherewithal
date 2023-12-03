@@ -11,7 +11,7 @@ class Screen extends StatelessWidget {
     this.floatingActionButtonLocation,
   });
 
-  final AppBar? appBar;
+  final PreferredSizeWidget? appBar;
   final Widget body;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;

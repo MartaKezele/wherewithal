@@ -7,25 +7,22 @@ import '../../../app_models/action_result.dart';
 import '../../../change_notifiers/auth.dart';
 import '../../../components/dialogs/confirm_dialog.dart';
 import '../../../components/error_content.dart';
-import '../../../components/form/value_transaction_form.dart';
+import '../../../components/form/budget_form.dart';
 import '../../../components/loading_content.dart';
 import '../../../components/no_data_content.dart';
 import '../../../constants/icon_size.dart';
 import '../../../constants/padding_size.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
-import '../../../constants/styles/outlined_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/models.dart' as models;
 import '../../../utils/form.dart';
 import '../../../utils/overlay_banner.dart';
-import '../../../extensions/button/button_style_button.dart';
 import '../../../extensions/button/filled_button.dart';
-import '../../../utils/value_transaction.dart';
-import '../../../extensions/button/outlined_button.dart';
+import '../../../extensions/button/button_style_button.dart';
 
-class ValueTransactionView extends StatefulWidget {
-  const ValueTransactionView({
+class BudgetView extends StatefulWidget {
+  const BudgetView({
     super.key,
     required this.id,
   });
@@ -33,20 +30,19 @@ class ValueTransactionView extends StatefulWidget {
   final String id;
 
   @override
-  State<ValueTransactionView> createState() => _ValueTransactionViewState();
+  State<BudgetView> createState() => _BudgetViewState();
 }
 
-class _ValueTransactionViewState extends State<ValueTransactionView> {
-  final _updateValueTransactionFormKey = GlobalKey<ValueTransactionFormState>();
-  final _updateValueTransactionFormStateKey = GlobalKey<FormState>();
-  final _addTransactionFormKey = GlobalKey<ValueTransactionFormState>();
-  final _addTransactionFormStateKey = GlobalKey<FormState>();
+class _BudgetViewState extends State<BudgetView> {
+  final _updateBudgetFormKey = GlobalKey<BudgetFormState>();
+  final _updateBudgetFormStateKey = GlobalKey<FormState>();
+  final _scrollController = ScrollController();
 
   bool _deleting = false;
   bool _updating = false;
   OverlayEntry? _resultBanner;
 
-  Future<void> _delete(String? transactionTitle) async {
+  Future<void> _delete(String? budgetTitle) async {
     final localizations = AppLocalizations.of(context);
 
     setState(() {
@@ -56,7 +52,7 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
     try {
       models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
-          .valueTransactions
+          .budgets
           .doc(widget.id)
           .delete()
           .then((_) {
@@ -67,9 +63,9 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
           context,
           ActionResult(
             success: true,
-            messageTitle: transactionTitle != null
-                ? localizations.deletedTransactionWithTitle(transactionTitle)
-                : localizations.deletedTransaction,
+            messageTitle: budgetTitle != null
+                ? localizations.deletedBudgetWithTitle(budgetTitle)
+                : localizations.deletedBudget,
           ),
         );
         context.pop();
@@ -82,10 +78,9 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
         context,
         ActionResult(
           success: false,
-          messageTitle: transactionTitle != null
-              ? localizations
-                  .couldNotDeleteTransactionWithTitle(transactionTitle)
-              : localizations.couldNotCreateTransaction,
+          messageTitle: budgetTitle != null
+              ? localizations.couldNotDeleteBudgetWithTitle(budgetTitle)
+              : localizations.couldNotCreateBudget,
         ),
       );
     }
@@ -96,9 +91,7 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
       _updating = true;
     });
 
-    await _updateValueTransactionFormKey.currentState
-        ?.updateValueTransaction()
-        .then((result) {
+    await _updateBudgetFormKey.currentState?.updateBudget().then((result) {
       setState(() {
         _updating = false;
       });
@@ -123,7 +116,7 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
     return FirestoreBuilder(
       ref: models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
-          .valueTransactions
+          .budgets
           .doc(widget.id),
       builder: (
         context,
@@ -143,9 +136,9 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
           return LoadingContent(color: fgColor);
         }
 
-        final valueTransaction = snapshot.requireData.data;
+        final budget = snapshot.requireData.data;
 
-        if (valueTransaction == null) {
+        if (budget == null) {
           return Scaffold(
             appBar: AppBar(
               title: Text(localizations.noData),
@@ -156,17 +149,18 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
 
         return Scaffold(
           appBar: AppBar(
-            title:
-                Text(valueTransaction.title ?? valueTransaction.categoryTitle),
+            title: Text(budget.title),
             actions: [
               IconButton(
                 color: deleteColor,
                 onPressed: () => showConfirmDialog(
                     context: context,
                     title: localizations.areYouSure,
+                    description: Text(localizations
+                        .deleteBudgetConfirmationMsg(budget.title)),
                     onOkPressed: () {
                       context.pop();
-                      _delete(valueTransaction.title);
+                      _delete(budget.title);
                     }),
                 icon: _deleting
                     ? SizedBox(
@@ -184,6 +178,7 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
           ),
           backgroundColor: bgColor,
           body: SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
               children: [
                 Column(
@@ -199,15 +194,15 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
                       color: Theme.of(context).colorScheme.background,
                       child: Column(
                         children: [
-                          ValueTransactionForm(
-                            key: _updateValueTransactionFormKey,
-                            formKey: _updateValueTransactionFormStateKey,
-                            valueTransaction: valueTransaction,
+                          BudgetForm(
+                            key: _updateBudgetFormKey,
+                            formKey: _updateBudgetFormStateKey,
+                            budget: budget,
                           ),
-                          HeightSpacer.xs,
+                          HeightSpacer.lg,
                           FilledButton(
                             onPressed: () => executeFnIfFormValid(
-                              formKey: _updateValueTransactionFormStateKey,
+                              formKey: _updateBudgetFormStateKey,
                               fn: _update,
                             ),
                             child: Text(localizations.save),
@@ -218,48 +213,6 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
                                 isLoading: _updating,
                                 colorStyle: FilledButtonStyles.primaryContainer,
                               ),
-                          if (valueTransaction.cronExpression != null)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: PaddingSize.xs,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      addValueTransaction(
-                                        context: context,
-                                        addTransactionFormKey:
-                                            _addTransactionFormKey,
-                                        addTransactionFormStateKey:
-                                            _addTransactionFormStateKey,
-                                        valueTransaction:
-                                            models.ValueTransaction(
-                                          id: '',
-                                          title: valueTransaction.title,
-                                          dateTime: DateTime.now(),
-                                          value: valueTransaction.value,
-                                          categoryId:
-                                              valueTransaction.categoryId,
-                                          categoryTitle:
-                                              valueTransaction.categoryTitle,
-                                          categoryTransactionType:
-                                              valueTransaction
-                                                  .categoryTransactionType,
-                                          categoryReason:
-                                              valueTransaction.categoryReason,
-                                          parentCategoryId:
-                                              valueTransaction.parentCategoryId,
-                                        ),
-                                        allowRecurring: false,
-                                      );
-                                    },
-                                    child: Text(localizations.add),
-                                  ).colorStyle(OutlinedButtonStyles.primary),
-                                ],
-                              ),
-                            ),
                         ],
                       ),
                     ),

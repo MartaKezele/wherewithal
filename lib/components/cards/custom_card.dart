@@ -2,26 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../../constants/padding_size.dart';
 import '../../constants/spacers.dart';
-import '../../constants/styles/container.dart';
+import '../../constants/themes/card.dart';
 
-class AnalyticsCard extends StatelessWidget {
-  const AnalyticsCard({
+class CustomCard extends StatelessWidget {
+  const CustomCard({
     super.key,
     required this.title,
     required this.child,
+    this.showDivider = true,
+    this.showSpacer = true,
   });
 
   final String title;
   final Widget child;
+  final bool showDivider;
+  final bool showSpacer;
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = Theme.of(context).colorScheme.surfaceVariant;
-    final foregroundColor = Theme.of(context).colorScheme.onSurfaceVariant;
-
     return Card(
-      shape: containerShape,
-      color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(PaddingSize.sm),
         child: Column(
@@ -33,14 +32,15 @@ class AnalyticsCard extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
-                    ?.copyWith(color: foregroundColor),
+                    ?.copyWith(color: cardForegroundColor(context)),
               ),
             ),
             HeightSpacer.xxs,
-            Divider(
-              color: foregroundColor,
-            ),
-            HeightSpacer.sm,
+            if (showDivider)
+              Divider(
+                color: cardForegroundColor(context),
+              ),
+            if (showSpacer) HeightSpacer.sm,
             child,
           ],
         ),

@@ -5,7 +5,7 @@ import '../../change_notifiers/currency.dart';
 import '../../config/fraction_digits.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/enums/transaction_types.dart';
-import 'analytics_card.dart';
+import 'custom_card.dart';
 
 class CashFlowCard extends StatelessWidget with GetItMixin {
   CashFlowCard({
@@ -39,7 +39,7 @@ class CashFlowCard extends StatelessWidget with GetItMixin {
       percentageOfIncomeSpent = (expense / income) * 100;
     }
 
-    return AnalyticsCard(
+    return CustomCard(
       title: localizations.cashFlow,
       child: Column(
         children: [

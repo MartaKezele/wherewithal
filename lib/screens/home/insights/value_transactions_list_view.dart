@@ -92,7 +92,7 @@ class ValueTransactionsListView extends StatelessWidget with GetItMixin {
                 valueTransaction.cronExpression != null
                     ? CronRecurrenceInterval.fromCronExpression(
                           valueTransaction.cronExpression!,
-                        ).localizedMessage(context) ??
+                        ).repeatsLocalizedMessage(context) ??
                         ''
                     : dateFormat?.format(valueTransaction.dateTime) ?? '',
               ),

@@ -12,12 +12,12 @@ import '../../constants/styles/text_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/chart/chart_section_color.dart';
 import '../charts/pie_chart_legend_list_tile.dart';
-import '../custom_expansion_panel.dart';
-import 'analytics_card.dart';
+import '../expandable_container.dart';
+import 'custom_card.dart';
 import '../../extensions/button/text_button.dart';
 
-class ValueTransactionsByCategoryCard extends StatefulWidget
-    with GetItStatefulWidgetMixin {
+class ValueTransactionsByCategoryCard extends StatelessWidget
+    with GetItMixin {
   ValueTransactionsByCategoryCard({
     super.key,
     required this.title,
@@ -41,15 +41,6 @@ class ValueTransactionsByCategoryCard extends StatefulWidget
   final double parentSectionTotalValue;
 
   @override
-  State<ValueTransactionsByCategoryCard> createState() =>
-      _ValueTransactionsByCategoryCardState();
-}
-
-class _ValueTransactionsByCategoryCardState
-    extends State<ValueTransactionsByCategoryCard> with GetItStateMixin {
-  bool _isExpanded = false;
-
-  @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
@@ -58,28 +49,28 @@ class _ValueTransactionsByCategoryCardState
           changeNotifier.currency?.symbol,
     );
 
-    final legendListTiles = widget.sections
+    final legendListTiles = sections
         .asMap()
         .map(
           (index, section) => MapEntry(
             index,
             PieChartLegendListTile(
-              selected: section == widget.selectedSection,
+              selected: section == selectedSection,
               title: section.legendTitle,
               subtitle:
                   '${section.value.toStringAsFixed(priceFractionDigits)} $currency',
               trailing:
                   '${section.percentage.toStringAsFixed(priceFractionDigits)}%',
               legendColor: chartSectionColorFromIndex(index),
-              onTap: () => widget.onLegendItemClicked(section),
+              onTap: () => onLegendItemClicked(section),
             ),
           ),
         )
         .values
         .toList();
 
-    return AnalyticsCard(
-      title: widget.title,
+    return CustomCard(
+      title: title,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -87,11 +78,11 @@ class _ValueTransactionsByCategoryCardState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.parentSectionTitle,
+                parentSectionTitle,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               Text(
-                '${widget.parentSectionTotalValue.toStringAsFixed(priceFractionDigits)} $currency',
+                '${parentSectionTotalValue.toStringAsFixed(priceFractionDigits)} $currency',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w900,
                     ),
@@ -104,8 +95,8 @@ class _ValueTransactionsByCategoryCardState
             height: pieChartSize(context),
             child: PieChart(
               PieChartData(
-                sections: widget.sections.isNotEmpty
-                    ? widget.sections
+                sections: sections.isNotEmpty
+                    ? sections
                         .asMap()
                         .map((index, section) {
                           return MapEntry(
@@ -114,7 +105,7 @@ class _ValueTransactionsByCategoryCardState
                               value: section.value,
                               color: chartSectionColorFromIndex(index),
                               showTitle: false,
-                              radius: section == widget.selectedSection
+                              radius: section == selectedSection
                                   ? selectedSectionRadius
                                   : unselectedSectionRadius,
                             ),
@@ -135,7 +126,7 @@ class _ValueTransactionsByCategoryCardState
               ),
             ),
           ),
-          if (widget.goBackFn != null || widget.moreDetailsFn != null)
+          if (goBackFn != null || moreDetailsFn != null)
             Padding(
               padding: const EdgeInsets.only(
                 top: PaddingSize.xxs,
@@ -143,15 +134,15 @@ class _ValueTransactionsByCategoryCardState
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (widget.goBackFn != null)
+                  if (goBackFn != null)
                     TextButton.icon(
-                      onPressed: widget.goBackFn,
+                      onPressed: goBackFn,
                       icon: const Icon(Icons.arrow_back),
                       label: Text(localizations.goBack),
                     ).colorStyle(TextButtonStyles.surfaceVariant),
-                  if (widget.moreDetailsFn != null)
+                  if (moreDetailsFn != null)
                     TextButton.icon(
-                      onPressed: widget.moreDetailsFn,
+                      onPressed: moreDetailsFn,
                       icon: Text(localizations.moreDetails),
                       label: const Icon(Icons.arrow_forward),
                     ).colorStyle(TextButtonStyles.surfaceVariant),
@@ -159,7 +150,7 @@ class _ValueTransactionsByCategoryCardState
               ),
             ),
           HeightSpacer.xxs,
-          if (widget.sections.isEmpty)
+          if (sections.isEmpty)
             Padding(
               padding: const EdgeInsets.only(
                 top: PaddingSize.sm,
@@ -171,39 +162,9 @@ class _ValueTransactionsByCategoryCardState
                 textAlign: TextAlign.center,
               ),
             ),
-          if (widget.sections.isNotEmpty)
-            CustomExpansionPanelList(
-              expandedHeaderPadding: const EdgeInsets.all(0),
-              expansionCallback: (_, isExpanded) {
-                setState(() {
-                  _isExpanded = isExpanded;
-                });
-              },
-              elevation: 0.0,
-              expandIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-              children: [
-                CustomExpansionPanel(
-                  backgroundColor: Colors.transparent,
-                  isExpanded: _isExpanded,
-                  showExpansionIcon:
-                      legendListTiles.length <= numberOfShowcasedSections
-                          ? false
-                          : true,
-                  headerBuilder: (context, isExpanded) {
-                    return Column(
-                      children: legendListTiles
-                          .take(numberOfShowcasedSections)
-                          .toList(),
-                    );
-                  },
-                  body: Column(
-                    children: legendListTiles.length <=
-                            numberOfShowcasedSections
-                        ? []
-                        : legendListTiles.sublist(numberOfShowcasedSections),
-                  ),
-                ),
-              ],
+          if (sections.isNotEmpty)
+            ExpandableContainer(
+              widgets: legendListTiles,
             ),
         ],
       ),
