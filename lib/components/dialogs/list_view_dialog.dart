@@ -5,6 +5,7 @@ import '../../constants/padding_size.dart';
 import '../../constants/styles/container.dart';
 import '../../constants/styles/text_button.dart';
 import '../../extensions/button/text_button.dart';
+import '../../l10n/app_localizations.dart';
 
 Future<T?> showListViewDialog<T>({
   required BuildContext context,
@@ -44,7 +45,7 @@ Future<T?> showListViewDialog<T>({
                 TextButton(
                   onPressed: () => context.pop(),
                   child: Text(
-                    MaterialLocalizations.of(context).cancelButtonLabel,
+                    AppLocalizations.of(context).cancel,
                   ),
                 ).colorStyle(TextButtonStyles.surface)
               ],

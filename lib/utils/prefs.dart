@@ -5,7 +5,7 @@ Future<String?> fetchStringPref(String key) async {
   return prefs.getString(key);
 }
 
-void writeStringPref(String key, String value) async {
+Future<void> writeStringPref(String key, String value) async {
   final prefs = await SharedPreferences.getInstance();
   prefs.setString(
     key,

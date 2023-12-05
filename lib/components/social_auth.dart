@@ -36,10 +36,10 @@ class _SocialAuthState extends State<SocialAuth> {
         .authRepo
         .continueWithGoogle()
         .then((result) {
-      setState(() {
-        _loading = false;
-      });
       if (!result.success) {
+        setState(() {
+          _loading = false;
+        });
         _resultBanner = showActionResultOverlayBanner(context, result);
       }
     });

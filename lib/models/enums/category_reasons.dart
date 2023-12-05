@@ -20,9 +20,9 @@ enum CategoryReasons {
 
   String localizedName(BuildContext context) {
     return switch (this) {
-      CategoryReasons.need => AppLocalizations.of(context).need,
-      CategoryReasons.want => AppLocalizations.of(context).want,
-      CategoryReasons.investment => AppLocalizations.of(context).investment,
+      need => AppLocalizations.of(context).need,
+      want => AppLocalizations.of(context).want,
+      investment => AppLocalizations.of(context).investment,
     };
   }
 }

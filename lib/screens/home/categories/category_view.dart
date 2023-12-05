@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app_models/action_result.dart';
 import '../../../change_notifiers/auth.dart';
-import '../../../components/categories_list_view.dart';
+import 'categories_list_view.dart';
 import '../../../components/dialogs/confirm_dialog.dart';
 import '../../../components/dialogs/scrollable_form_dialog.dart';
 import '../../../components/error_content.dart';
@@ -106,7 +106,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
   }
 
   void _showCreateSubcategoryDialog(models.Category parentCategory) async {
-    await showScrollableFormDialog<ActionResult>(
+    await showScrollableFormDialog(
       context: context,
       title: AppLocalizations.of(context).addSubcategory,
       form: CategoryForm(
@@ -122,7 +122,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
       ),
       formKey: _addSubcategoryFormStateKey,
       onSubmit: _createSubcategory,
-      submitBtnText: MaterialLocalizations.of(context).saveButtonLabel,
+      submitBtnText: AppLocalizations.of(context).save,
     ).then((result) {
       if (result != null) {
         _resultBanner = showActionResultOverlayBanner(
@@ -147,15 +147,15 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
     final bgColor = Theme.of(context).colorScheme.surfaceVariant;
     final fgColor = Theme.of(context).colorScheme.onSurfaceVariant;
 
-    return FirestoreBuilder<models.CategoryDocumentSnapshot>(
+    return FirestoreBuilder(
       ref: models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
           .categories
           .doc(widget.id),
       builder: (
         context,
-        AsyncSnapshot<models.CategoryDocumentSnapshot> snapshot,
-        Widget? child,
+        snapshot,
+        child,
       ) {
         if (snapshot.hasError) {
           return Scaffold(
@@ -196,7 +196,8 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
                 onPressed: () => showConfirmDialog(
                     context: context,
                     title: localizations.areYouSure,
-                    description: localizations.deleteCategoryConfirmationMsg,
+                    description:
+                        Text(localizations.deleteCategoryConfirmationMsg),
                     onOkPressed: () {
                       context.pop();
                       _delete(category.title);
@@ -258,9 +259,7 @@ class _CategoryViewState extends State<CategoryView> with GetItStateMixin {
                               formKey: _updateCategoryFormStateKey,
                               fn: _update,
                             ),
-                            child: Text(
-                              MaterialLocalizations.of(context).saveButtonLabel,
-                            ),
+                            child: Text(localizations.save),
                           )
                               .colorStyle(FilledButtonStyles.primaryContainer)
                               .loadingBtn(

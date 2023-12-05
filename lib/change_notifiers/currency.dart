@@ -16,7 +16,6 @@ class CurrencyChangeNotifier extends ChangeNotifier {
     writeStringPref(
       SharedPrefsKeys.currency,
       value?.code ?? '',
-    );
-    notifyListeners();
+    ).then((_) => notifyListeners());
   }
 }

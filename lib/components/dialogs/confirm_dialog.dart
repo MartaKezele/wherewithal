@@ -6,13 +6,16 @@ import '../../constants/spacers.dart';
 import '../../constants/styles/container.dart';
 import '../../constants/styles/text_button.dart';
 import '../../extensions/button/text_button.dart';
+import '../../l10n/app_localizations.dart';
 
 Future<T?> showConfirmDialog<T>({
   required BuildContext context,
   required String title,
-  String? description,
+  Widget? description,
   final void Function()? onOkPressed,
 }) {
+  final localizations = AppLocalizations.of(context);
+
   return showDialog<T>(
     context: context,
     builder: (BuildContext context) {
@@ -28,7 +31,13 @@ Future<T?> showConfirmDialog<T>({
             ),
             child: Column(
               children: [
-                if (description != null) Text(description),
+                if (description != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: PaddingSize.xs,
+                    ),
+                    child: description,
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -37,14 +46,14 @@ Future<T?> showConfirmDialog<T>({
                         context.pop();
                       },
                       child: Text(
-                        MaterialLocalizations.of(context).cancelButtonLabel,
+                        localizations.cancel,
                       ),
                     ).colorStyle(TextButtonStyles.surface),
                     WidthSpacer.sm,
                     TextButton(
                       onPressed: onOkPressed,
                       child: Text(
-                        MaterialLocalizations.of(context).okButtonLabel,
+                        localizations.ok,
                       ),
                     ).colorStyle(TextButtonStyles.surface),
                   ],

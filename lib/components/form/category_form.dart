@@ -19,10 +19,12 @@ class CategoryForm extends StatefulWidget {
     this.category,
     required this.formKey,
     this.disableTransactionTypeField = false,
+    this.transactionType,
   });
 
   final models.Category? category;
   final GlobalKey<FormState> formKey;
+  final TransactionTypes? transactionType;
   final bool disableTransactionTypeField;
 
   @override
@@ -31,7 +33,6 @@ class CategoryForm extends StatefulWidget {
 
 class CategoryFormState extends State<CategoryForm> {
   late final TextEditingController _titleController;
-  late final TextEditingController _budgetController;
 
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<CategoryReasons> _selectedCategoryReasons = [];
@@ -43,9 +44,10 @@ class CategoryFormState extends State<CategoryForm> {
       id: widget.category?.id ?? '',
       title: _titleController.text.trim(),
       transactionType: _selectedTransactionTypes.first.name,
-      categoryReason: _selectedCategoryReasons.first.name,
+      categoryReason: _selectedCategoryReasons.isEmpty
+          ? null
+          : _selectedCategoryReasons.first.name,
       parentCategoryId: widget.category?.parentCategoryId,
-      budget: double.tryParse(_budgetController.text),
     );
   }
 
@@ -53,8 +55,6 @@ class CategoryFormState extends State<CategoryForm> {
     final localizations = AppLocalizations.of(context);
     final category = categoryInfo();
 
-    // TODO we need to update category info in all transactions
-    // using cloud functions
     try {
       await models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
@@ -64,7 +64,6 @@ class CategoryFormState extends State<CategoryForm> {
             title: category.title,
             transactionType: category.transactionType,
             categoryReason: category.categoryReason,
-            budget: category.budget,
           );
 
       return ActionResult(
@@ -106,8 +105,14 @@ class CategoryFormState extends State<CategoryForm> {
         widget.category!.transactionType,
       );
       if (transactionType != null) {
-        _selectedTransactionTypes = [transactionType];
+        setState(() {
+          _selectedTransactionTypes = [transactionType];
+        });
       }
+    } else if (widget.transactionType != null) {
+      setState(() {
+        _selectedTransactionTypes = [widget.transactionType!];
+      });
     }
   }
 
@@ -125,12 +130,6 @@ class CategoryFormState extends State<CategoryForm> {
   @override
   void initState() {
     _titleController = TextEditingController(text: widget.category?.title);
-    _budgetController = TextEditingController(
-      text: widget.category?.budget != null
-          ? widget.category!.budget.toString()
-          : null,
-    );
-
     super.initState();
   }
 
@@ -145,7 +144,6 @@ class CategoryFormState extends State<CategoryForm> {
   @override
   void dispose() {
     _titleController.dispose();
-    _budgetController.dispose();
     super.dispose();
   }
 
@@ -185,14 +183,7 @@ class CategoryFormState extends State<CategoryForm> {
             AppLocalizations.of(context),
           ),
         ),
-        TextFormField(
-          controller: _budgetController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            label: Text(localizations.budget),
-          ),
-        ),
-        CustomDropdown<TransactionTypes>(
+        CustomDropdown(
           options: transactionTypeOptions,
           selectedOptions: _selectedTransactionTypes
               .map((transactionType) =>
@@ -206,11 +197,12 @@ class CategoryFormState extends State<CategoryForm> {
             });
           },
           title: localizations.transactionType,
+          required: true,
         ),
         Visibility(
           visible: _selectedTransactionTypes.isNotEmpty &&
               _selectedTransactionTypes.first == TransactionTypes.expense,
-          child: CustomDropdown<CategoryReasons>(
+          child: CustomDropdown(
             options: categoryReasonOptions,
             selectedOptions: _selectedCategoryReasons
                 .map((categoryReason) => CustomDropdownEntry(

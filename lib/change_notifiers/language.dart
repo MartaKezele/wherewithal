@@ -16,11 +16,11 @@ class LanguageChangeNotifier extends ChangeNotifier {
     writeStringPref(
       SharedPrefsKeys.languageCode,
       value?.locale.languageCode ?? '',
-    );
-    writeStringPref(
-      SharedPrefsKeys.countryCode,
-      value?.locale.countryCode ?? '',
-    );
-    notifyListeners();
+    ).then((_) {
+      writeStringPref(
+        SharedPrefsKeys.countryCode,
+        value?.locale.countryCode ?? '',
+      ).then((_) => notifyListeners());
+    });
   }
 }

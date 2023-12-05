@@ -14,12 +14,15 @@ import '../../../constants/icon_size.dart';
 import '../../../constants/padding_size.dart';
 import '../../../constants/spacers.dart';
 import '../../../constants/styles/filled_button.dart';
+import '../../../constants/styles/outlined_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/models.dart' as models;
 import '../../../utils/form.dart';
 import '../../../utils/overlay_banner.dart';
 import '../../../extensions/button/button_style_button.dart';
 import '../../../extensions/button/filled_button.dart';
+import '../../../utils/value_transaction.dart';
+import '../../../extensions/button/outlined_button.dart';
 
 class ValueTransactionView extends StatefulWidget {
   const ValueTransactionView({
@@ -36,6 +39,8 @@ class ValueTransactionView extends StatefulWidget {
 class _ValueTransactionViewState extends State<ValueTransactionView> {
   final _updateValueTransactionFormKey = GlobalKey<ValueTransactionFormState>();
   final _updateValueTransactionFormStateKey = GlobalKey<FormState>();
+  final _addTransactionFormKey = GlobalKey<ValueTransactionFormState>();
+  final _addTransactionFormStateKey = GlobalKey<FormState>();
 
   bool _deleting = false;
   bool _updating = false;
@@ -115,15 +120,15 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
     final bgColor = Theme.of(context).colorScheme.surfaceVariant;
     final fgColor = Theme.of(context).colorScheme.onSurfaceVariant;
 
-    return FirestoreBuilder<models.ValueTransactionDocumentSnapshot>(
+    return FirestoreBuilder(
       ref: models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
           .valueTransactions
           .doc(widget.id),
       builder: (
         context,
-        AsyncSnapshot<models.ValueTransactionDocumentSnapshot> snapshot,
-        Widget? child,
+        snapshot,
+        child,
       ) {
         if (snapshot.hasError) {
           return Scaffold(
@@ -205,9 +210,7 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
                               formKey: _updateValueTransactionFormStateKey,
                               fn: _update,
                             ),
-                            child: Text(
-                              MaterialLocalizations.of(context).saveButtonLabel,
-                            ),
+                            child: Text(localizations.save),
                           )
                               .colorStyle(FilledButtonStyles.primaryContainer)
                               .loadingBtn(
@@ -215,6 +218,48 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
                                 isLoading: _updating,
                                 colorStyle: FilledButtonStyles.primaryContainer,
                               ),
+                          if (valueTransaction.cronExpression != null)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: PaddingSize.xs,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      addValueTransaction(
+                                        context: context,
+                                        addTransactionFormKey:
+                                            _addTransactionFormKey,
+                                        addTransactionFormStateKey:
+                                            _addTransactionFormStateKey,
+                                        valueTransaction:
+                                            models.ValueTransaction(
+                                          id: '',
+                                          title: valueTransaction.title,
+                                          dateTime: DateTime.now(),
+                                          value: valueTransaction.value,
+                                          categoryId:
+                                              valueTransaction.categoryId,
+                                          categoryTitle:
+                                              valueTransaction.categoryTitle,
+                                          categoryTransactionType:
+                                              valueTransaction
+                                                  .categoryTransactionType,
+                                          categoryReason:
+                                              valueTransaction.categoryReason,
+                                          parentCategoryId:
+                                              valueTransaction.parentCategoryId,
+                                        ),
+                                        allowRecurring: false,
+                                      );
+                                    },
+                                    child: Text(localizations.add),
+                                  ).colorStyle(OutlinedButtonStyles.primary),
+                                ],
+                              ),
+                            ),
                         ],
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../change_notifiers/repo_factory.dart';
 import '../../../components/form/custom_form.dart';
@@ -10,7 +11,6 @@ import '../../../constants/styles/filled_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../utils/overlay_banner.dart';
-import '../../../extensions/build_context.dart';
 import '../../../extensions/button/filled_button.dart';
 import '../../../extensions/button/button_style_button.dart';
 
@@ -51,7 +51,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
       if (result.success) {
         showActionResultOverlayBanner(context, result);
-        context.goToProfile();
+        context.pop();
       } else {
         _resultBanner = showActionResultOverlayBanner(context, result);
       }

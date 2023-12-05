@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../change_notifiers/date_format.dart';
 import '../../../config/date_time_picker.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../utils/date_time.dart';
 import '../../../utils/form_field_validators.dart';
 
 class DateRangeFormField extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -14,11 +15,13 @@ class DateRangeFormField extends StatefulWidget with GetItStatefulWidgetMixin {
     required this.setDateTimeRange,
     this.dateTimeRange,
     this.required = false,
+    this.autoValidateMode,
   });
 
   final void Function(DateTimeRange? dateTimeRange) setDateTimeRange;
   final DateTimeRange? dateTimeRange;
   final bool required;
+  final AutovalidateMode? autoValidateMode;
 
   @override
   State<DateRangeFormField> createState() => _DateFormFieldState();
@@ -69,14 +72,15 @@ class _DateFormFieldState extends State<DateRangeFormField>
                 ),
               )
           : null,
+      autovalidateMode: widget.autoValidateMode,
       keyboardType: TextInputType.none,
       showCursor: false,
       onTap: () async {
         final dateTimeRange = await showDateRangePicker(
           context: context,
           initialDateRange: widget.dateTimeRange,
-          firstDate: firstDate,
-          lastDate: endOfDay(DateTime.now()),
+          firstDate: datePickerFirstDate,
+          lastDate: datePickerLastDate,
         );
         DateTimeRange? adjustedDateTimeRange;
 

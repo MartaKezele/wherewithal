@@ -38,11 +38,20 @@ class _DeleteAccountState extends State<DeleteAccount> {
       });
 
       if (result.success) {
-        showActionResultOverlayBanner(context, result);
+        if (mounted) {
+          showActionResultOverlayBanner(context, result);
+        }
       } else {
         _resultBanner = showActionResultOverlayBanner(context, result);
       }
     });
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override

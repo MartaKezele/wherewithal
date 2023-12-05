@@ -30,9 +30,7 @@ extension Navigation on BuildContext {
   }
 
   Future<T?> pushSettings<T extends Object?>() async {
-    return await push<T>(
-      TopLevelRoutes.settings.path,
-    );
+    return await push<T>(TopLevelRoutes.settings.path);
   }
 
   Future<T?> pushChangePassword<T extends Object?>() async {
@@ -42,6 +40,10 @@ extension Navigation on BuildContext {
         QueryParamKeys.shouldRedirect: true.toString(),
       },
     );
+  }
+
+  Future<T?> pushCreateReceipt<T extends Object?>() async {
+    return await push<T>(TopLevelRoutes.createReceipt.path);
   }
 
   Future<T?> pushConfigurePasswordAuth<T extends Object?>() async {
@@ -72,11 +74,9 @@ extension Navigation on BuildContext {
   }
 
   Future<T?> pushCategory<T extends Object?>(String categoryId) async {
-    return await pushNamed<T>(
-      NamedChildRoutes.category.nonNullableName,
-      pathParameters: {
-        PathParamKeys.categoryId: categoryId,
-      },
+    return await push<T>(
+      TopLevelRoutes.category.path,
+      extra: categoryId,
     );
   }
 
@@ -85,6 +85,15 @@ extension Navigation on BuildContext {
       NamedChildRoutes.valueTransaction.nonNullableName,
       pathParameters: {
         PathParamKeys.valueTransactionId: transactionId,
+      },
+    );
+  }
+
+  Future<T?> pushBudgetView<T extends Object?>(String budgetId) async {
+    return await pushNamed<T>(
+      NamedChildRoutes.budgetView.nonNullableName,
+      pathParameters: {
+        PathParamKeys.budgetId: budgetId,
       },
     );
   }
@@ -98,12 +107,6 @@ extension Navigation on BuildContext {
   void goToSignIn() {
     goNamed(
       NamedChildRoutes.signIn.nonNullableName,
-    );
-  }
-
-  void goToProfile() async {
-    return goNamed(
-      NamedChildRoutes.profile.nonNullableName,
     );
   }
 }

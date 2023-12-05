@@ -1,24 +1,23 @@
-import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../app_models/action_result.dart';
+import '../../app_models/cron_recurrence_interval.dart';
 import '../../app_models/custom_dropdown_entry.dart';
+import '../../app_models/months.dart';
+import '../../app_models/recurrence_intervals.dart';
+import '../../app_models/week_days.dart';
 import '../../change_notifiers/auth.dart';
-import '../../change_notifiers/currency.dart';
-import '../../constants/padding_size.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/enums/transaction_types.dart';
 import '../../models/models.dart' as models;
-import '../../utils/dropdown/category_dropdown.dart';
 import '../../utils/dropdown/transaction_type_dropdown.dart';
-import '../../utils/form_field_validators.dart';
 import '../dropdown/custom_dropdown.dart';
-import '../error_content.dart';
-import '../loading_content.dart';
 import 'custom_form.dart';
+import 'form_fields/category_form_field.dart';
 import 'form_fields/date_form_field.dart';
+import 'form_fields/price_value_form_field.dart';
 
 class ValueTransactionForm extends StatefulWidget
     with GetItStatefulWidgetMixin {
@@ -27,11 +26,13 @@ class ValueTransactionForm extends StatefulWidget
     this.valueTransaction,
     required this.formKey,
     this.transactionType,
+    this.allowRecurring = true,
   });
 
   final GlobalKey<FormState> formKey;
   final models.ValueTransaction? valueTransaction;
   final TransactionTypes? transactionType;
+  final bool allowRecurring;
 
   @override
   State<ValueTransactionForm> createState() => ValueTransactionFormState();
@@ -45,6 +46,9 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
   DateTime? _dateTime;
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<models.Category> _selectedCategories = [];
+
+  RecurrenceIntervals? _selectedRecurrenceInterval;
+  CronRecurrenceInterval? _selectedCron;
 
   models.ValueTransaction _valueTransactionInfo() {
     final value = double.tryParse(_valueController.text);
@@ -63,6 +67,8 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
       categoryTitle: _selectedCategories.first.title,
       categoryTransactionType: _selectedTransactionTypes.first.name,
       categoryReason: _selectedCategories.first.categoryReason,
+      parentCategoryId: _selectedCategories.first.parentCategoryId,
+      cronExpression: _selectedCron?.cronExpression,
     );
   }
 
@@ -83,6 +89,8 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
             categoryTitle: valueTransaction.categoryTitle,
             categoryTransactionType: valueTransaction.categoryTransactionType,
             categoryReason: valueTransaction.categoryReason,
+            parentCategoryId: valueTransaction.parentCategoryId,
+            cronExpression: valueTransaction.cronExpression,
           );
       return ActionResult(
         success: true,
@@ -145,6 +153,100 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
     }
   }
 
+  void _onTransactionTypesChanged(
+    List<CustomDropdownEntry<TransactionTypes>> selection,
+  ) {
+    final selectedTransactionTypeNames =
+        selection.map((dropdownEntry) => dropdownEntry.value.name);
+
+    setState(() {
+      _selectedTransactionTypes =
+          selection.map((dropdownEntry) => dropdownEntry.value).toList();
+      _selectedCategories.removeWhere(
+        (element) => !selectedTransactionTypeNames.contains(
+          element.transactionType,
+        ),
+      );
+    });
+  }
+
+  void _onRecurrenceIntervalChanged(
+    List<CustomDropdownEntry<RecurrenceIntervals?>> selection,
+  ) {
+    setState(() {
+      if (selection.isNotEmpty) {
+        _selectedRecurrenceInterval = selection.first.value;
+
+        if (_selectedRecurrenceInterval != RecurrenceIntervals.oneTime &&
+            _selectedCron == null) {
+          _dateTime = DateTime.now();
+          _selectedCron = CronRecurrenceInterval();
+        }
+
+        switch (selection.first.value) {
+          case RecurrenceIntervals.oneTime:
+            _selectedCron = null;
+            break;
+          case RecurrenceIntervals.day:
+            _selectedCron?.day = null;
+            _selectedCron?.weekDays = [];
+            _selectedCron?.month = null;
+            break;
+          case RecurrenceIntervals.week:
+            _selectedCron?.weekDays = [];
+            _selectedCron?.weekDays
+                .add(WeekDays.fromNumber(DateTime.now().weekday)!);
+            _selectedCron?.day = null;
+            _selectedCron?.month = null;
+            break;
+          case RecurrenceIntervals.month:
+            _selectedCron?.day = DateTime.now().day;
+            _selectedCron?.weekDays = [];
+            _selectedCron?.month = null;
+            break;
+          case RecurrenceIntervals.year:
+            _selectedCron?.day = DateTime.now().day;
+            _selectedCron?.month = Months.fromNumber(DateTime.now().month);
+            _selectedCron?.weekDays = [];
+            break;
+          default:
+            break;
+        }
+      }
+    });
+  }
+
+  void _onWeekDayChanged(
+    List<CustomDropdownEntry<WeekDays>> selection,
+  ) {
+    setState(() {
+      _selectedCron?.weekDays = [];
+      _selectedCron?.weekDays
+          .addAll(selection.map((dropdownEntry) => dropdownEntry.value));
+    });
+  }
+
+  void _onMonthChanged(
+    List<CustomDropdownEntry<Months?>> selection,
+  ) {
+    setState(() {
+      _selectedCron?.month = selection.first.value;
+      if (selection.isNotEmpty &&
+          _selectedCron?.day != null &&
+          selection.first.value!.numberOfDays < _selectedCron!.day!) {
+        _selectedCron?.day = null;
+      }
+    });
+  }
+
+  void _onDayChanged(
+    List<CustomDropdownEntry<int?>> selection,
+  ) {
+    setState(() {
+      _selectedCron?.day = selection.first.value;
+    });
+  }
+
   @override
   void initState() {
     _titleController = TextEditingController(
@@ -158,6 +260,15 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
     );
 
     _dateTime = widget.valueTransaction?.dateTime ?? DateTime.now();
+
+    if (widget.valueTransaction?.cronExpression != null) {
+      _selectedCron = CronRecurrenceInterval.fromCronExpression(
+        widget.valueTransaction!.cronExpression!,
+      );
+      _selectedRecurrenceInterval = _selectedCron?.recurrenceInterval;
+    } else {
+      _selectedRecurrenceInterval = RecurrenceIntervals.oneTime;
+    }
 
     super.initState();
   }
@@ -180,17 +291,6 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-
-    final currencySymbol = watchOnly(
-      (CurrencyChangeNotifier changeNotifier) =>
-          changeNotifier.currency?.symbol,
-    );
-
-    final valuePrefixSuffixTextStyle =
-        Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w900,
-              color: _selectedTransactionTypes.first.foregroundColor(context),
-            );
 
     final userId = watchOnly(
       (AuthChangeNotifier changeNotifier) => changeNotifier.id,
@@ -217,47 +317,11 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
           ),
           autocorrect: false,
         ),
-        TextFormField(
+        PriceValueFormField(
           controller: _valueController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            label: Text('${localizations.value}*'),
-            prefix: Container(
-              padding: const EdgeInsets.only(
-                right: PaddingSize.xxs,
-              ),
-              child: Text(
-                _selectedTransactionTypes.first.operand,
-                style: valuePrefixSuffixTextStyle,
-              ),
-            ),
-            suffix: Container(
-              padding: const EdgeInsets.only(
-                left: PaddingSize.xxs,
-              ),
-              child: Text(
-                '$currencySymbol',
-                style: valuePrefixSuffixTextStyle,
-              ),
-            ),
-          ),
-          validator: (value) => requiredDoubleValidator(
-            value,
-            AppLocalizations.of(
-              context,
-            ),
-          ),
+          transactionType: _selectedTransactionTypes.first,
         ),
-        DateFormField(
-          required: true,
-          setDateTime: (dateTime) {
-            setState(() {
-              _dateTime = dateTime;
-            });
-          },
-          dateTime: _dateTime,
-        ),
-        CustomDropdown<TransactionTypes>(
+        CustomDropdown(
           options: TransactionTypes.values
               .map(
                 (transactionType) => CustomDropdownEntry(
@@ -272,72 +336,134 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
               .map((transactionType) =>
                   transactionTypeDropdownEntry(transactionType, context))
               .toList(),
+          onSelectionChanged: _onTransactionTypesChanged,
+          title: localizations.transactionType,
+          required: true,
+        ),
+        CategoryFormField(
           onSelectionChanged: (selection) {
-            final selectedTransactionTypeNames =
-                selection.map((dropdownEntry) => dropdownEntry.value.name);
-
             setState(() {
-              _selectedTransactionTypes = selection
+              _selectedCategories = selection
                   .map((dropdownEntry) => dropdownEntry.value)
                   .toList();
-              _selectedCategories.removeWhere(
-                (element) => !selectedTransactionTypeNames.contains(
-                  element.transactionType,
-                ),
-              );
             });
           },
-          title: localizations.transactionType,
+          selectedCategories: _selectedCategories,
+          categoriesRef: categoriesRef,
+          required: true,
         ),
-        FirestoreBuilder<models.CategoryQuerySnapshot>(
-          ref: categoriesRef,
-          builder: (
-            context,
-            AsyncSnapshot<models.CategoryQuerySnapshot> snapshot,
-            Widget? child,
-          ) {
-            if (snapshot.hasError) {
-              return Padding(
-                padding: const EdgeInsets.all(PaddingSize.md),
-                child: ErrorContent(
-                  text: localizations.couldNotLoadCategoriesFilter,
+        CustomDropdown(
+          required: true,
+          options: RecurrenceIntervals.values
+              .map(
+                (recurrenceInterval) => CustomDropdownEntry(
+                  value: recurrenceInterval,
+                  title: recurrenceInterval.localizedName2(context),
                 ),
-              );
-            }
-
-            if (!snapshot.hasData) {
-              return const LoadingContent();
-            }
-
-            final docs = snapshot.requireData.docs;
-
-            final baseCategories = docs.where(
-              (element) => element.data.parentCategoryId == null,
-            );
-
-            return CustomDropdown<models.Category>(
-              title: localizations.categories,
-              selectedOptions: _selectedCategories
-                  .map((category) =>
-                      categoryDropdownEntries(category, docs, context))
-                  .toList(),
-              onSelectionChanged: (selection) {
-                setState(() {
-                  _selectedCategories = selection
-                      .map((dropdownEntry) => dropdownEntry.value)
-                      .toList();
-                });
-              },
-              options: baseCategories.map((categoryDoc) {
-                return categoryDropdownEntries(
-                  categoryDoc.data,
-                  docs,
-                  context,
-                );
-              }).toList(),
-            );
-          },
+              )
+              .toList(),
+          selectedOptions: [
+            if (_selectedRecurrenceInterval != null)
+              CustomDropdownEntry(
+                value: _selectedRecurrenceInterval,
+                title: _selectedRecurrenceInterval!.localizedName2(context),
+              ),
+          ],
+          onSelectionChanged: _onRecurrenceIntervalChanged,
+          title: localizations.repeat,
         ),
+        if (_selectedRecurrenceInterval == RecurrenceIntervals.oneTime)
+          DateFormField(
+            required: true,
+            setDateTime: (dateTime) {
+              setState(() {
+                _dateTime = dateTime;
+              });
+            },
+            dateTime: _dateTime,
+          ),
+        if (_selectedRecurrenceInterval == RecurrenceIntervals.week)
+          CustomDropdown<WeekDays>(
+            multiselect: true,
+            showSelectAllOption: false,
+            required:
+                _selectedCron?.recurrenceInterval == RecurrenceIntervals.week,
+            options: WeekDays.values
+                .map(
+                  (weekDay) => CustomDropdownEntry(
+                    value: weekDay,
+                    title: weekDay.localizedName(context),
+                  ),
+                )
+                .toList(),
+            selectedOptions: _selectedCron?.weekDays == null
+                ? []
+                : _selectedCron!.weekDays
+                    .map(
+                      (weekDay) => CustomDropdownEntry(
+                        value: weekDay,
+                        title: weekDay.localizedName(context),
+                      ),
+                    )
+                    .toList(),
+            onSelectionChanged: _onWeekDayChanged,
+            title: localizations.weekDay(1),
+          ),
+        if (_selectedRecurrenceInterval == RecurrenceIntervals.year)
+          CustomDropdown(
+            options: Months.values
+                .map(
+                  (month) => CustomDropdownEntry(
+                    value: month,
+                    title: month.localizedName(context),
+                  ),
+                )
+                .toList(),
+            selectedOptions: [
+              if (_selectedCron?.month != null)
+                CustomDropdownEntry(
+                  value: _selectedCron!.month,
+                  title: _selectedCron!.month!.localizedName(context),
+                ),
+            ],
+            onSelectionChanged: _onMonthChanged,
+            title: localizations.month(1),
+          ),
+        if ([RecurrenceIntervals.month, RecurrenceIntervals.year]
+            .contains(_selectedRecurrenceInterval))
+          CustomDropdown(
+            options: List.generate(
+              _selectedCron?.month?.numberOfDays ??
+                  Months.february.numberOfDays,
+              (index) => CustomDropdownEntry(
+                value: index + 1,
+                title: '${index + 1}',
+              ),
+            ),
+            selectedOptions: [
+              if (_selectedCron?.day != null)
+                CustomDropdownEntry(
+                  value: _selectedCron!.day,
+                  title: _selectedCron!.day!.toString(),
+                ),
+            ],
+            onSelectionChanged: _onDayChanged,
+            title: localizations.day(1),
+          ),
+        if (_selectedRecurrenceInterval != null &&
+            _selectedRecurrenceInterval != RecurrenceIntervals.oneTime)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              _selectedCron?.repeatsLocalizedMessage(
+                    context,
+                  ) ??
+                  '',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontStyle: FontStyle.italic,
+                  ),
+            ),
+          ),
       ],
     );
   }

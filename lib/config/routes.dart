@@ -1,15 +1,23 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import '../app_models/tab_stateful_shell_branch.dart';
 import '../change_notifiers/auth.dart';
-import '../screens/home/budget.dart';
-import '../screens/home/categories/categories.dart';
+import '../screens/home/budget/budget_view.dart';
+import '../screens/home/categories/categories_list_view.dart';
+import '../components/wrappers/tabbed_root_screen.dart';
+import '../models/enums/transaction_types.dart';
+import '../models/models.dart' as models;
+import '../screens/data_setup_screen.dart';
+import '../screens/home/budget/budget.dart';
 import '../screens/home/categories/category_view.dart';
 import '../screens/home/home.dart';
-import '../screens/home/insights/insights.dart';
+import '../screens/create_receipt.dart';
+import '../screens/home/insights/analytics.dart';
+import '../screens/home/insights/value_transaction_history.dart';
 import '../screens/home/insights/value_transaction_view.dart';
-import '../screens/home/recurring_transactions.dart';
-import 'bottom_nav.dart';
+import '../screens/home/insights/value_transactions_list_view.dart';
 import 'keys/path_param.dart';
 import 'keys/query_param.dart';
 import '../app_models/named_go_route.dart';
@@ -32,42 +40,204 @@ import '../l10n/app_localizations.dart';
 import 'auth_provider.dart';
 import 'router.dart';
 
+final homeShellRoute = TabStatefulShellRoute(
+  builder: (context, state, navigationShell) {
+    return navigationShell;
+  },
+  navigatorContainerBuilder: (context, navigationShell, children) {
+    return Home(
+      navigationShell: navigationShell,
+      children: children,
+    );
+  },
+  tabBranches: [
+    TabStatefulShellBranch(
+      label: (context) => AppLocalizations.of(context).insights,
+      icon: Icons.insights_rounded,
+      routes: [
+        StatefulShellRoute(
+          builder: (context, state, navigationShell) {
+            return navigationShell;
+          },
+          navigatorContainerBuilder: (context, navigationShell, children) {
+            return TabbedRootScreen(
+              appBarTitle: AppLocalizations.of(context).insights,
+              navigationShell: navigationShell,
+              children: children,
+            );
+          },
+          branches: [
+            TabStatefulShellBranch(
+              label: (context) => AppLocalizations.of(context).analytics,
+              icon: Icons.bar_chart_rounded,
+              routes: [TopLevelRoutes.analytics],
+            ),
+            TabStatefulShellBranch(
+              label: (context) => AppLocalizations.of(context).history,
+              icon: Icons.history_rounded,
+              routes: [TopLevelRoutes.history],
+            ),
+          ],
+        ),
+      ],
+    ),
+    TabStatefulShellBranch(
+      label: (context) => AppLocalizations.of(context).recurringTransactions,
+      icon: Icons.event_repeat_rounded,
+      routes: [
+        StatefulShellRoute(
+          builder: (context, state, navigationShell) {
+            return navigationShell;
+          },
+          navigatorContainerBuilder: (context, navigationShell, children) {
+            return TabbedRootScreen(
+              appBarTitle: AppLocalizations.of(context).recurringTransactions,
+              navigationShell: navigationShell,
+              children: children,
+            );
+          },
+          branches: [
+            TabStatefulShellBranch(
+              label: (context) => AppLocalizations.of(context).expense,
+              icon: TransactionTypes.expense.icon,
+              routes: [TopLevelRoutes.expenseRecurringTransactions],
+            ),
+            TabStatefulShellBranch(
+              label: (context) => AppLocalizations.of(context).income,
+              icon: TransactionTypes.income.icon,
+              routes: [TopLevelRoutes.incomeRecurringTransactions],
+            ),
+          ],
+        ),
+      ],
+    ),
+    TabStatefulShellBranch(
+      label: (context) => AppLocalizations.of(context).categories,
+      icon: Icons.category_rounded,
+      routes: [
+        StatefulShellRoute(
+          builder: (context, state, navigationShell) {
+            return navigationShell;
+          },
+          navigatorContainerBuilder: (context, navigationShell, children) {
+            return TabbedRootScreen(
+              appBarTitle: AppLocalizations.of(context).categories,
+              navigationShell: navigationShell,
+              children: children,
+            );
+          },
+          branches: [
+            TabStatefulShellBranch(
+              label: (context) => AppLocalizations.of(context).expense,
+              icon: TransactionTypes.expense.icon,
+              routes: [TopLevelRoutes.expenseCategories],
+            ),
+            TabStatefulShellBranch(
+              label: (context) => AppLocalizations.of(context).income,
+              icon: TransactionTypes.income.icon,
+              routes: [TopLevelRoutes.incomeCategories],
+            ),
+          ],
+        ),
+      ],
+    ),
+    TabStatefulShellBranch(
+      label: (context) => AppLocalizations.of(context).budget,
+      icon: Icons.savings_rounded,
+      routes: [TopLevelRoutes.budget],
+    ),
+  ],
+);
+
 class TopLevelRoutes {
-  static final homeShellRoute = ShellRoute(
-    parentNavigatorKey: navigatorKey,
-    builder: (context, state, child) {
-      return Home(
-        body: child,
-        bottomNav: bottomNavItems,
-      );
-    },
-    routes: bottomNavItems.map((navItem) => navItem.route).toList(),
+  static final analytics = GoRoute(
+    path: '/analytics',
+    builder: (context, state) => Analytics(),
   );
 
-  static final insights = GoRoute(
-    path: '/',
-    builder: (context, state) => const Insights(),
+  static final history = GoRoute(
+    path: '/history',
+    builder: (context, state) => TransactionHistory(),
     routes: [
       NamedChildRoutes.valueTransaction,
     ],
   );
 
-  static final recurringTransactions = GoRoute(
-    path: '/recurring-transactions',
-    builder: (context, state) => const RecurringTransactions(),
+  static final expenseCategories = GoRoute(
+    path: '/expense-categories',
+    builder: (context, state) => CategoriesListView(
+      ref: models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .categories
+          .whereTransactionType(isEqualTo: TransactionTypes.expense.name)
+          .whereParentCategoryId(isNull: true)
+          .orderByTitle(),
+      foregroundColor: TransactionTypes.expense.foregroundColor(context),
+    ),
   );
 
-  static final categories = GoRoute(
-    path: '/categories',
-    builder: (context, state) => const Categories(),
-    routes: [
-      NamedChildRoutes.category,
-    ],
+  static final incomeCategories = GoRoute(
+    path: '/income-categories',
+    builder: (context, state) => CategoriesListView(
+      ref: models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .categories
+          .whereTransactionType(isEqualTo: TransactionTypes.income.name)
+          .whereParentCategoryId(isNull: true)
+          .orderByTitle(),
+      foregroundColor: TransactionTypes.income.foregroundColor(context),
+    ),
+  );
+
+  static final expenseRecurringTransactions = GoRoute(
+    path: '/expense-recurring-transactions',
+    builder: (context, state) => ValueTransactionsListView(
+      ref: models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .valueTransactions
+          .whereCronExpression(isNull: false)
+          .whereCategoryTransactionType(
+            isEqualTo: TransactionTypes.expense.name,
+          ),
+      ctx: context,
+    ),
+  );
+
+  static final incomeRecurringTransactions = GoRoute(
+    path: '/income-recurring-transactions',
+    builder: (context, state) => ValueTransactionsListView(
+      ref: models.usersRef
+          .doc(GetIt.I<AuthChangeNotifier>().id)
+          .valueTransactions
+          .whereCronExpression(isNull: false)
+          .whereCategoryTransactionType(
+            isEqualTo: TransactionTypes.income.name,
+          ),
+      ctx: context,
+    ),
+  );
+
+  static final category = GoRoute(
+    parentNavigatorKey: navigatorKey,
+    path: '/category',
+    builder: (context, state) {
+      assert(state.extra != null);
+      assert(state.extra is String);
+
+      final categoryId = state.extra as String;
+
+      return CategoryView(
+        id: categoryId,
+      );
+    },
   );
 
   static final budget = GoRoute(
     path: '/budget',
-    builder: (context, state) => const Budget(),
+    builder: (context, state) => Budget(),
+    routes: [
+      NamedChildRoutes.budgetView,
+    ],
   );
 
   static final welcome = GoRoute(
@@ -114,12 +284,25 @@ class TopLevelRoutes {
     ],
   );
 
+  static final createReceipt = GoRoute(
+    parentNavigatorKey: navigatorKey,
+    path: '/create-receipt',
+    builder: (context, state) => CreateReceipt(),
+  );
+
+  static final dataSetup = GoRoute(
+    path: '/data-setup',
+    builder: (context, state) {
+      return DataSetupScreen();
+    },
+  );
+
   static final error = GoRoute(
     path: '/error',
     builder: (context, state) {
       return ErrorScreen(
-        title: state.queryParameters[QueryParamKeys.errorTitle],
-        description: state.queryParameters[QueryParamKeys.errorDescription],
+        title: state.queryParameters[QueryParamKeys.title],
+        description: state.queryParameters[QueryParamKeys.description],
       );
     },
   );
@@ -190,7 +373,7 @@ class NamedChildRoutes {
     parentNavigatorKey: navigatorKey,
     nonNullableName: 'notifications',
     path: 'notifications',
-    builder: (context, state) => const Notifications(),
+    builder: (context, state) => Notifications(),
   );
 
   static final changePassword = NamedGoRoute(
@@ -245,7 +428,7 @@ class NamedChildRoutes {
       final authProviders = GetIt.I<AuthChangeNotifier>().authProviders;
 
       if (authProviders.isEmpty) {
-        return '${TopLevelRoutes.error.path}?${QueryParamKeys.errorTitle}=${localizations.noConfiguredAuthProviders}';
+        return '${TopLevelRoutes.error.path}?${QueryParamKeys.title}=${localizations.noConfiguredAuthProviders}';
       }
 
       final redirectRoute = authProviderRedirectRoutes[authProviders.first];
@@ -256,21 +439,6 @@ class NamedChildRoutes {
         state,
         redirectRoute!,
         _deleteAccountName,
-      );
-    },
-  );
-
-  static final category = NamedGoRoute(
-    parentNavigatorKey: navigatorKey,
-    nonNullableName: 'category',
-    path: 'category/:${PathParamKeys.categoryId}',
-    builder: (context, state) {
-      final categoryId = state.pathParameters[PathParamKeys.categoryId];
-
-      assert(categoryId != null);
-
-      return CategoryView(
-        id: categoryId!,
       );
     },
   );
@@ -287,6 +455,20 @@ class NamedChildRoutes {
 
       return ValueTransactionView(
         id: valueTransactionId!,
+      );
+    },
+  );
+  static final budgetView = NamedGoRoute(
+    parentNavigatorKey: navigatorKey,
+    nonNullableName: 'budget-view',
+    path: 'budget-view/:${PathParamKeys.budgetId}',
+    builder: (context, state) {
+      final budgetId = state.pathParameters[PathParamKeys.budgetId];
+
+      assert(budgetId != null);
+
+      return BudgetView(
+        id: budgetId!,
       );
     },
   );

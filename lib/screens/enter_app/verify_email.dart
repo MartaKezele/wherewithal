@@ -28,6 +28,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   OverlayEntry? _resultBanner;
 
   void emailVerifiedChangeListener() {
+    GetIt.I<AuthChangeNotifier>().removeListener(emailVerifiedChangeListener);
     final localizations = AppLocalizations.of(context);
 
     final emailVerified = GetIt.I<AuthChangeNotifier>().emailVerified;
@@ -65,6 +66,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
         .reloadUser()
         .then((result) {
       if (!result.success) {
+        GetIt.I<AuthChangeNotifier>()
+            .removeListener(emailVerifiedChangeListener);
         setState(() {
           _reloadingUser = false;
         });

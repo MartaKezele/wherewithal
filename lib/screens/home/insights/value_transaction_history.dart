@@ -4,23 +4,19 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../app_models/custom_dropdown_entry.dart';
 import '../../../change_notifiers/auth.dart';
-import '../../../change_notifiers/currency.dart';
-import '../../../change_notifiers/date_format.dart';
-import '../../../components/custom_badge.dart';
 import '../../../components/dropdown/custom_dropdown.dart';
 import '../../../components/error_content.dart';
 import '../../../components/form/form_fields/date_range_form_field.dart';
 import '../../../components/loading_content.dart';
-import '../../../components/no_data_content.dart';
-import '../../../config/date_time_picker.dart';
 import '../../../constants/padding_size.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/enums/category_reasons.dart';
 import '../../../models/enums/transaction_types.dart';
 import '../../../models/models.dart' as models;
-import '../../../extensions/build_context.dart';
+import '../../../utils/date_time.dart';
 import '../../../utils/dropdown/category_dropdown.dart';
 import '../../../utils/dropdown/transaction_type_dropdown.dart';
+import 'value_transactions_list_view.dart';
 
 class TransactionHistory extends StatefulWidget with GetItStatefulWidgetMixin {
   TransactionHistory({super.key});
@@ -34,10 +30,8 @@ class _TransactionHistoryState extends State<TransactionHistory>
   final _scrollController = ScrollController();
 
   DateTimeRange? _dateTimeRange = DateTimeRange(
-    start: beginningOfToday().subtract(
-      const Duration(days: 7),
-    ),
-    end: endOfDay(DateTime.now()),
+    start: beginningOfThisWeek(),
+    end: endOfThisWeek(),
   );
   List<TransactionTypes> _selectedTransactionTypes = [];
   List<CategoryReasons> _selectedCategoryReasons = [];
@@ -45,7 +39,8 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   List<models.ValueTransactionQueryDocumentSnapshot>
       _filterTransactionsByTransactionTypes(
-          List<models.ValueTransactionQueryDocumentSnapshot> filteredDocs) {
+    List<models.ValueTransactionQueryDocumentSnapshot> filteredDocs,
+  ) {
     if (_selectedTransactionTypes.isNotEmpty) {
       filteredDocs = filteredDocs
           .where(
@@ -82,15 +77,6 @@ class _TransactionHistoryState extends State<TransactionHistory>
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
-    final currency = watchOnly(
-      (CurrencyChangeNotifier changeNotifier) =>
-          changeNotifier.currency?.symbol,
-    );
-
-    final dateFormat = watchOnly(
-      (DateFormatChangeNotifier changeNotifier) => changeNotifier.dateFormat,
-    );
-
     final userId = watchOnly(
       (AuthChangeNotifier changeNotifier) => changeNotifier.id,
     );
@@ -98,6 +84,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     models.ValueTransactionQuery valueTransactionsRef = models.usersRef
         .doc(userId)
         .valueTransactions
+        .whereCronExpression(isNull: true)
         .whereDateTime(
           isGreaterThanOrEqualTo: _dateTimeRange?.start,
           isLessThanOrEqualTo: _dateTimeRange?.end,
@@ -141,8 +128,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
                   },
                   dateTimeRange: _dateTimeRange,
                 ),
-                CustomDropdown<TransactionTypes>(
+                CustomDropdown(
                   multiselect: true,
+                  showSelectAllOption: true,
                   options: [
                     ...TransactionTypes.values
                         .map(
@@ -181,12 +169,12 @@ class _TransactionHistoryState extends State<TransactionHistory>
                   },
                   title: localizations.transactionType,
                 ),
-                FirestoreBuilder<models.CategoryQuerySnapshot>(
+                FirestoreBuilder(
                   ref: categoriesRef,
                   builder: (
                     context,
-                    AsyncSnapshot<models.CategoryQuerySnapshot> snapshot,
-                    Widget? child,
+                    snapshot,
+                    child,
                   ) {
                     if (snapshot.hasError) {
                       return Padding(
@@ -210,9 +198,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
                       (element) => element.data.parentCategoryId == null,
                     );
 
-                    return CustomDropdown<models.Category>(
+                    return CustomDropdown(
                       title: localizations.categories,
                       multiselect: true,
+                      showSelectAllOption: true,
                       selectedOptions: _selectedCategories
                           .map((e) => categoryDropdownEntries(e, docs, context))
                           .toList(),
@@ -238,8 +227,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
                       _selectedTransactionTypes.contains(
                         TransactionTypes.expense,
                       ),
-                  child: CustomDropdown<CategoryReasons>(
+                  child: CustomDropdown(
                     multiselect: true,
+                    showSelectAllOption: true,
                     options: [
                       ...CategoryReasons.values
                           .map(
@@ -276,76 +266,13 @@ class _TransactionHistoryState extends State<TransactionHistory>
               ],
             ),
           ),
-          FirestoreBuilder<models.ValueTransactionQuerySnapshot>(
+          ValueTransactionsListView(
             ref: valueTransactionsRef,
-            builder: (
-              context,
-              AsyncSnapshot<models.ValueTransactionQuerySnapshot> snapshot,
-              Widget? child,
-            ) {
-              if (snapshot.hasError) {
-                return const Padding(
-                  padding: EdgeInsets.all(PaddingSize.md),
-                  child: ErrorContent(),
-                );
-              }
-
-              if (!snapshot.hasData) {
-                return const LoadingContent();
-              }
-
-              final docs = snapshot.requireData.docs;
-
-              if (docs.isEmpty) {
-                return const NoDataContent();
-              }
-
-              var filteredDocs = docs;
-
-              filteredDocs =
-                  _filterTransactionsByTransactionTypes(filteredDocs);
-              filteredDocs = _filterTransactionsByCategoryReasons(filteredDocs);
-
-              return ListView.builder(
-                controller: _scrollController,
-                shrinkWrap: true,
-                itemCount: filteredDocs.length,
-                itemBuilder: (context, index) {
-                  final valueTransaction = filteredDocs[index].data;
-
-                  final transactionType = TransactionTypes.fromName(
-                    valueTransaction.categoryTransactionType,
-                  );
-
-                  final foregroundColor =
-                      transactionType?.foregroundColor(context);
-
-                  return ListTile(
-                    title: Text(
-                      valueTransaction.title ?? valueTransaction.categoryTitle,
-                    ),
-                    subtitle: Text(
-                      dateFormat?.format(valueTransaction.dateTime) ?? '',
-                    ),
-                    leading: CustomBadge(
-                      title: valueTransaction.categoryTitle,
-                      backgroundColor:
-                          transactionType?.backgroundColor(context),
-                      foregroundColor:
-                          transactionType?.foregroundColor(context),
-                    ),
-                    trailing: Text(
-                      '${transactionType?.operand} ${valueTransaction.value.toString()} $currency',
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: foregroundColor,
-                          ),
-                    ),
-                    textColor: foregroundColor,
-                    onTap: () => context.pushTransaction(valueTransaction.id),
-                  );
-                },
-              );
+            filterFn: (docs) {
+              final filteredDocs = _filterTransactionsByTransactionTypes(docs);
+              return _filterTransactionsByCategoryReasons(filteredDocs);
             },
+            scrollController: _scrollController,
           ),
         ],
       ),

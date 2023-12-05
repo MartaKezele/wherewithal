@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_models/action_result.dart';
-import '../components/action_result_overlay_banner.dart';
+import '../components/banners/action_result_overlay_banner.dart';
 
 OverlayEntry? showActionResultOverlayBanner(
   BuildContext context,

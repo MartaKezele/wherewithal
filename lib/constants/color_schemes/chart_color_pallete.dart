@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+
+const chartColorPallete = [
+  Color(0xFFe6194B),
+  Color(0xFF3cb44b),
+  Color(0xFFffe119),
+  Color(0xFF4363d8),
+  Color(0xFFf58231),
+  Color(0xFF911eb4),
+  Color(0xFF42d4f4),
+  Color(0xFFf032e6),
+  Color(0xFFbfef45),
+  Color(0xFFfabed4),
+  Color(0xFF469990),
+  Color(0xFFdcbeff),
+  Color(0xFF9A6324),
+  Color(0xFFfffac8),
+  Color(0xFF800000),
+  Color(0xFFaaffc3),
+  Color(0xFF808000),
+  Color(0xFFffd8b1),
+  Color(0xFF000075),
+  Color(0xFFa9a9a9),
+  Color(0xFFffffff),
+  Color(0xFF000000),
+];

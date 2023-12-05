@@ -12,7 +12,6 @@ import '../../../app_models/action_result.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/form.dart';
 import '../../../utils/overlay_banner.dart';
-import '../../../extensions/build_context.dart';
 import '../../../extensions/button/filled_button.dart';
 import '../../../extensions/button/button_style_button.dart';
 
@@ -67,12 +66,7 @@ class _ConfigurePasswordAuthState extends State<ConfigurePasswordAuth> {
       setState(() {
         _linkingAuth = false;
       });
-      if (result.success) {
-        showActionResultOverlayBanner(context, result);
-        context.goToProfile();
-      } else {
-        _resultBanner = showActionResultOverlayBanner(context, result);
-      }
+      _resultBanner = showActionResultOverlayBanner(context, result);
     });
   }
 

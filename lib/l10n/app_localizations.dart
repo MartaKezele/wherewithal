@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../config/countries.dart';
+import '../config/fraction_digits.dart';
 import 'messages_all.dart';
 
 class AppLocalizations {
@@ -719,6 +720,20 @@ class AppLocalizations {
     );
   }
 
+  String get scanReceipt {
+    return Intl.message(
+      'Scan receipt',
+      locale: localeName,
+    );
+  }
+
+  String get addItem {
+    return Intl.message(
+      'Add item',
+      locale: localeName,
+    );
+  }
+
   String get expense {
     return Intl.message(
       'Expense',
@@ -791,8 +806,203 @@ class AppLocalizations {
 
   String get deleteCategoryConfirmationMsg {
     return Intl.message(
-      'All subcategories will be deleted. This action is non-reversible.',
+      'All subcategories and transactions of this category will be deleted. This action is irreversible.',
       locale: localeName,
+    );
+  }
+
+  String get setUpData {
+    return Intl.message(
+      'Set up data',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotSetUpData {
+    return Intl.message(
+      'Could not set up data',
+      locale: localeName,
+    );
+  }
+
+  String get dataIsSetUp {
+    return Intl.message(
+      'Data is set up',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotDeleteAccount {
+    return Intl.message(
+      'Could not delete account',
+      locale: localeName,
+    );
+  }
+
+  String get done {
+    return Intl.message(
+      'Done',
+      locale: localeName,
+    );
+  }
+
+  String get daily {
+    return Intl.message(
+      'Daily',
+      locale: localeName,
+    );
+  }
+
+  String get weekly {
+    return Intl.message(
+      'Weekly',
+      locale: localeName,
+    );
+  }
+
+  String get monthly {
+    return Intl.message(
+      'Monthly',
+      locale: localeName,
+    );
+  }
+
+  String get yearly {
+    return Intl.message(
+      'Yearly',
+      locale: localeName,
+    );
+  }
+
+  String get recurrenceInterval {
+    return Intl.message(
+      'Recurrence interval',
+      locale: localeName,
+    );
+  }
+
+  String get recurrence {
+    return Intl.message(
+      'Recurrence',
+      locale: localeName,
+    );
+  }
+
+  String get every {
+    return Intl.message(
+      'Every',
+      locale: localeName,
+    );
+  }
+
+  String get repeat {
+    return Intl.message(
+      'Repeat',
+      locale: localeName,
+    );
+  }
+
+  String get monday {
+    return Intl.message(
+      'Monday',
+      locale: localeName,
+    );
+  }
+
+  String get tuesday {
+    return Intl.message(
+      'Tuesday',
+      locale: localeName,
+    );
+  }
+
+  String get wednesday {
+    return Intl.message(
+      'Wednesday',
+      locale: localeName,
+    );
+  }
+
+  String get thursday {
+    return Intl.message(
+      'Thursday',
+      locale: localeName,
+    );
+  }
+
+  String get friday {
+    return Intl.message(
+      'Friday',
+      locale: localeName,
+    );
+  }
+
+  String get saturday {
+    return Intl.message(
+      'Saturday',
+      locale: localeName,
+    );
+  }
+
+  String get sunday {
+    return Intl.message(
+      'Sunday',
+      locale: localeName,
+    );
+  }
+
+  String day(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Day',
+      other: 'Days',
+      name: 'dayPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String weekDay(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Weekday',
+      other: 'Weekdays',
+      name: 'weekDayPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String week(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Week',
+      other: 'Weeks',
+      name: 'weekPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String month(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Month',
+      other: 'Months',
+      name: 'monthPlural',
+      locale: localeName,
+      args: [howMany],
+    );
+  }
+
+  String year(int howMany) {
+    return Intl.plural(
+      howMany,
+      one: 'Year',
+      other: 'Years',
+      name: 'yearPlural',
+      locale: localeName,
+      args: [howMany],
     );
   }
 
@@ -1111,6 +1321,461 @@ class AppLocalizations {
     );
   }
 
+  String get scan {
+    return Intl.message(
+      'Scan',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotProcessReceipt {
+    return Intl.message(
+      'Could not process receipt',
+      locale: localeName,
+    );
+  }
+
+  String get transaction {
+    return Intl.message(
+      'Transaction',
+      locale: localeName,
+    );
+  }
+
+  String get receipt {
+    return Intl.message(
+      'Receipt',
+      locale: localeName,
+    );
+  }
+
+  String get newReceipt {
+    return Intl.message(
+      'New receipt',
+      locale: localeName,
+    );
+  }
+
+  String get createdTransactions {
+    return Intl.message(
+      'Created transactions',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotCreateTransactions {
+    return Intl.message(
+      'Could not create transactions',
+      locale: localeName,
+    );
+  }
+
+  String get camera {
+    return Intl.message(
+      'Camera',
+      locale: localeName,
+    );
+  }
+
+  String get gallery {
+    return Intl.message(
+      'Gallery',
+      locale: localeName,
+    );
+  }
+
+  String get failedToProcessReceipt {
+    return Intl.message(
+      'Failed to process receipt',
+      locale: localeName,
+    );
+  }
+
+  String get receiptProcessingQuotaHasBeenReached {
+    return Intl.message(
+      'Receipt processing quota has been reached for this month',
+      locale: localeName,
+    );
+  }
+
+  String get processingReceipts {
+    return Intl.message(
+      'Processing receipts',
+      locale: localeName,
+    );
+  }
+
+  String get totalPrice {
+    return Intl.message(
+      'Total price',
+      locale: localeName,
+    );
+  }
+
+  String get addReceiptTransactions {
+    return Intl.message(
+      'Add receipt transactions',
+      locale: localeName,
+    );
+  }
+
+  String get overview {
+    return Intl.message(
+      'Overview',
+      locale: localeName,
+    );
+  }
+
+  String get incomeByCategories {
+    return Intl.message(
+      'Income by categories',
+      locale: localeName,
+    );
+  }
+
+  String get moreDetails {
+    return Intl.message(
+      'More details',
+      locale: localeName,
+    );
+  }
+
+  String get loading {
+    return Intl.message(
+      'Loading',
+      locale: localeName,
+    );
+  }
+
+  String get settingUpData {
+    return Intl.message(
+      'Setting up data',
+      locale: localeName,
+    );
+  }
+
+  String get welcome {
+    return Intl.message(
+      'Welcome',
+      locale: localeName,
+    );
+  }
+
+  String get spendingByCategories {
+    return Intl.message(
+      'Spending by categories',
+      locale: localeName,
+    );
+  }
+
+  String get total {
+    return Intl.message(
+      'Total',
+      locale: localeName,
+    );
+  }
+
+  String get failurePickingImages {
+    return Intl.message(
+      'Failure picking images',
+      locale: localeName,
+    );
+  }
+
+  String get failureCapturingImage {
+    return Intl.message(
+      'Failure capturing image',
+      locale: localeName,
+    );
+  }
+
+  String get dataExtracted {
+    return Intl.message(
+      'Data extracted',
+      locale: localeName,
+    );
+  }
+
+  String get uploadedFiles {
+    return Intl.message(
+      'Uploaded files',
+      locale: localeName,
+    );
+  }
+
+  String get spendingByReason {
+    return Intl.message(
+      'Spending by reason',
+      locale: localeName,
+    );
+  }
+
+  String get unspecified {
+    return Intl.message(
+      'Unspecified',
+      locale: localeName,
+    );
+  }
+
+  String get january {
+    return Intl.message(
+      'January',
+      locale: localeName,
+    );
+  }
+
+  String get february {
+    return Intl.message(
+      'February',
+      locale: localeName,
+    );
+  }
+
+  String get march {
+    return Intl.message(
+      'March',
+      locale: localeName,
+    );
+  }
+
+  String get april {
+    return Intl.message(
+      'April',
+      locale: localeName,
+    );
+  }
+
+  String get may {
+    return Intl.message(
+      'May',
+      locale: localeName,
+    );
+  }
+
+  String get june {
+    return Intl.message(
+      'June',
+      locale: localeName,
+    );
+  }
+
+  String get july {
+    return Intl.message(
+      'July',
+      locale: localeName,
+    );
+  }
+
+  String get august {
+    return Intl.message(
+      'August',
+      locale: localeName,
+    );
+  }
+
+  String get september {
+    return Intl.message(
+      'September',
+      locale: localeName,
+    );
+  }
+
+  String get october {
+    return Intl.message(
+      'October',
+      locale: localeName,
+    );
+  }
+
+  String get november {
+    return Intl.message(
+      'November',
+      locale: localeName,
+    );
+  }
+
+  String get december {
+    return Intl.message(
+      'December',
+      locale: localeName,
+    );
+  }
+
+  String get repeatsEveryDay {
+    return Intl.message(
+      'Repeats every day',
+      locale: localeName,
+    );
+  }
+
+  String get fetchedReceiptRecognitionQuota {
+    return Intl.message(
+      'Fetched receipt recognition quota',
+      locale: localeName,
+    );
+  }
+
+  String get failureFetchingReceiptRecognitionQuota {
+    return Intl.message(
+      'Failure fetching receipt recognition quota',
+      locale: localeName,
+    );
+  }
+
+  String get updatedNotificationPreferences {
+    return Intl.message(
+      'Updated notification preferences',
+      locale: localeName,
+    );
+  }
+
+  String get recurringTransactionsNotifications {
+    return Intl.message(
+      'Recurring transactions notifications',
+      locale: localeName,
+    );
+  }
+
+  String get remindsAboutUpcomingScheduledPayments {
+    return Intl.message(
+      'Reminds about upcoming scheduled payments',
+      locale: localeName,
+    );
+  }
+
+  String get oneTime {
+    return Intl.message(
+      'One time',
+      locale: localeName,
+    );
+  }
+
+  String get addBudget {
+    return Intl.message(
+      'Add budget',
+      locale: localeName,
+    );
+  }
+
+  String get createdBudget {
+    return Intl.message(
+      'Created budget',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotCreateBudget {
+    return Intl.message(
+      'Could not create budget',
+      locale: localeName,
+    );
+  }
+
+  String get startDate {
+    return Intl.message(
+      'Start date',
+      locale: localeName,
+    );
+  }
+
+  String get endDate {
+    return Intl.message(
+      'End date',
+      locale: localeName,
+    );
+  }
+
+  String get updatedBudget {
+    return Intl.message(
+      'Updated budget',
+      locale: localeName,
+    );
+  }
+
+  String get couldNotUpdateBudget {
+    return Intl.message(
+      'Could not update budget',
+      locale: localeName,
+    );
+  }
+
+  String get deletedBudget {
+    return Intl.message(
+      'Deleted budget',
+      locale: localeName,
+    );
+  }
+
+  String deleteBudgetConfirmationMsg(String budgetTitle) {
+    return Intl.message(
+      'Are you sure you want to delete budget $budgetTitle',
+      locale: localeName,
+      name: 'deleteBudgetConfirmationsMsg',
+      args: [
+        budgetTitle,
+      ],
+    );
+  }
+
+  String couldNotFetchDataForBudget(String budgetTitle) {
+    return Intl.message(
+      'Could not fetch data for budget $budgetTitle',
+      locale: localeName,
+      name: 'couldNotFetchDataForBudget',
+      args: [
+        budgetTitle,
+      ],
+    );
+  }
+
+  String couldNotDeleteBudgetWithTitle(String budgetTitle) {
+    return Intl.message(
+      'Could not delete budget $budgetTitle',
+      locale: localeName,
+      name: 'couldNotDeleteBudgetWithTitle',
+      args: [
+        budgetTitle,
+      ],
+    );
+  }
+
+  String deletedBudgetWithTitle(String budgetTitle) {
+    return Intl.message(
+      'Deleted budget $budgetTitle',
+      locale: localeName,
+      name: 'deletedBudgetWithTitle',
+      args: [
+        budgetTitle,
+      ],
+    );
+  }
+
+  String spentXPercentageOdIncome(double percentage) {
+    return Intl.message(
+      'You spent ${percentage.toStringAsFixed(priceFractionDigits)}% of your income in the selected period',
+      locale: localeName,
+      name: 'spentXPercentageOdIncome',
+      args: [
+        percentage,
+      ],
+    );
+  }
+
+  String createdXOutOfYTransactions(
+    int numberOfCreatedTransactions,
+    int numberOfAllTransactions,
+  ) {
+    return Intl.message(
+      'Created $numberOfCreatedTransactions/$numberOfAllTransactions transactions',
+      locale: localeName,
+      name: 'createdXOutOfYTransactions',
+      args: [
+        numberOfCreatedTransactions,
+        numberOfAllTransactions,
+      ],
+    );
+  }
+
   String couldNotDeleteCategory(String categoryTitle) {
     return Intl.message(
       'Could not delete category $categoryTitle',
@@ -1180,6 +1845,46 @@ class AppLocalizations {
       locale: localeName,
       name: 'minCharacters',
       args: [howMany],
+    );
+  }
+
+  String intNumberIsNotWithinRange(int min, int max) {
+    return Intl.message(
+      'Number is not within range $min - $max',
+      locale: localeName,
+      name: 'intNumberIsNotWithinRange',
+      args: [min, max],
+    );
+  }
+
+  String repeatsEveryWeekOn(String weekDays) {
+    return Intl.message(
+      'Repeats every week on $weekDays',
+      locale: localeName,
+      name: 'repeatsEveryWeekOn',
+      args: [weekDays],
+    );
+  }
+
+  String repeatsEveryMonthOnDay(int day) {
+    return Intl.message(
+      'Repeats every month on day $day',
+      locale: localeName,
+      name: 'repeatsEveryMonthOnDay',
+      args: [day],
+    );
+  }
+
+  String repeatsEveryYearOnDayOfMonth(
+    int day,
+    int monthNumber,
+    String monthName,
+  ) {
+    return Intl.message(
+      'Repeats every year on day $day of month $monthNumber ($monthName)',
+      locale: localeName,
+      name: 'repeatsEveryYearOnDayOfMonth',
+      args: [day, monthNumber, monthName],
     );
   }
 }

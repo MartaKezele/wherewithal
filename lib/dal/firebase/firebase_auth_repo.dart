@@ -3,59 +3,15 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../change_notifiers/repo_factory.dart';
-import '../../config/auth_provider.dart';
-import '../../config/setup_data/categories/expense.dart';
-import '../../config/setup_data/categories/income.dart';
+import '../../config/auth_provider.dart' as config;
 import '../../constants/general.dart';
 import '../../app_models/action_result.dart';
-import '../../models/models.dart' as models;
-import '../../models/setup/setup_category.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 
+// TODO: check this out: https://firebase.google.com/docs/auth/extend-with-blocking-functions?gen=2nd
 class FirebaseAuthRepo extends AuthRepo {
   FirebaseAuthRepo(super.localizations);
-
-  Future<void> _setupCategories({
-    required String userId,
-    required String? parentCategoryId,
-    required List<SetupCategory> categories,
-  }) async {
-    for (final category in categories) {
-      final subcategoryDoc = await models.usersRef.doc(userId).categories.add(
-            models.Category(
-              id: '',
-              title: category.title,
-              transactionType: category.transactionType,
-              budget: category.budget,
-              categoryReason: category.categoryReason,
-              parentCategoryId: parentCategoryId,
-            ),
-          );
-      await _setupCategories(
-        userId: userId,
-        parentCategoryId: subcategoryDoc.id,
-        categories: category.subcategories,
-      );
-    }
-  }
-
-  Future<ActionResult> _setupUserData(String userUid) async {
-    final userResult = await GetIt.I<RepoFactoryChangeNotifier>()
-        .repoFactory
-        .userRepo2
-        .create(userUid);
-
-    if (userResult.data != null) {
-      await _setupCategories(
-        userId: userResult.data!.id,
-        categories: [...expenseCategories, ...incomeCategories],
-        parentCategoryId: null,
-      );
-    }
-
-    return userResult;
-  }
 
   Future<OAuthCredential?> _googleAuthCredential() async {
     try {
@@ -156,7 +112,12 @@ class FirebaseAuthRepo extends AuthRepo {
         return genericFailureResult(localizations);
       }
 
-      return await _setupUserData(userCredential.user!.uid);
+      await sendVerificationEmail();
+
+      return ActionResult(
+        success: true,
+        messageTitle: localizations.createdAccount,
+      );
     } on FirebaseAuthException catch (e) {
       return handleFirebaseAuthException(e, localizations);
     } catch (_) {
@@ -218,8 +179,13 @@ class FirebaseAuthRepo extends AuthRepo {
   @override
   Future<ActionResult> signOut() async {
     try {
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
+      if (uid != null) {
+        GetIt.I<RepoFactoryChangeNotifier>().repoFactory.userRepo2.signOut(uid);
+      }
       return ActionResult(
         success: true,
         messageTitle: localizations.signedOut,
@@ -258,21 +224,6 @@ class FirebaseAuthRepo extends AuthRepo {
         return genericFailureResult(localizations);
       }
 
-      final userResult = await GetIt.I<RepoFactoryChangeNotifier>()
-          .repoFactory
-          .userRepo2
-          .retrieveByUid(userCredential.user!.uid);
-
-      if (!userResult.success) {
-        final userResult = await _setupUserData(userCredential.user!.uid);
-        // Reload user so that AuthChangeNotifier can register firestore user listener
-        await GetIt.I<RepoFactoryChangeNotifier>()
-            .repoFactory
-            .userRepo1
-            .reloadUser();
-        return userResult;
-      }
-
       return ActionResult(
         success: true,
         messageTitle: localizations.signedIn,
@@ -304,7 +255,7 @@ class FirebaseAuthRepo extends AuthRepo {
           await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
 
       final authProviders = signInMethods
-          .map((methodId) => AuthProvider.values
+          .map((methodId) => config.AuthProvider.values
               .firstWhere((authProvider) => authProvider.id == methodId))
           .toList();
 

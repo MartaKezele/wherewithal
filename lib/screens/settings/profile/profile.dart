@@ -4,7 +4,7 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../change_notifiers/auth.dart';
 import '../../../change_notifiers/repo_factory.dart';
-import '../../../components/auth_provider_card.dart';
+import '../../../components/cards/auth_provider_card.dart';
 import '../../../components/form/custom_form.dart';
 import '../../../components/form/form_fields/email_form_field.dart';
 import '../../../components/wrappers/screen.dart';
@@ -154,21 +154,23 @@ class _ProfileState extends State<Profile> with GetItStateMixin {
                   ).colorStyle(OutlinedButtonStyles.primary)
               ],
             ),
-            AuthProviderCard(
-              title: localizations.password,
-              buttons: [
-                if (!authProviders.contains(AuthProvider.password))
-                  OutlinedButton(
-                    onPressed: () => context.pushConfigurePasswordAuth(),
-                    child: Text(localizations.configure),
-                  ).colorStyle(OutlinedButtonStyles.primary),
-                if (authProviders.contains(AuthProvider.password))
-                  OutlinedButton(
-                    onPressed: () => context.pushChangePassword(),
-                    child: Text(localizations.changePassword),
-                  ).colorStyle(OutlinedButtonStyles.primary),
-              ],
-            ),
+            if (authProviders.contains(AuthProvider.password))
+              AuthProviderCard(
+                title: localizations.password,
+                buttons: [
+                  // TODO enable when linking password auth is fixed
+                  // if (!authProviders.contains(AuthProvider.password))
+                  //   OutlinedButton(
+                  //     onPressed: () => context.pushConfigurePasswordAuth(),
+                  //     child: Text(localizations.configure),
+                  //   ).colorStyle(OutlinedButtonStyles.primary),
+                  if (authProviders.contains(AuthProvider.password))
+                    OutlinedButton(
+                      onPressed: () => context.pushChangePassword(),
+                      child: Text(localizations.changePassword),
+                    ).colorStyle(OutlinedButtonStyles.primary),
+                ],
+              ),
             HeightSpacer.md,
             FilledButton(
               onPressed: () => context.pushDeleteAccount(),
