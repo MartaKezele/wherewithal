@@ -70,11 +70,19 @@ class BudgetFormState extends State<BudgetForm> with GetItStateMixin {
     final budget = _budgetInfo();
 
     try {
+      final budgetInfo = _budgetInfo();
       await models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
           .budgets
           .doc(budget.id)
-          .update();
+          .update(
+            title: budgetInfo.title,
+            categoryIds: budgetInfo.categoryIds,
+            cronExpression: budgetInfo.cronExpression,
+            startDateTime: budgetInfo.startDateTime,
+            endDateTime: budgetInfo.endDateTime,
+            budget: budgetInfo.budget,
+          );
       return ActionResult(
         success: true,
         messageTitle: localizations.updatedBudget,
@@ -143,6 +151,7 @@ class BudgetFormState extends State<BudgetForm> with GetItStateMixin {
         switch (selection.first.value) {
           case RecurrenceIntervals.oneTime:
             _selectedCron = null;
+            _startDateTime ??= DateTime.now();
             break;
           case RecurrenceIntervals.day:
             _selectedCron?.day = null;

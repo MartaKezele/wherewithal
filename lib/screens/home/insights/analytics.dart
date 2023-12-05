@@ -4,7 +4,7 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 
 import '../../../app_models/pie_section_data.dart';
 import '../../../change_notifiers/auth.dart';
-import '../../../components/cards/cash_flow_card.dart';
+import '../../../components/cards/overview_card.dart';
 import '../../../components/cards/value_transactions_by_category_card.dart';
 import '../../../components/error_content.dart';
 import '../../../components/form/form_fields/date_range_form_field.dart';
@@ -243,7 +243,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
 
                 return Column(
                   children: [
-                    CashFlowCard(
+                    OverviewCard(
                       expense: totalExpense,
                       income: totalIncome,
                     ),

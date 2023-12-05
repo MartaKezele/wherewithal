@@ -19,10 +19,12 @@ class CategoryForm extends StatefulWidget {
     this.category,
     required this.formKey,
     this.disableTransactionTypeField = false,
+    this.transactionType,
   });
 
   final models.Category? category;
   final GlobalKey<FormState> formKey;
+  final TransactionTypes? transactionType;
   final bool disableTransactionTypeField;
 
   @override
@@ -103,8 +105,14 @@ class CategoryFormState extends State<CategoryForm> {
         widget.category!.transactionType,
       );
       if (transactionType != null) {
-        _selectedTransactionTypes = [transactionType];
+        setState(() {
+          _selectedTransactionTypes = [transactionType];
+        });
       }
+    } else if (widget.transactionType != null) {
+      setState(() {
+        _selectedTransactionTypes = [widget.transactionType!];
+      });
     }
   }
 

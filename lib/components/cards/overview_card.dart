@@ -7,8 +7,8 @@ import '../../l10n/app_localizations.dart';
 import '../../models/enums/transaction_types.dart';
 import 'custom_card.dart';
 
-class CashFlowCard extends StatelessWidget with GetItMixin {
-  CashFlowCard({
+class OverviewCard extends StatelessWidget with GetItMixin {
+  OverviewCard({
     super.key,
     required this.income,
     required this.expense,
@@ -40,7 +40,7 @@ class CashFlowCard extends StatelessWidget with GetItMixin {
     }
 
     return CustomCard(
-      title: localizations.cashFlow,
+      title: localizations.overview,
       child: Column(
         children: [
           Table(

@@ -131,6 +131,7 @@ export const createFirestoreUser = functions.https.onCall(async (data, context) 
             .collection('users').add({
                 uid: data.uid,
                 shouldSetUpData: true,
+                recurringTransactionsNotifications: true,
             });
 
         await _createCategories(
@@ -164,7 +165,7 @@ export const createFirestoreUser = functions.https.onCall(async (data, context) 
 });
 
 // Scheduled functions
-export const recurringTransactionReminders = onSchedule('0 2 * * *', async (_) => {
+export const recurringTransactionReminders = onSchedule('0 1 * * *', async (_) => {
     const users = (await admin
         .firestore()
         .collection('users')

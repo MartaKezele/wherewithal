@@ -57,11 +57,16 @@ class _HomeState extends State<Home> {
       context: context,
       useSafeArea: true,
       builder: (BuildContext context) => AddBottomSheet(
-        addCategory: _addCategory,
-        addExpense: () => _addValueTransaction(
+        addExpenseCategory: () => _addCategory(
           transactionType: TransactionTypes.expense,
         ),
-        addIncome: () => _addValueTransaction(
+        addIncomeCategory: () => _addCategory(
+          transactionType: TransactionTypes.income,
+        ),
+        addExpenseTransaction: () => _addValueTransaction(
+          transactionType: TransactionTypes.expense,
+        ),
+        addIncomeTransaction: () => _addValueTransaction(
           transactionType: TransactionTypes.income,
         ),
         addBudget: _addBudget,
@@ -69,13 +74,16 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _addCategory() async {
+  void _addCategory({
+    TransactionTypes? transactionType,
+  }) async {
     await showScrollableFormDialog(
       context: context,
       title: AppLocalizations.of(context).addCategory,
       form: CategoryForm(
         key: _addCategoryFormKey,
         formKey: _addCategoryFormStateKey,
+        transactionType: transactionType,
       ),
       formKey: _addCategoryFormStateKey,
       onSubmit: () {

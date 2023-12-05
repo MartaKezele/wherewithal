@@ -1419,9 +1419,9 @@ class AppLocalizations {
     );
   }
 
-  String get cashFlow {
+  String get overview {
     return Intl.message(
-      'Cash flow',
+      'Overview',
       locale: localeName,
     );
   }

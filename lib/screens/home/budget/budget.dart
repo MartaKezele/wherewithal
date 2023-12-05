@@ -85,7 +85,7 @@ class _BudgetState extends State<Budget> with GetItStateMixin {
           for (final budget in budgets) {
             if (budget.cronExpression == null) {
               oneTimeBudgets.add(budget);
-              break;
+              continue;
             }
             final cron = CronRecurrenceInterval.fromCronExpression(
               budget.cronExpression!,

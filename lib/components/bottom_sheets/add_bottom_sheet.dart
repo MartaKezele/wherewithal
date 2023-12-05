@@ -7,26 +7,24 @@ import '../../l10n/app_localizations.dart';
 import '../../extensions/button/filled_button.dart';
 import '../../extensions/button/button_style_button.dart';
 import '../../extensions/build_context.dart';
+import 'expense_income_bottom_sheet.dart';
 
-class AddBottomSheet extends StatefulWidget {
+class AddBottomSheet extends StatelessWidget {
   const AddBottomSheet({
     super.key,
-    required this.addCategory,
-    required this.addExpense,
-    required this.addIncome,
+    required this.addExpenseCategory,
+    required this.addIncomeCategory,
+    required this.addExpenseTransaction,
+    required this.addIncomeTransaction,
     required this.addBudget,
   });
 
-  final void Function() addCategory;
-  final void Function() addExpense;
-  final void Function() addIncome;
+  final void Function() addExpenseCategory;
+  final void Function() addIncomeCategory;
+  final void Function() addExpenseTransaction;
+  final void Function() addIncomeTransaction;
   final void Function() addBudget;
 
-  @override
-  State<AddBottomSheet> createState() => _AddBottomSheetState();
-}
-
-class _AddBottomSheetState extends State<AddBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -40,13 +38,13 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
               child: FilledButton(
                 onPressed: () {
                   context.pop();
-                  widget.addCategory();
+                  context.pushCreateReceipt();
                 },
-                child: Text(localizations.category),
+                child: Text(localizations.receipt),
               )
                   .iconOnTop(
-                    icon: Icons.category_rounded,
-                    colorStyle: FilledButtonStyles.inverseSurface,
+                    icon: Icons.receipt_long_rounded,
+                    colorStyle: FilledButtonStyles.primaryContainer,
                   )
                   .bottomSheetStyle(
                     constructor: FilledButton.new,
@@ -63,13 +61,20 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
               child: FilledButton(
                 onPressed: () {
                   context.pop();
-                  widget.addBudget();
+                  showModalBottomSheet(
+                    context: context,
+                    useSafeArea: true,
+                    builder: (BuildContext context) => ExpenseIncomeBottomSheet(
+                      addExpense: addExpenseTransaction,
+                      addIncome: addIncomeTransaction,
+                    ),
+                  );
                 },
-                child: Text(localizations.budget),
+                child: Text(localizations.transaction),
               )
                   .iconOnTop(
-                    icon: Icons.savings_rounded,
-                    colorStyle: FilledButtonStyles.primaryContainer,
+                    icon: Icons.wallet_rounded,
+                    colorStyle: FilledButtonStyles.inverseSurface,
                   )
                   .bottomSheetStyle(
                     constructor: FilledButton.new,
@@ -90,13 +95,20 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
               child: FilledButton(
                 onPressed: () {
                   context.pop();
-                  context.pushCreateReceipt();
+                  showModalBottomSheet(
+                    context: context,
+                    useSafeArea: true,
+                    builder: (BuildContext context) => ExpenseIncomeBottomSheet(
+                      addExpense: addExpenseCategory,
+                      addIncome: addIncomeCategory,
+                    ),
+                  );
                 },
-                child: Text(localizations.receipt),
+                child: Text(localizations.category),
               )
                   .iconOnTop(
-                    icon: Icons.receipt_long_rounded,
-                    colorStyle: FilledButtonStyles.primaryContainer,
+                    icon: Icons.category_rounded,
+                    colorStyle: FilledButtonStyles.inverseSurface,
                   )
                   .bottomSheetStyle(
                     constructor: FilledButton.new,
@@ -107,66 +119,13 @@ class _AddBottomSheetState extends State<AddBottomSheet> {
               child: FilledButton(
                 onPressed: () {
                   context.pop();
-                  showModalBottomSheet(
-                    context: context,
-                    useSafeArea: true,
-                    builder: (BuildContext context) => Row(
-                      children: [
-                        Expanded(
-                          child: FilledButton(
-                            onPressed: () {
-                              context.pop();
-                              widget.addExpense();
-                            },
-                            child: Text(localizations.expense),
-                          )
-                              .iconOnTop(
-                                icon: Icons.remove_rounded,
-                                colorStyle: FilledButtonStyles.error,
-                              )
-                              .bottomSheetStyle(
-                                constructor: FilledButton.new,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(
-                                      containerBorderRadius,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                        ),
-                        Expanded(
-                          child: FilledButton(
-                            onPressed: () {
-                              context.pop();
-                              widget.addIncome();
-                            },
-                            child: Text(localizations.income),
-                          )
-                              .iconOnTop(
-                                icon: Icons.add_rounded,
-                                colorStyle: FilledButtonStyles.success,
-                              )
-                              .bottomSheetStyle(
-                                constructor: FilledButton.new,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(
-                                      containerBorderRadius,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                        ),
-                      ],
-                    ),
-                  );
+                  addBudget();
                 },
-                child: Text(localizations.transaction),
+                child: Text(localizations.budget),
               )
                   .iconOnTop(
-                    icon: Icons.wallet_rounded,
-                    colorStyle: FilledButtonStyles.inverseSurface,
+                    icon: Icons.savings_rounded,
+                    colorStyle: FilledButtonStyles.primaryContainer,
                   )
                   .bottomSheetStyle(
                     constructor: FilledButton.new,

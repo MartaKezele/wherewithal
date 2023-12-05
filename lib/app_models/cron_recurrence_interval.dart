@@ -72,7 +72,7 @@ class CronRecurrenceInterval {
         .map(
           (weekDay) => weekDay.localizedName(context),
         )
-        .join(',');
+        .join(', ');
 
     return switch (recurrenceInterval) {
       RecurrenceIntervals.day => AppLocalizations.of(context).repeatsEveryDay,

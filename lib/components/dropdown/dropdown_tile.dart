@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app_models/custom_dropdown_entry.dart';
 import '../../constants/padding_size.dart';
+import '../../utils/dropdown/dropdown.dart';
 import 'custom_expansion_tile.dart';
 
 class DropdownTile<T> extends StatelessWidget {
@@ -111,8 +112,10 @@ class DropdownTile<T> extends StatelessWidget {
     return CustomExpansionTile(
       shape: const BeveledRectangleBorder(),
       title: Text(dropdownEntry.title),
-      initiallyExpanded: selectedTiles.any((selectedDropdownEntry) =>
-          dropdownEntry.subEntries.contains(selectedDropdownEntry)),
+      initiallyExpanded: subentrySelected(
+        selectedTiles,
+        dropdownEntry,
+      ),
       iconColor: iconColor,
       collapsedIconColor: collapsedIconColor,
       textColor: dropdownEntry.foregroundColor,

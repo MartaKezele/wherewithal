@@ -8,6 +8,7 @@ import '../../change_notifiers/date_format.dart';
 import '../../config/fraction_digits.dart';
 import '../../constants/padding_size.dart';
 import '../../constants/spacers.dart';
+import '../../constants/themes/card.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/models.dart' as models;
 import '../../utils/budget.dart';
@@ -103,8 +104,9 @@ class _BudgetCardState extends State<BudgetCard> with GetItStateMixin {
                       widget.title,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const Icon(
+                    Icon(
                       Icons.keyboard_arrow_right_rounded,
+                      color: cardForegroundColor(context),
                     ),
                   ],
                 ),
