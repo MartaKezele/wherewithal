@@ -1,8 +1,8 @@
 class ReceiptProduct {
-  static const valueField = 'value';
-  static const productNameField = 'ProductName';
-  static const productPriceField = 'ProductPrice';
-  static const productQuantityField = 'ProductQuantity';
+  static const _valueField = 'value';
+  static const _productNameField = 'ProductName';
+  static const _productPriceField = 'ProductPrice';
+  static const _productQuantityField = 'ProductQuantity';
 
   final String productName;
   final double? productPrice;
@@ -16,9 +16,11 @@ class ReceiptProduct {
 
   factory ReceiptProduct.fromJson(Map<String, dynamic> json) {
     return ReceiptProduct(
-      productName: json[productNameField]?[valueField] ?? '',
-      productPrice: double.tryParse(json[productPriceField]?[valueField] ?? ''),
-      quantity: double.tryParse(json[productQuantityField]?[valueField] ?? ''),
+      productName: json[_productNameField]?[_valueField] ?? '',
+      productPrice:
+          double.tryParse(json[_productPriceField]?[_valueField] ?? ''),
+      quantity:
+          double.tryParse(json[_productQuantityField]?[_valueField] ?? ''),
     );
   }
 }

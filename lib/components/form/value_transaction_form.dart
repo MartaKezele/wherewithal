@@ -134,7 +134,8 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
             title: widget.valueTransaction!.categoryTitle,
             transactionType: widget.valueTransaction!.categoryTransactionType,
             categoryReason: widget.valueTransaction!.categoryReason,
-          )
+            parentCategoryId: widget.valueTransaction!.parentCategoryId,
+          ),
         ];
       });
     }

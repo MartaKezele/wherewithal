@@ -38,14 +38,14 @@ final router = GoRouter(
       }
 
       if (auth.emailVerified &&
-          auth.shouldSetUpData &&
+          auth.shouldSetUpUserData &&
           (state.location.startsWith(TopLevelRoutes.welcome.path) ||
               state.location.startsWith(TopLevelRoutes.verifyEmail.path))) {
         return TopLevelRoutes.dataSetup.path;
       }
 
       if (auth.emailVerified &&
-          !auth.shouldSetUpData &&
+          !auth.shouldSetUpUserData &&
           (state.location.startsWith(TopLevelRoutes.dataSetup.path) ||
               state.location.startsWith(TopLevelRoutes.welcome.path))) {
         return initialLocation;

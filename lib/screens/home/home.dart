@@ -205,6 +205,7 @@ class _HomeState extends State<Home> {
                     valueTransaction.categoryTransactionType,
                 categoryReason: valueTransaction.categoryReason,
                 parentCategoryId: valueTransaction.parentCategoryId,
+                cronExpression: valueTransaction.cronExpression,
               )
             : null;
 

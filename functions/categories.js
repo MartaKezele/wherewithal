@@ -59,18 +59,10 @@ const _rent = {
     transactionType: TransactionTypes.expense,
     title: 'Rent',
 };
-const _services = {
-    transactionType: TransactionTypes.expense,
-    title: 'Services',
-};
 
 const _fuel = {
     transactionType: TransactionTypes.expense,
     title: 'Fuel',
-};
-const _leasing = {
-    transactionType: TransactionTypes.expense,
-    title: 'Leasing',
 };
 const _parking = {
     transactionType: TransactionTypes.expense,
@@ -98,7 +90,6 @@ const _vehicle = {
     title: 'Vehicle',
     subcategories: [
         _fuel,
-        _leasing,
         _parking,
         _vehicleInsurance,
         _vehicleMaintenance,
@@ -191,11 +182,6 @@ const _advisory = {
     categoryReason: CategoryReasons.want,
     transactionType: TransactionTypes.expense,
 };
-const _expenseChildSupport = {
-    title: 'Child support',
-    categoryReason: CategoryReasons.need,
-    transactionType: TransactionTypes.expense,
-};
 
 const _stocks = {
     title: 'Stocks',
@@ -216,53 +202,18 @@ const _crypto = {
 const _pensionPayments = {
     title: 'Pension payments',
     transactionType: TransactionTypes.expense,
-};
-
-const _petFood = {
-    title: 'Food',
+}; 
+const _bonds = {
+    title: 'Bonds',
     transactionType: TransactionTypes.expense,
 };
-const _petToys = {
-    title: 'Toys',
-    transactionType: TransactionTypes.expense,
-};
-const _petClothesAccessories = {
-    title: 'Clothes & Accessories',
-    transactionType: TransactionTypes.expense,
-};
-const _vetCheckups = {
-    title: 'Vet checkups',
-    transactionType: TransactionTypes.expense,
-};
-const _petCareProducts = {
-    title: 'Care products',
-    transactionType: TransactionTypes.expense,
-};
-
 
 const _clothes = {
     title: 'Clothes',
     transactionType: TransactionTypes.expense,
 };
-const _sportClothesEquipment = {
-    title: 'Sport clothes & equipment',
-    transactionType: TransactionTypes.expense,
-};
 const _shoes = {
     title: 'Shoes',
-    transactionType: TransactionTypes.expense,
-};
-const _bags = {
-    title: 'Bags',
-    transactionType: TransactionTypes.expense,
-};
-const _accessories = {
-    title: 'Accessories',
-    transactionType: TransactionTypes.expense,
-};
-const _jewlery = {
-    title: 'Jewlery',
-    categoryReason: CategoryReasons.want,
     transactionType: TransactionTypes.expense,
 };
 const _cosmetics = {
@@ -270,8 +221,8 @@ const _cosmetics = {
     categoryReason: CategoryReasons.want,
     transactionType: TransactionTypes.expense,
 };
-const _hygineProducts = {
-    title: 'Hygine products',
+const _toiletries = {
+    title: 'Toiletries',
     transactionType: TransactionTypes.expense,
 };
 const _cleaning = {
@@ -286,41 +237,9 @@ const _homeGarden = {
 const _pets = {
     title: 'Pets',
     transactionType: TransactionTypes.expense,
-    subcategories: [
-        _petFood,
-        _petToys,
-        _petClothesAccessories,
-        _vetCheckups,
-        _petCareProducts,
-    ],
 };
 const _expenseGifts = {
     title: 'Gifts',
-    transactionType: TransactionTypes.expense,
-};
-
-const _childCare = {
-    title: 'Child care',
-    transactionType: TransactionTypes.expense,
-};
-const _pocketMoney = {
-    title: 'Pocket money',
-    transactionType: TransactionTypes.expense,
-};
-const _schoolTrips = {
-    title: 'School trips',
-    transactionType: TransactionTypes.expense,
-};
-const _tuition = {
-    title: 'Tuition',
-    transactionType: TransactionTypes.expense,
-};
-const _clothesAndShoes = {
-    title: 'Clothes and shoes',
-    transactionType: TransactionTypes.expense,
-};
-const _schoolSupplies = {
-    title: 'School supplies',
     transactionType: TransactionTypes.expense,
 };
 
@@ -328,28 +247,11 @@ const _hairdresser = {
     title: 'Hairdresser',
     transactionType: TransactionTypes.expense,
 };
-const _manicurePedicure = {
-    title: 'Manicure, pedicure',
-    transactionType: TransactionTypes.expense,
-};
-const _massage = {
-    title: 'Massage',
-    transactionType: TransactionTypes.expense,
-};
-const _beautyTreatments = {
-    title: 'Beauty treatments',
-    transactionType: TransactionTypes.expense,
-};
 
 const _onlineCourses = {
     title: 'Online courses',
     transactionType: TransactionTypes.expense,
 };
-const _schoolFees = {
-    title: 'School fees',
-    transactionType: TransactionTypes.expense,
-};
-
 
 const _foodAndDrinks = {
     title: 'Food & Drinks',
@@ -370,7 +272,6 @@ const _housing = {
         _mortgage,
         _propertyInsurance,
         _rent,
-        _services,
     ],
 };
 const _transportation = {
@@ -438,7 +339,6 @@ const _financialExpenses = {
         _fines,
         _taxes,
         _advisory,
-        _expenseChildSupport,
     ],
 };
 const _investments = {
@@ -451,6 +351,7 @@ const _investments = {
         _preciousMetals,
         _crypto,
         _pensionPayments,
+        _bonds,
     ],
 };
 const _shopping = {
@@ -458,29 +359,13 @@ const _shopping = {
     transactionType: TransactionTypes.expense,
     subcategories: [
         _clothes,
-        _sportClothesEquipment,
         _shoes,
-        _bags,
-        _accessories,
-        _jewlery,
         _cosmetics,
         _cleaning,
         _homeGarden,
         _pets,
         _expenseGifts,
-        _hygineProducts,
-    ],
-};
-const _kids = {
-    title: 'Kids',
-    transactionType: TransactionTypes.expense,
-    subcategories: [
-        _childCare,
-        _pocketMoney,
-        _schoolTrips,
-        _tuition,
-        _clothesAndShoes,
-        _schoolSupplies,
+        _toiletries,
     ],
 };
 const _serviceTreatments = {
@@ -488,9 +373,6 @@ const _serviceTreatments = {
     transactionType: TransactionTypes.expense,
     subcategories: [
         _hairdresser,
-        _manicurePedicure,
-        _massage,
-        _beautyTreatments,
     ],
 };
 const _education = {
@@ -498,7 +380,6 @@ const _education = {
     transactionType: TransactionTypes.expense,
     subcategories: [
         _onlineCourses,
-        _schoolFees,
     ],
 };
 const _sportFitness = {
@@ -526,10 +407,6 @@ const _salary = {
     title: 'Salary',
     transactionType: TransactionTypes.income,
 };
-const _incomeChildSupport = {
-    title: 'Child support',
-    transactionType: TransactionTypes.income,
-};
 
 const _expenseCategories = [
     _foodAndDrinks,
@@ -543,7 +420,6 @@ const _expenseCategories = [
     _financialExpenses,
     _investments,
     _shopping,
-    _kids,
     _serviceTreatments,
     _education,
     _sportFitness,
@@ -555,7 +431,6 @@ const _incomeCategories = [
     _incomeGifts,
     _incomeLotteryGambling,
     _salary,
-    _incomeChildSupport,
 ];
 
 export const categories = [

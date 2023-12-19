@@ -1,4 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,6 +17,7 @@ import 'config/router.dart';
 import 'config/keys/shared_prefs.dart';
 import 'constants/themes/themes.dart';
 import 'dal/repo_factory.dart';
+import 'env.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'utils/prefs.dart';
@@ -78,6 +80,8 @@ Future<void> main() async {
       ),
     ),
   );
+
+  OpenAI.apiKey = Env.openaiApiKey;
 
   runApp(
     WherewithalApp(

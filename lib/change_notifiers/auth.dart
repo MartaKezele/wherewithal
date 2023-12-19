@@ -24,15 +24,19 @@ class AuthChangeNotifier extends ChangeNotifier {
   StreamSubscription<String>? _fcmTokenStreamSubscription;
 
   bool get signedIn => _firebaseAuthUser != null;
-  bool get emailVerified =>
-      _firebaseAuthUser != null && _firebaseAuthUser!.emailVerified;
+  bool get emailVerified => signedIn && _firebaseAuthUser!.emailVerified;
   String? get email => _firebaseAuthUser?.email;
   String? get displayName => _firebaseAuthUser?.displayName;
   String? get uid => _firebaseAuthUser?.uid;
   String? get id => _user?.id;
 
-  bool get shouldSetUpData =>
-      signedIn && (_user == null || (_user != null && _user!.shouldSetUpData));
+  bool get shouldSetUpUserData =>
+      _user == null || (_user != null && _user!.shouldSetUpUserData);
+  
+  bool get shouldSetUpCategories =>
+      shouldSetUpUserData ||
+      _user == null ||
+      (_user != null && _user!.shouldSetUpCategories);
 
   List<config.AuthProvider> get authProviders => _authProviders;
 

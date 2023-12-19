@@ -11,7 +11,7 @@ import '../models/receipt_api_quota_data.dart';
 import '../models/receipt_data.dart';
 import '../models/receipt_response.dart';
 
-Future<List<ActionResult<ReceiptData?>>> processReceipts({
+Future<List<ActionResult<ReceiptData?>>> processReceiptImages({
   required List<XFile> imageFiles,
   required AppLocalizations localizations,
 }) async {
@@ -19,7 +19,7 @@ Future<List<ActionResult<ReceiptData?>>> processReceipts({
   final client = http.Client();
 
   for (final file in imageFiles) {
-    final result = await processReceipt(
+    final result = await processReceiptImage(
       client: client,
       imageFile: file,
       localizations: localizations,
@@ -31,7 +31,7 @@ Future<List<ActionResult<ReceiptData?>>> processReceipts({
   return results;
 }
 
-Future<ActionResult<ReceiptData?>> processReceipt({
+Future<ActionResult<ReceiptData?>> processReceiptImage({
   http.Client? client,
   required XFile imageFile,
   required AppLocalizations localizations,

@@ -46,7 +46,7 @@ class _DataSetupScreenState extends State<DataSetupScreen>
       return;
     }
 
-    if (!GetIt.I<AuthChangeNotifier>().shouldSetUpData) {
+    if (!GetIt.I<AuthChangeNotifier>().shouldSetUpUserData) {
       setState(() {
         _settingUpData = false;
         _resultBanner = showActionResultOverlayBanner(
@@ -100,8 +100,8 @@ class _DataSetupScreenState extends State<DataSetupScreen>
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
-    final shouldSetUpData = watchOnly(
-      (AuthChangeNotifier changeNotifier) => changeNotifier.shouldSetUpData,
+    final shouldSetUpUserData = watchOnly(
+      (AuthChangeNotifier changeNotifier) => changeNotifier.shouldSetUpUserData,
     );
 
     return Screen(
@@ -128,7 +128,7 @@ class _DataSetupScreenState extends State<DataSetupScreen>
             child: const CircularProgressIndicator(),
           ),
           Visibility(
-            visible: _showRetryBtn && shouldSetUpData,
+            visible: _showRetryBtn && shouldSetUpUserData,
             child: FilledButton(
               onPressed: _setUpData,
               child: Text(localizations.retry),

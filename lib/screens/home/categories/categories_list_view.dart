@@ -2,7 +2,9 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
+import '../../../change_notifiers/auth.dart';
 import '../../../constants/padding_size.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/enums/category_reasons.dart';
 import '../../../models/models.dart' as models;
 import '../../../components/error_content.dart';
@@ -24,51 +26,62 @@ class CategoriesListView extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FirestoreBuilder(
-      ref: ref,
-      builder: (
-        context,
-        snapshot,
-        child,
-      ) {
-        if (snapshot.hasError) {
-          return const Padding(
-            padding: EdgeInsets.all(PaddingSize.md),
-            child: ErrorContent(),
-          );
-        }
+    final localizations = AppLocalizations.of(context);
 
-        if (!snapshot.hasData) {
-          return LoadingContent(color: foregroundColor);
-        }
-
-        final docs = snapshot.requireData.docs;
-
-        if (docs.isEmpty) {
-          return const NoDataContent();
-        }
-
-        return ListView.builder(
-          shrinkWrap: true,
-          controller: scrollController,
-          itemCount: docs.length,
-          itemBuilder: (context, index) {
-            final category = docs[index].data;
-
-            final categoryNeedString =
-                CategoryReasons.fromName(category.categoryReason)
-                        ?.localizedName(context) ??
-                    '';
-
-            return ListTile(
-              title: Text(category.title),
-              subtitle: Text(categoryNeedString),
-              textColor: foregroundColor,
-              onTap: () => context.pushCategory(category.id),
-            );
-          },
-        );
-      },
+    final shouldSetUpCategories = watchOnly(
+      (AuthChangeNotifier changeNotifier) =>
+          changeNotifier.shouldSetUpCategories,
     );
+
+    return shouldSetUpCategories
+        ? LoadingContent(
+            title: localizations.settingUpData,
+          )
+        : FirestoreBuilder(
+            ref: ref,
+            builder: (
+              context,
+              snapshot,
+              child,
+            ) {
+              if (snapshot.hasError) {
+                return const Padding(
+                  padding: EdgeInsets.all(PaddingSize.md),
+                  child: ErrorContent(),
+                );
+              }
+
+              if (!snapshot.hasData) {
+                return LoadingContent(color: foregroundColor);
+              }
+
+              final docs = snapshot.requireData.docs;
+
+              if (docs.isEmpty) {
+                return const NoDataContent();
+              }
+
+              return ListView.builder(
+                shrinkWrap: true,
+                controller: scrollController,
+                itemCount: docs.length,
+                itemBuilder: (context, index) {
+                  final category = docs[index].data;
+
+                  final categoryNeedString =
+                      CategoryReasons.fromName(category.categoryReason)
+                              ?.localizedName(context) ??
+                          '';
+
+                  return ListTile(
+                    title: Text(category.title),
+                    subtitle: Text(categoryNeedString),
+                    textColor: foregroundColor,
+                    onTap: () => context.pushCategory(category.id),
+                  );
+                },
+              );
+            },
+          );
   }
 }

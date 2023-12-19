@@ -147,8 +147,10 @@ abstract class UserDocumentReference
     FieldValue fcmTokenFieldValue,
     int? fcmTokenTimestamp,
     FieldValue fcmTokenTimestampFieldValue,
-    bool shouldSetUpData,
-    FieldValue shouldSetUpDataFieldValue,
+    bool shouldSetUpUserData,
+    FieldValue shouldSetUpUserDataFieldValue,
+    bool shouldSetUpCategories,
+    FieldValue shouldSetUpCategoriesFieldValue,
     bool recurringTransactionsNotifications,
     FieldValue recurringTransactionsNotificationsFieldValue,
   });
@@ -164,8 +166,10 @@ abstract class UserDocumentReference
     FieldValue fcmTokenFieldValue,
     int? fcmTokenTimestamp,
     FieldValue fcmTokenTimestampFieldValue,
-    bool shouldSetUpData,
-    FieldValue shouldSetUpDataFieldValue,
+    bool shouldSetUpUserData,
+    FieldValue shouldSetUpUserDataFieldValue,
+    bool shouldSetUpCategories,
+    FieldValue shouldSetUpCategoriesFieldValue,
     bool recurringTransactionsNotifications,
     FieldValue recurringTransactionsNotificationsFieldValue,
   });
@@ -220,8 +224,10 @@ class _$UserDocumentReference
     FieldValue? fcmTokenFieldValue,
     Object? fcmTokenTimestamp = _sentinel,
     FieldValue? fcmTokenTimestampFieldValue,
-    Object? shouldSetUpData = _sentinel,
-    FieldValue? shouldSetUpDataFieldValue,
+    Object? shouldSetUpUserData = _sentinel,
+    FieldValue? shouldSetUpUserDataFieldValue,
+    Object? shouldSetUpCategories = _sentinel,
+    FieldValue? shouldSetUpCategoriesFieldValue,
     Object? recurringTransactionsNotifications = _sentinel,
     FieldValue? recurringTransactionsNotificationsFieldValue,
   }) async {
@@ -238,8 +244,13 @@ class _$UserDocumentReference
       "Cannot specify both fcmTokenTimestamp and fcmTokenTimestampFieldValue",
     );
     assert(
-      shouldSetUpData == _sentinel || shouldSetUpDataFieldValue == null,
-      "Cannot specify both shouldSetUpData and shouldSetUpDataFieldValue",
+      shouldSetUpUserData == _sentinel || shouldSetUpUserDataFieldValue == null,
+      "Cannot specify both shouldSetUpUserData and shouldSetUpUserDataFieldValue",
+    );
+    assert(
+      shouldSetUpCategories == _sentinel ||
+          shouldSetUpCategoriesFieldValue == null,
+      "Cannot specify both shouldSetUpCategories and shouldSetUpCategoriesFieldValue",
     );
     assert(
       recurringTransactionsNotifications == _sentinel ||
@@ -257,10 +268,15 @@ class _$UserDocumentReference
         _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestamp as int?,
       if (fcmTokenTimestampFieldValue != null)
         _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestampFieldValue,
-      if (shouldSetUpData != _sentinel)
-        _$UserFieldMap['shouldSetUpData']!: shouldSetUpData as bool,
-      if (shouldSetUpDataFieldValue != null)
-        _$UserFieldMap['shouldSetUpData']!: shouldSetUpDataFieldValue,
+      if (shouldSetUpUserData != _sentinel)
+        _$UserFieldMap['shouldSetUpUserData']!: shouldSetUpUserData as bool,
+      if (shouldSetUpUserDataFieldValue != null)
+        _$UserFieldMap['shouldSetUpUserData']!: shouldSetUpUserDataFieldValue,
+      if (shouldSetUpCategories != _sentinel)
+        _$UserFieldMap['shouldSetUpCategories']!: shouldSetUpCategories as bool,
+      if (shouldSetUpCategoriesFieldValue != null)
+        _$UserFieldMap['shouldSetUpCategories']!:
+            shouldSetUpCategoriesFieldValue,
       if (recurringTransactionsNotifications != _sentinel)
         _$UserFieldMap['recurringTransactionsNotifications']!:
             recurringTransactionsNotifications as bool,
@@ -280,8 +296,10 @@ class _$UserDocumentReference
     FieldValue? fcmTokenFieldValue,
     Object? fcmTokenTimestamp = _sentinel,
     FieldValue? fcmTokenTimestampFieldValue,
-    Object? shouldSetUpData = _sentinel,
-    FieldValue? shouldSetUpDataFieldValue,
+    Object? shouldSetUpUserData = _sentinel,
+    FieldValue? shouldSetUpUserDataFieldValue,
+    Object? shouldSetUpCategories = _sentinel,
+    FieldValue? shouldSetUpCategoriesFieldValue,
     Object? recurringTransactionsNotifications = _sentinel,
     FieldValue? recurringTransactionsNotificationsFieldValue,
   }) {
@@ -298,8 +316,13 @@ class _$UserDocumentReference
       "Cannot specify both fcmTokenTimestamp and fcmTokenTimestampFieldValue",
     );
     assert(
-      shouldSetUpData == _sentinel || shouldSetUpDataFieldValue == null,
-      "Cannot specify both shouldSetUpData and shouldSetUpDataFieldValue",
+      shouldSetUpUserData == _sentinel || shouldSetUpUserDataFieldValue == null,
+      "Cannot specify both shouldSetUpUserData and shouldSetUpUserDataFieldValue",
+    );
+    assert(
+      shouldSetUpCategories == _sentinel ||
+          shouldSetUpCategoriesFieldValue == null,
+      "Cannot specify both shouldSetUpCategories and shouldSetUpCategoriesFieldValue",
     );
     assert(
       recurringTransactionsNotifications == _sentinel ||
@@ -317,10 +340,15 @@ class _$UserDocumentReference
         _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestamp as int?,
       if (fcmTokenTimestampFieldValue != null)
         _$UserFieldMap['fcmTokenTimestamp']!: fcmTokenTimestampFieldValue,
-      if (shouldSetUpData != _sentinel)
-        _$UserFieldMap['shouldSetUpData']!: shouldSetUpData as bool,
-      if (shouldSetUpDataFieldValue != null)
-        _$UserFieldMap['shouldSetUpData']!: shouldSetUpDataFieldValue,
+      if (shouldSetUpUserData != _sentinel)
+        _$UserFieldMap['shouldSetUpUserData']!: shouldSetUpUserData as bool,
+      if (shouldSetUpUserDataFieldValue != null)
+        _$UserFieldMap['shouldSetUpUserData']!: shouldSetUpUserDataFieldValue,
+      if (shouldSetUpCategories != _sentinel)
+        _$UserFieldMap['shouldSetUpCategories']!: shouldSetUpCategories as bool,
+      if (shouldSetUpCategoriesFieldValue != null)
+        _$UserFieldMap['shouldSetUpCategories']!:
+            shouldSetUpCategoriesFieldValue,
       if (recurringTransactionsNotifications != _sentinel)
         _$UserFieldMap['recurringTransactionsNotifications']!:
             recurringTransactionsNotifications as bool,
@@ -460,7 +488,18 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     List<int?>? whereIn,
     List<int?>? whereNotIn,
   });
-  UserQuery whereShouldSetUpData({
+  UserQuery whereShouldSetUpUserData({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  });
+  UserQuery whereShouldSetUpCategories({
     bool? isEqualTo,
     bool? isNotEqualTo,
     bool? isLessThan,
@@ -531,7 +570,19 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     UserDocumentSnapshot? startAfterDocument,
   });
 
-  UserQuery orderByShouldSetUpData({
+  UserQuery orderByShouldSetUpUserData({
+    bool descending = false,
+    bool startAt,
+    bool startAfter,
+    bool endAt,
+    bool endBefore,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  });
+
+  UserQuery orderByShouldSetUpCategories({
     bool descending = false,
     bool startAt,
     bool startAfter,
@@ -819,7 +870,7 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
-  UserQuery whereShouldSetUpData({
+  UserQuery whereShouldSetUpUserData({
     bool? isEqualTo,
     bool? isNotEqualTo,
     bool? isLessThan,
@@ -833,7 +884,36 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     return _$UserQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$UserFieldMap['shouldSetUpData']!,
+        _$UserFieldMap['shouldSetUpUserData']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  UserQuery whereShouldSetUpCategories({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  }) {
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$UserFieldMap['shouldSetUpCategories']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -1165,7 +1245,7 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
-  UserQuery orderByShouldSetUpData({
+  UserQuery orderByShouldSetUpUserData({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -1176,8 +1256,82 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     UserDocumentSnapshot? endBeforeDocument,
     UserDocumentSnapshot? startAfterDocument,
   }) {
-    final query = $referenceWithoutCursor
-        .orderBy(_$UserFieldMap['shouldSetUpData']!, descending: descending);
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserFieldMap['shouldSetUpUserData']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$UserQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  UserQuery orderByShouldSetUpCategories({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    UserDocumentSnapshot? startAtDocument,
+    UserDocumentSnapshot? endAtDocument,
+    UserDocumentSnapshot? endBeforeDocument,
+    UserDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$UserFieldMap['shouldSetUpCategories']!,
+        descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -6178,7 +6332,8 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       uid: json['uid'] as String,
       fcmToken: json['fcmToken'] as String?,
       fcmTokenTimestamp: json['fcmTokenTimestamp'] as int?,
-      shouldSetUpData: json['shouldSetUpData'] as bool? ?? true,
+      shouldSetUpUserData: json['shouldSetUpUserData'] as bool? ?? true,
+      shouldSetUpCategories: json['shouldSetUpCategories'] as bool? ?? true,
       recurringTransactionsNotifications:
           json['recurringTransactionsNotifications'] as bool? ?? true,
     );
@@ -6188,7 +6343,8 @@ const _$UserFieldMap = <String, String>{
   'uid': 'uid',
   'fcmToken': 'fcmToken',
   'fcmTokenTimestamp': 'fcmTokenTimestamp',
-  'shouldSetUpData': 'shouldSetUpData',
+  'shouldSetUpUserData': 'shouldSetUpUserData',
+  'shouldSetUpCategories': 'shouldSetUpCategories',
   'recurringTransactionsNotifications': 'recurringTransactionsNotifications',
 };
 
@@ -6197,7 +6353,8 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'uid': instance.uid,
       'fcmToken': instance.fcmToken,
       'fcmTokenTimestamp': instance.fcmTokenTimestamp,
-      'shouldSetUpData': instance.shouldSetUpData,
+      'shouldSetUpUserData': instance.shouldSetUpUserData,
+      'shouldSetUpCategories': instance.shouldSetUpCategories,
       'recurringTransactionsNotifications':
           instance.recurringTransactionsNotifications,
     };
