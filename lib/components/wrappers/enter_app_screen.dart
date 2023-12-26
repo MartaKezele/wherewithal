@@ -55,7 +55,7 @@ class _EnterAppScreenState extends State<EnterAppScreen>
     return Screen(
       appBar: widget.appBar,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (widget.icon != null)
             Expanded(
