@@ -1797,6 +1797,20 @@ class AppLocalizations {
     );
   }
 
+  String get pdfFiles {
+    return Intl.message(
+      'PDF files',
+      locale: localeName,
+    );
+  }
+
+  String get fileIsNotSavedOnDisk {
+    return Intl.message(
+      'File is not saved on disk',
+      locale: localeName,
+    );
+  }
+
   String categorizedXProducts(int howMany, int all) {
     return Intl.message(
       'Categorized $howMany out of $all products because the request was too big. To categorize the remaining products enable categorization of products that don\'t have category selected press the button again.',

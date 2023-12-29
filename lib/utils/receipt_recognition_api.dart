@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
@@ -11,31 +12,53 @@ import '../models/receipt_api_quota_data.dart';
 import '../models/receipt_data.dart';
 import '../models/receipt_response.dart';
 
-Future<List<ActionResult<ReceiptData?>>> processReceiptImages({
-  required List<XFile> imageFiles,
+Future<List<ActionResult<ReceiptData?>>> processReceiptFiles({
+  List<PlatformFile>? files,
+  List<XFile>? imageFiles,
   required AppLocalizations localizations,
 }) async {
   List<ActionResult<ReceiptData?>> results = [];
   final client = http.Client();
 
-  for (final file in imageFiles) {
-    final result = await processReceiptImage(
-      client: client,
-      imageFile: file,
-      localizations: localizations,
-    );
-    results.add(result);
+  if (files != null) {
+    for (final file in files) {
+      final result = await processReceiptFile(
+        client: client,
+        file: file,
+        localizations: localizations,
+      );
+      results.add(result);
+    }
+  }
+
+  if (imageFiles != null) {
+    for (final imageFile in imageFiles) {
+      final result = await processReceiptFile(
+        client: client,
+        imageFile: imageFile,
+        localizations: localizations,
+      );
+      results.add(result);
+    }
   }
 
   client.close();
   return results;
 }
 
-Future<ActionResult<ReceiptData?>> processReceiptImage({
+Future<ActionResult<ReceiptData?>> processReceiptFile({
   http.Client? client,
-  required XFile imageFile,
+  PlatformFile? file,
+  XFile? imageFile,
   required AppLocalizations localizations,
 }) async {
+  if (file != null && file.path == null) {
+    return ActionResult(
+      success: false,
+      messageTitle: localizations.fileIsNotSavedOnDisk,
+    );
+  }
+
   // Checking if receipt api quota is reached
   final receiptApiQuotaResult = await _receiptRecognitionQuota(localizations);
   if (receiptApiQuotaResult.success && receiptApiQuotaResult.data != null) {
@@ -53,7 +76,7 @@ Future<ActionResult<ReceiptData?>> processReceiptImage({
     success: false,
     messageTitle: localizations.failedToProcessReceipt,
     data: ReceiptData(
-      imageFile: imageFile,
+      file: file,
     ),
   );
 
@@ -63,17 +86,29 @@ Future<ActionResult<ReceiptData?>> processReceiptImage({
     final request = http.MultipartRequest(
       'POST',
       url,
-    )
-      ..files.add(
+    )..headers.addAll({
+        apiKeyParam: Env.receiptRecognitionApiKey,
+      });
+
+    if (file != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          fileParam,
+          file.path!,
+          filename: file.name,
+        ),
+      );
+    }
+
+    if (imageFile != null) {
+      request.files.add(
         http.MultipartFile.fromBytes(
           fileParam,
           await imageFile.readAsBytes(),
           filename: imageFile.name,
         ),
-      )
-      ..headers.addAll({
-        apiKeyParam: Env.receiptRecognitionApiKey,
-      });
+      );
+    }
 
     final response =
         client != null ? await client.send(request) : await request.send();
@@ -83,14 +118,14 @@ Future<ActionResult<ReceiptData?>> processReceiptImage({
 
       final receiptResponse = ReceiptResponse.fromJson(
         json: jsonDecode(responseString),
-        fileName: imageFile.name,
+        fileName: file?.name ?? imageFile?.name ?? '',
       );
 
       return ActionResult(
         success: true,
         messageTitle: localizations.dataExtracted,
         data: ReceiptData(
-          imageFile: imageFile,
+          file: file,
           receiptResponse: receiptResponse,
         ),
       );

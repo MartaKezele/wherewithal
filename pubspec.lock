@@ -289,14 +289,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-  document_analysis:
-    dependency: "direct main"
-    description:
-      name: document_analysis
-      sha256: d217b3cff2fe2447ac296cfb059e258537d61e12959df5ea9fb4963c2b8acee6
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   envied:
     dependency: "direct main"
     description:
@@ -361,6 +353,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: "4e42aacde3b993c5947467ab640882c56947d9d27342a5b6f2895b23956954a6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.1"
   file_selector_linux:
     dependency: transitive
     description:

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
@@ -10,7 +11,7 @@ import '../app_models/action_result.dart';
 import '../app_models/product_item_data.dart';
 import '../change_notifiers/auth.dart';
 import '../change_notifiers/currency.dart';
-import '../components/bottom_sheets/camera_gallery_bottom_sheet.dart';
+import '../components/bottom_sheets/pick_file_bottom_sheet.dart';
 import '../components/cards/product_item_card.dart';
 import '../components/dialogs/confirm_dialog.dart';
 import '../components/expandable_container.dart';
@@ -141,6 +142,66 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
     }
   }
 
+  Future<void> _pickAndHandlePDFfiles(
+    AppLocalizations localizations,
+  ) async {
+    if (true) {
+      try {
+        await FilePicker.platform.pickFiles(
+          allowMultiple: true,
+          type: FileType.custom,
+          allowedExtensions: ['pdf'],
+        ).then((filePicerResult) async {
+          if (filePicerResult?.count != null) {
+            setState(() {
+              _processingReceipts = true;
+              _loadingMessage = localizations.processingReceipts;
+            });
+            await processReceiptFiles(
+              files: filePicerResult!.files,
+              localizations: localizations,
+            ).then((results) async {
+              if (results.any((actionResult) => actionResult.success)) {
+                for (final result in results) {
+                  _receiptResults.add(result);
+                  if (result.success && result.data != null) {
+                    _setReceiptDate(result.data!);
+                    _setShopName(result.data!);
+
+                    await _addProductItemsFromReceipt(result.data!);
+                  }
+                }
+              } else {
+                _resultBanner = showActionResultOverlayBanner(
+                  context,
+                  results.first,
+                );
+              }
+              setState(() {
+                _processingReceipts = false;
+                _loadingMessage = null;
+              });
+            });
+          }
+        });
+      } catch (_) {
+        setState(() {
+          _processingReceipts = false;
+          _loadingMessage = null;
+        });
+
+        // ignore: use_build_context_synchronously
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          ActionResult(
+            success: false,
+            messageTitle: localizations.failurePickingImages,
+          ),
+        );
+      }
+    }
+  }
+
   Future<void> _pickAndHandleGalleryImages(
     AppLocalizations localizations,
   ) async {
@@ -163,7 +224,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
               _processingReceipts = true;
               _loadingMessage = localizations.processingReceipts;
             });
-            await processReceiptImages(
+            await processReceiptFiles(
               imageFiles: imageFiles,
               localizations: localizations,
             ).then((results) async {
@@ -225,7 +286,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
             _processingReceipts = true;
             _loadingMessage = localizations.processingReceipts;
           });
-          await processReceiptImage(
+          await processReceiptFile(
             imageFile: pickedFile,
             localizations: localizations,
           ).then((result) async {
@@ -413,10 +474,11 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                           context: context,
                           useSafeArea: true,
                           builder: (BuildContext context) =>
-                              CameraGalleryBottomSheet(
+                              PickFileBottomSheet(
                             pickAndHandleGalleryImages:
                                 _pickAndHandleGalleryImages,
                             takeAndHandleCameraImage: _takeAndHandleCameraImage,
+                            pickAndHandlePDFfiles: _pickAndHandlePDFfiles,
                           ),
                         );
                       },
@@ -441,6 +503,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                                 });
                               },
                               imageFile: result.data!.imageFile,
+                              file: result.data!.file,
                               errorMessage:
                                   result.success ? null : result.messageTitle,
                             );

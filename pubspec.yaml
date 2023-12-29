@@ -14,8 +14,8 @@ dependencies:
   collection: ^1.17.2
   dart_openai: ^5.0.0
   device_info_plus: ^9.1.1
-  document_analysis: ^0.2.0
   envied: ^0.3.0+3
+  file_picker: ^6.1.1
   firebase_analytics: ^10.7.1
   firebase_auth: ^4.7.1
   firebase_core: ^2.15.0
