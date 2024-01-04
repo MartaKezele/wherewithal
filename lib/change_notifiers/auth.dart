@@ -30,13 +30,11 @@ class AuthChangeNotifier extends ChangeNotifier {
   String? get uid => _firebaseAuthUser?.uid;
   String? get id => _user?.id;
 
-  bool get shouldSetUpUserData =>
-      _user == null || (_user != null && _user!.shouldSetUpUserData);
-  
+  // whether user should be created in firestore
+  bool get shouldSetUpUserData => _user == null;
+
   bool get shouldSetUpCategories =>
-      shouldSetUpUserData ||
-      _user == null ||
-      (_user != null && _user!.shouldSetUpCategories);
+      shouldSetUpUserData || (_user != null && _user!.shouldSetUpCategories);
 
   List<config.AuthProvider> get authProviders => _authProviders;
 
@@ -98,11 +96,6 @@ class AuthChangeNotifier extends ChangeNotifier {
         _firestoreUserStreamSubscription = null;
       } else {
         _updateAuthProviders();
-
-        final userQuerySnapshot =
-            await models.usersRef.whereUid(isEqualTo: user.uid).limit(1).get();
-        _firestoreUserListener(userQuerySnapshot);
-
         _firestoreUserStreamSubscription ??= models.usersRef
             .whereUid(isEqualTo: user.uid)
             .limit(1)

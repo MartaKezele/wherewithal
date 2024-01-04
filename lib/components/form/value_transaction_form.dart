@@ -26,13 +26,11 @@ class ValueTransactionForm extends StatefulWidget
     this.valueTransaction,
     required this.formKey,
     this.transactionType,
-    this.allowRecurring = true,
   });
 
   final GlobalKey<FormState> formKey;
   final models.ValueTransaction? valueTransaction;
   final TransactionTypes? transactionType;
-  final bool allowRecurring;
 
   @override
   State<ValueTransactionForm> createState() => ValueTransactionFormState();
@@ -320,7 +318,9 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
         ),
         PriceValueFormField(
           controller: _valueController,
-          transactionType: _selectedTransactionTypes.first,
+          transactionType: _selectedTransactionTypes.isEmpty
+              ? null
+              : _selectedTransactionTypes.first,
         ),
         CustomDropdown(
           options: TransactionTypes.values

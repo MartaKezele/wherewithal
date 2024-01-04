@@ -13,7 +13,6 @@ class User {
     required this.uid,
     this.fcmToken,
     this.fcmTokenTimestamp,
-    this.shouldSetUpUserData = true,
     this.shouldSetUpCategories = true,
     this.recurringTransactionsNotifications = true,
   });
@@ -23,7 +22,6 @@ class User {
   final String uid;
   final String? fcmToken;
   final int? fcmTokenTimestamp;
-  final bool shouldSetUpUserData;
   final bool shouldSetUpCategories;
   final bool recurringTransactionsNotifications;
 }

@@ -13,7 +13,6 @@ class FirestoreUserRepo2 extends UserRepo2 {
         models.User(
           id: '',
           uid: uid,
-          shouldSetUpUserData: false,
         ),
       );
 

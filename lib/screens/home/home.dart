@@ -104,7 +104,6 @@ class _HomeState extends State<Home> {
   void _addValueTransaction({
     TransactionTypes? transactionType,
     models.ValueTransaction? valueTransaction,
-    bool allowRecurring = true,
   }) async {
     await showScrollableFormDialog(
       context: context,
@@ -114,7 +113,6 @@ class _HomeState extends State<Home> {
         formKey: _addTransactionFormStateKey,
         transactionType: transactionType,
         valueTransaction: valueTransaction,
-        allowRecurring: allowRecurring,
       ),
       onSubmit: () {
         assert(_addTransactionFormKey.currentState != null);
@@ -205,13 +203,11 @@ class _HomeState extends State<Home> {
                     valueTransaction.categoryTransactionType,
                 categoryReason: valueTransaction.categoryReason,
                 parentCategoryId: valueTransaction.parentCategoryId,
-                cronExpression: valueTransaction.cronExpression,
               )
             : null;
 
         _addValueTransaction(
           valueTransaction: nonRecurringTransaction,
-          allowRecurring: false,
         );
         break;
     }

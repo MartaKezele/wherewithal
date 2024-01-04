@@ -65,10 +65,10 @@ class _DataSetupScreenState extends State<DataSetupScreen>
         .userRepo2
         .create(GetIt.I<AuthChangeNotifier>().uid!)
         .then((result) {
-      setState(() {
-        _settingUpData = false;
-      });
       if (!result.success) {
+        setState(() {
+          _settingUpData = false;
+        });
         setState(() {
           _showRetryBtn = true;
         });
@@ -124,7 +124,7 @@ class _DataSetupScreenState extends State<DataSetupScreen>
           ),
           HeightSpacer.md,
           Visibility(
-            visible: _settingUpData == true,
+            visible: _settingUpData && !_showRetryBtn,
             child: const CircularProgressIndicator(),
           ),
           Visibility(
