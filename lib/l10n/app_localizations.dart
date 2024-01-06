@@ -1811,6 +1811,13 @@ class AppLocalizations {
     );
   }
 
+  String get creatingAccount {
+    return Intl.message(
+      'Creating account',
+      locale: localeName,
+    );
+  }
+
   String categorizedXProducts(int howMany, int all) {
     return Intl.message(
       'Categorized $howMany out of $all products because the request was too big. To categorize the remaining products enable categorization of products that don\'t have category selected press the button again.',

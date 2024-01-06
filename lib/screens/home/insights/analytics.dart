@@ -139,7 +139,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
       (AuthChangeNotifier changeNotifier) => changeNotifier.id,
     );
 
-    models.ValueTransactionQuery valueTransactionsRef = models.usersRef
+    final valueTransactionsRef = models.usersRef
         .doc(userId)
         .valueTransactions
         .whereCronExpression(isNull: true)

@@ -141,8 +141,6 @@ abstract class UserDocumentReference
   ///
   /// If no document exists yet, the update will fail.
   Future<void> update({
-    String uid,
-    FieldValue uidFieldValue,
     String? fcmToken,
     FieldValue fcmTokenFieldValue,
     int? fcmTokenTimestamp,
@@ -158,8 +156,6 @@ abstract class UserDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
-    String uid,
-    FieldValue uidFieldValue,
     String? fcmToken,
     FieldValue fcmTokenFieldValue,
     int? fcmTokenTimestamp,
@@ -214,8 +210,6 @@ class _$UserDocumentReference
   }
 
   Future<void> update({
-    Object? uid = _sentinel,
-    FieldValue? uidFieldValue,
     Object? fcmToken = _sentinel,
     FieldValue? fcmTokenFieldValue,
     Object? fcmTokenTimestamp = _sentinel,
@@ -225,10 +219,6 @@ class _$UserDocumentReference
     Object? recurringTransactionsNotifications = _sentinel,
     FieldValue? recurringTransactionsNotificationsFieldValue,
   }) async {
-    assert(
-      uid == _sentinel || uidFieldValue == null,
-      "Cannot specify both uid and uidFieldValue",
-    );
     assert(
       fcmToken == _sentinel || fcmTokenFieldValue == null,
       "Cannot specify both fcmToken and fcmTokenFieldValue",
@@ -248,8 +238,6 @@ class _$UserDocumentReference
       "Cannot specify both recurringTransactionsNotifications and recurringTransactionsNotificationsFieldValue",
     );
     final json = {
-      if (uid != _sentinel) _$UserFieldMap['uid']!: uid as String,
-      if (uidFieldValue != null) _$UserFieldMap['uid']!: uidFieldValue,
       if (fcmToken != _sentinel)
         _$UserFieldMap['fcmToken']!: fcmToken as String?,
       if (fcmTokenFieldValue != null)
@@ -276,8 +264,6 @@ class _$UserDocumentReference
 
   void transactionUpdate(
     Transaction transaction, {
-    Object? uid = _sentinel,
-    FieldValue? uidFieldValue,
     Object? fcmToken = _sentinel,
     FieldValue? fcmTokenFieldValue,
     Object? fcmTokenTimestamp = _sentinel,
@@ -287,10 +273,6 @@ class _$UserDocumentReference
     Object? recurringTransactionsNotifications = _sentinel,
     FieldValue? recurringTransactionsNotificationsFieldValue,
   }) {
-    assert(
-      uid == _sentinel || uidFieldValue == null,
-      "Cannot specify both uid and uidFieldValue",
-    );
     assert(
       fcmToken == _sentinel || fcmTokenFieldValue == null,
       "Cannot specify both fcmToken and fcmTokenFieldValue",
@@ -310,8 +292,6 @@ class _$UserDocumentReference
       "Cannot specify both recurringTransactionsNotifications and recurringTransactionsNotificationsFieldValue",
     );
     final json = {
-      if (uid != _sentinel) _$UserFieldMap['uid']!: uid as String,
-      if (uidFieldValue != null) _$UserFieldMap['uid']!: uidFieldValue,
       if (fcmToken != _sentinel)
         _$UserFieldMap['fcmToken']!: fcmToken as String?,
       if (fcmTokenFieldValue != null)
@@ -431,17 +411,6 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
-  UserQuery whereUid({
-    String? isEqualTo,
-    String? isNotEqualTo,
-    String? isLessThan,
-    String? isLessThanOrEqualTo,
-    String? isGreaterThan,
-    String? isGreaterThanOrEqualTo,
-    bool? isNull,
-    List<String>? whereIn,
-    List<String>? whereNotIn,
-  });
   UserQuery whereFcmToken({
     String? isEqualTo,
     String? isNotEqualTo,
@@ -488,18 +457,6 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
   });
 
   UserQuery orderByDocumentId({
-    bool descending = false,
-    String startAt,
-    String startAfter,
-    String endAt,
-    String endBefore,
-    UserDocumentSnapshot? startAtDocument,
-    UserDocumentSnapshot? endAtDocument,
-    UserDocumentSnapshot? endBeforeDocument,
-    UserDocumentSnapshot? startAfterDocument,
-  });
-
-  UserQuery orderByUid({
     bool descending = false,
     String startAt,
     String startAfter,
@@ -736,35 +693,6 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
-  UserQuery whereUid({
-    String? isEqualTo,
-    String? isNotEqualTo,
-    String? isLessThan,
-    String? isLessThanOrEqualTo,
-    String? isGreaterThan,
-    String? isGreaterThanOrEqualTo,
-    bool? isNull,
-    List<String>? whereIn,
-    List<String>? whereNotIn,
-  }) {
-    return _$UserQuery(
-      _collection,
-      $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$UserFieldMap['uid']!,
-        isEqualTo: isEqualTo,
-        isNotEqualTo: isNotEqualTo,
-        isLessThan: isLessThan,
-        isLessThanOrEqualTo: isLessThanOrEqualTo,
-        isGreaterThan: isGreaterThan,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
-        isNull: isNull,
-        whereIn: whereIn,
-        whereNotIn: whereNotIn,
-      ),
-      $queryCursor: $queryCursor,
-    );
-  }
-
   UserQuery whereFcmToken({
     String? isEqualTo,
     String? isNotEqualTo,
@@ -893,78 +821,6 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     UserDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
-        descending: descending);
-    var queryCursor = $queryCursor;
-
-    if (startAtDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        startAt: const [],
-        startAtDocumentSnapshot: startAtDocument.snapshot,
-      );
-    }
-    if (startAfterDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        startAfter: const [],
-        startAfterDocumentSnapshot: startAfterDocument.snapshot,
-      );
-    }
-    if (endAtDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        endAt: const [],
-        endAtDocumentSnapshot: endAtDocument.snapshot,
-      );
-    }
-    if (endBeforeDocument != null) {
-      queryCursor = queryCursor.copyWith(
-        endBefore: const [],
-        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
-      );
-    }
-
-    if (startAt != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
-        startAtDocumentSnapshot: null,
-      );
-    }
-    if (startAfter != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
-        startAfterDocumentSnapshot: null,
-      );
-    }
-    if (endAt != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
-        endAtDocumentSnapshot: null,
-      );
-    }
-    if (endBefore != _sentinel) {
-      queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
-        endBeforeDocumentSnapshot: null,
-      );
-    }
-
-    return _$UserQuery(
-      _collection,
-      $referenceWithoutCursor: query,
-      $queryCursor: queryCursor,
-    );
-  }
-
-  UserQuery orderByUid({
-    bool descending = false,
-    Object? startAt = _sentinel,
-    Object? startAfter = _sentinel,
-    Object? endAt = _sentinel,
-    Object? endBefore = _sentinel,
-    UserDocumentSnapshot? startAtDocument,
-    UserDocumentSnapshot? endAtDocument,
-    UserDocumentSnapshot? endBeforeDocument,
-    UserDocumentSnapshot? startAfterDocument,
-  }) {
-    final query = $referenceWithoutCursor.orderBy(_$UserFieldMap['uid']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -6180,7 +6036,6 @@ void _$assertValueTransaction(ValueTransaction instance) {
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
       id: json['id'] as String,
-      uid: json['uid'] as String,
       fcmToken: json['fcmToken'] as String?,
       fcmTokenTimestamp: json['fcmTokenTimestamp'] as int?,
       shouldSetUpCategories: json['shouldSetUpCategories'] as bool? ?? true,
@@ -6190,7 +6045,6 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
 
 const _$UserFieldMap = <String, String>{
   'id': 'id',
-  'uid': 'uid',
   'fcmToken': 'fcmToken',
   'fcmTokenTimestamp': 'fcmTokenTimestamp',
   'shouldSetUpCategories': 'shouldSetUpCategories',
@@ -6199,7 +6053,6 @@ const _$UserFieldMap = <String, String>{
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
-      'uid': instance.uid,
       'fcmToken': instance.fcmToken,
       'fcmTokenTimestamp': instance.fcmTokenTimestamp,
       'shouldSetUpCategories': instance.shouldSetUpCategories,

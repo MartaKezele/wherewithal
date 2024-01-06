@@ -10,7 +10,7 @@ import '../utils/prefs.dart';
 
 class AuthChangeNotifier extends ChangeNotifier {
   AuthChangeNotifier._privateConstructor() {
-    registerListeners();
+    _registerListeners();
   }
 
   static final AuthChangeNotifier instance =
@@ -19,7 +19,7 @@ class AuthChangeNotifier extends ChangeNotifier {
   User? _firebaseAuthUser;
   models.User? _user;
   List<config.AuthProvider> _authProviders = [];
-  StreamSubscription<models.UserQuerySnapshot>?
+  StreamSubscription<models.UserDocumentSnapshot>?
       _firestoreUserStreamSubscription;
   StreamSubscription<String>? _fcmTokenStreamSubscription;
 
@@ -53,19 +53,24 @@ class AuthChangeNotifier extends ChangeNotifier {
     }
   }
 
-  void _firestoreUserListener(models.UserQuerySnapshot userQuerySnapshot) {
-    if (userQuerySnapshot.docs.isEmpty) {
-      _user = null;
-    } else {
-      _user = userQuerySnapshot.docs.first.data;
-    }
+  void _firestoreUserListener(
+    models.UserDocumentSnapshot userDocSnapshot,
+  ) async {
+    _user = userDocSnapshot.data;
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    _handleFcmToken(fcmToken, userDocSnapshot);
+    _fcmTokenStreamSubscription ??=
+        FirebaseMessaging.instance.onTokenRefresh.listen(
+      (fcmToken) => _handleFcmToken(fcmToken, userDocSnapshot),
+      onError: (err) => debugPrint(err),
+    );
+    notifyListeners();
   }
 
   void _handleFcmToken(
     String? fcmToken,
-    models.UserQuerySnapshot userQuerySnapshot,
+    models.UserDocumentSnapshot userDocSnapshot,
   ) async {
-    final userExists = userQuerySnapshot.docs.isNotEmpty;
     final fcmTokenPref = await fetchStringPref(SharedPrefsKeys.fcmToken);
 
     if (fcmToken != null) {
@@ -75,8 +80,8 @@ class AuthChangeNotifier extends ChangeNotifier {
           fcmToken,
         );
       }
-      if (userExists) {
-        final user = userQuerySnapshot.docs.first.data;
+      if (userDocSnapshot.exists) {
+        final user = userDocSnapshot.data!;
         if (user.fcmToken != fcmToken) {
           await models.usersRef.doc(user.id).update(
                 fcmToken: fcmToken,
@@ -87,32 +92,21 @@ class AuthChangeNotifier extends ChangeNotifier {
     }
   }
 
-  void registerListeners() {
+  void _registerListeners() {
     FirebaseAuth.instance.userChanges().listen((user) async {
       _firebaseAuthUser = user;
       if (user == null) {
         _user = null;
         _firestoreUserStreamSubscription?.cancel();
         _firestoreUserStreamSubscription = null;
+        _fcmTokenStreamSubscription?.cancel();
+        _fcmTokenStreamSubscription = null;
       } else {
         _updateAuthProviders();
         _firestoreUserStreamSubscription ??= models.usersRef
-            .whereUid(isEqualTo: user.uid)
-            .limit(1)
+            .doc(user.uid)
             .snapshots()
-            .listen(
-          (userQuerySnapshot) async {
-            _firestoreUserListener(userQuerySnapshot);
-            String? fcmToken = await FirebaseMessaging.instance.getToken();
-            _handleFcmToken(fcmToken, userQuerySnapshot);
-            _fcmTokenStreamSubscription ??=
-                FirebaseMessaging.instance.onTokenRefresh.listen(
-              (fcmToken) => _handleFcmToken(fcmToken, userQuerySnapshot),
-              onError: (err) => debugPrint(err),
-            );
-            notifyListeners();
-          },
-        );
+            .listen(_firestoreUserListener);
       }
       notifyListeners();
     });

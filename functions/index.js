@@ -177,6 +177,28 @@ export const deleteFirestoreUserData = functions.https.onCall(async (data, conte
 
 });
 
+export const onFirebaseAuthUserCreate = functions.auth.user().onCreate(async (user) => {
+    try {
+        await admin
+            .firestore()
+            .collection('users')
+            .doc(user.uid)
+            .set({
+                shouldSetUpCategories: true,
+                recurringTransactionsNotifications: true
+            });
+        return {
+            success: true,
+            msg: 'Created firestore user.'
+        };
+    } catch (error) {
+        return {
+            success: false,
+            msg: error.toString(),
+        };
+    }
+});
+
 // Scheduled functions
 export const recurringTransactionReminders = onSchedule('0 1 * * *', async (_) => {
     const users = (await admin

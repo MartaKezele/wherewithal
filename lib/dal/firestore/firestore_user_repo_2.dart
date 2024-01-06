@@ -7,38 +7,18 @@ class FirestoreUserRepo2 extends UserRepo2 {
   FirestoreUserRepo2(super.localizations);
 
   @override
-  Future<ActionResult<models.User?>> create(String uid) async {
-    try {
-      await models.usersRef.add(
-        models.User(
-          id: '',
-          uid: uid,
-        ),
-      );
-
-      return ActionResult(
-        success: true,
-        messageTitle: localizations.createdAccount,
-      );
-    } catch (_) {
-      return genericFailureResult(localizations);
-    }
-  }
-
-  @override
   Future<ActionResult> signOut(String uid) async {
     try {
-      final userSnapshot =
-          await models.usersRef.whereUid(isEqualTo: uid).limit(1).get();
+      final userSnapshot = await models.usersRef.doc(uid).get();
 
-      if (userSnapshot.docs.isEmpty) {
+      if (userSnapshot.data == null) {
         return ActionResult(
           success: false,
           messageTitle: localizations.userCouldNotBeFound,
         );
       }
 
-      userSnapshot.docs.first.reference.update(
+      userSnapshot.reference.update(
         fcmToken: null,
         fcmTokenTimestamp: DateTime.now().millisecondsSinceEpoch,
       );

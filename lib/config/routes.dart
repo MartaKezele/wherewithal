@@ -293,7 +293,7 @@ class TopLevelRoutes {
   static final dataSetup = GoRoute(
     path: '/data-setup',
     builder: (context, state) {
-      return DataSetupScreen();
+      return const DataSetupScreen();
     },
   );
 

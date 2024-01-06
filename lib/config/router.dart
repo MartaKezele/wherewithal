@@ -47,7 +47,8 @@ final router = GoRouter(
       if (auth.emailVerified &&
           !auth.shouldSetUpUserData &&
           (state.location.startsWith(TopLevelRoutes.dataSetup.path) ||
-              state.location.startsWith(TopLevelRoutes.welcome.path))) {
+              state.location.startsWith(TopLevelRoutes.welcome.path) ||
+              state.location.startsWith(TopLevelRoutes.verifyEmail.path))) {
         return initialLocation;
       }
     }
