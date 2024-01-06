@@ -1,3 +1,3 @@
-# wherewithal
+# Wherewithal
 
 Personal finance tracker
