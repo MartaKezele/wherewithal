@@ -1,7 +1,7 @@
 class ReceiptApiQuotaData {
-  static const quotaField = 'quota';
-  static const quotaUsedField = 'quotaUsed';
-  static const currentMonthField = 'currentMonth';
+  static const _quotaField = 'quota';
+  static const _quotaUsedField = 'quotaUsed';
+  static const _currentMonthField = 'currentMonth';
 
   final int quota;
   final int quotaUsed;
@@ -15,9 +15,9 @@ class ReceiptApiQuotaData {
 
   factory ReceiptApiQuotaData.fromJson(Map<String, dynamic> json) {
     return ReceiptApiQuotaData(
-      quota: json[quotaField],
-      quotaUsed: json[quotaUsedField],
-      currentMonth: json[currentMonthField],
+      quota: json[_quotaField],
+      quotaUsed: json[_quotaUsedField],
+      currentMonth: json[_currentMonthField],
     );
   }
 }

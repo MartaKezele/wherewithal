@@ -10,19 +10,17 @@ part 'models.g.dart';
 class User {
   User({
     required this.id,
-    required this.uid,
     this.fcmToken,
     this.fcmTokenTimestamp,
-    this.shouldSetUpData = true,
+    this.shouldSetUpCategories = true,
     this.recurringTransactionsNotifications = true,
   });
 
   @Id()
   final String id;
-  final String uid;
   final String? fcmToken;
   final int? fcmTokenTimestamp;
-  final bool shouldSetUpData;
+  final bool shouldSetUpCategories;
   final bool recurringTransactionsNotifications;
 }
 

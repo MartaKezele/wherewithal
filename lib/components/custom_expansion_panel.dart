@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/padding_size.dart';
+
 const double _kPanelHeaderCollapsedHeight = kMinInteractiveDimension;
 const EdgeInsets _kPanelHeaderExpandedDefaultPadding = EdgeInsets.symmetric(
   vertical: 64.0 - _kPanelHeaderCollapsedHeight,
@@ -222,7 +224,8 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
       );
 
       Widget expandIconContainer = Container(
-        margin: const EdgeInsetsDirectional.only(end: 8.0),
+        margin:
+            const EdgeInsetsDirectional.symmetric(vertical: PaddingSize.xxs),
         child: ExpandIcon(
           color: widget.expandIconColor,
           isExpanded: _isChildExpanded(index),

@@ -251,6 +251,8 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
                                               valueTransaction.categoryReason,
                                           parentCategoryId:
                                               valueTransaction.parentCategoryId,
+                                          cronExpression:
+                                              valueTransaction.cronExpression,
                                         ),
                                         allowRecurring: false,
                                       );

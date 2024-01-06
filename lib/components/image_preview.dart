@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,16 +15,29 @@ class ImagePreview extends StatelessWidget {
   const ImagePreview({
     super.key,
     required this.onRemovePressed,
-    required this.imageFile,
+    this.imageFile,
+    this.file,
     this.errorMessage,
   });
 
   final void Function() onRemovePressed;
-  final XFile imageFile;
+  final XFile? imageFile;
+  final PlatformFile? file;
   final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
+    Widget img;
+
+    if (imageFile?.path != null) {
+      img = Image.file(
+        File(imageFile!.path),
+        fit: BoxFit.cover,
+      );
+    }
+
+    img = const Icon(Icons.picture_as_pdf_rounded);
+
     return Column(
       children: [
         SizedBox(
@@ -40,10 +54,7 @@ class ImagePreview extends StatelessWidget {
                   aspectRatio: imagePreviewAspectRatio,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(containerBorderRadius),
-                    child: Image.file(
-                      File(imageFile.path),
-                      fit: BoxFit.cover,
-                    ),
+                    child: img,
                   ),
                 ),
               ),

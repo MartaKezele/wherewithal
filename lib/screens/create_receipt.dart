@@ -1,20 +1,21 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:collection/collection.dart';
 
 import '../app_models/action_result.dart';
-import '../app_models/custom_dropdown_entry.dart';
 import '../app_models/product_item_data.dart';
 import '../change_notifiers/auth.dart';
 import '../change_notifiers/currency.dart';
-import '../components/bottom_sheets/camera_gallery_bottom_sheet.dart';
+import '../components/bottom_sheets/pick_file_bottom_sheet.dart';
 import '../components/cards/product_item_card.dart';
 import '../components/dialogs/confirm_dialog.dart';
+import '../components/expandable_container.dart';
 import '../components/form/custom_form.dart';
-import '../components/form/form_fields/category_form_field.dart';
 import '../components/form/form_fields/date_form_field.dart';
 import '../components/image_preview.dart';
 import '../components/wrappers/loading_overlay_wrapper.dart';
@@ -27,8 +28,8 @@ import '../constants/styles/outlined_button.dart';
 import '../l10n/app_localizations.dart';
 import '../models/enums/transaction_types.dart';
 import '../models/receipt_data.dart';
-import '../models/receipt_product.dart';
 import '../utils/android.dart';
+import '../utils/detect_product_categories.dart';
 import '../utils/form.dart';
 import '../utils/overlay_banner.dart';
 import '../utils/receipt_recognition_api.dart';
@@ -48,11 +49,13 @@ class CreateReceipt extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
   final _formKey = GlobalKey<FormState>();
-  final ImagePicker _imagePicker = ImagePicker();
+  final _imagePicker = ImagePicker();
+  final _shopNameController = TextEditingController();
 
   final List<ActionResult<ReceiptData?>> _receiptResults = [];
   OverlayEntry? _resultBanner;
-  bool _loading = false;
+  bool _processingReceipts = false;
+  bool _detectingCategories = false;
   String? _loadingMessage;
   final List<ProductItemData> _productItems = [];
   DateTime? _dateTime;
@@ -68,35 +71,134 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
     }
   }
 
-  void _addProductItemsFromReceipt(
-    XFile? imageFile,
-    List<ReceiptProduct>? productItems,
-  ) {
-    if (productItems != null) {
-      final items = productItems.map((receiptProduct) {
-        String productTitle;
-        if (receiptProduct.quantity != null && receiptProduct.quantity != 1) {
-          productTitle =
-              '${receiptProduct.quantity}x ${receiptProduct.productName}';
-        } else {
-          productTitle = receiptProduct.productName;
-        }
-
-        return ProductItemData(
-          imagefile: imageFile,
-          titleController: TextEditingController(text: productTitle),
-          priceController: TextEditingController(
-            text: receiptProduct.productPrice != null
-                ? '${receiptProduct.productPrice}'
-                : '',
-          ),
-          // TODO determine category using AI
-          category: null,
-        );
+  void _setShopName(ReceiptData receiptData) {
+    final receiptShopName = receiptData.receiptResponse?.shopName;
+    if (receiptShopName != null && _shopNameController.text.isEmpty) {
+      setState(() {
+        _shopNameController.text = receiptShopName;
       });
+    }
+  }
+
+  Future<void> _addProductItemsFromReceipt(
+    ReceiptData receiptData,
+  ) async {
+    final receiptResponse = receiptData.receiptResponse;
+    if (receiptResponse != null &&
+        receiptResponse.productItems != null &&
+        receiptResponse.productItems!.isNotEmpty) {
+      final items = receiptResponse.productItems!
+          .mapIndexed((index, item) {
+            return ProductItemData(
+              imagefile: receiptData.imageFile,
+              titleController: TextEditingController(text: item.productName),
+              priceController: TextEditingController(
+                text: item.productPrice != null ? '${item.productPrice}' : '',
+              ),
+              quantity: item.quantity,
+              category: null,
+            );
+          })
+          .toList()
+          .reversed;
+
       setState(() {
         _productItems.addAll(items);
       });
+    }
+  }
+
+  Future<void> _categorizeProducts() async {
+    final localizations = AppLocalizations.of(context);
+    final anyEmptyTitles =
+        _productItems.any((element) => element.titleController.text.isEmpty);
+    if (anyEmptyTitles) {
+      _resultBanner = showActionResultOverlayBanner(
+        context,
+        ActionResult(
+          success: false,
+          messageTitle: localizations.categoryDetectionTips,
+        ),
+      );
+    } else {
+      setState(() {
+        _detectingCategories = true;
+        _loadingMessage = localizations.detectingCategories;
+      });
+      await categorizeProductItems(
+        context: context,
+        shopName: _shopNameController.text,
+        items: _productItems,
+        setStateFn: setState,
+      ).then((result) {
+        setState(() {
+          _detectingCategories = false;
+          _loadingMessage = null;
+        });
+        if (!result.success) {
+          _resultBanner = showActionResultOverlayBanner(context, result);
+        }
+      });
+    }
+  }
+
+  Future<void> _pickAndHandlePDFfiles(
+    AppLocalizations localizations,
+  ) async {
+    if (true) {
+      try {
+        await FilePicker.platform.pickFiles(
+          allowMultiple: true,
+          type: FileType.custom,
+          allowedExtensions: ['pdf'],
+        ).then((filePicerResult) async {
+          if (filePicerResult?.count != null) {
+            setState(() {
+              _processingReceipts = true;
+              _loadingMessage = localizations.processingReceipts;
+            });
+            await processReceiptFiles(
+              files: filePicerResult!.files,
+              localizations: localizations,
+            ).then((results) async {
+              if (results.any((actionResult) => actionResult.success)) {
+                for (final result in results) {
+                  _receiptResults.add(result);
+                  if (result.success && result.data != null) {
+                    _setReceiptDate(result.data!);
+                    _setShopName(result.data!);
+
+                    await _addProductItemsFromReceipt(result.data!);
+                  }
+                }
+              } else {
+                _resultBanner = showActionResultOverlayBanner(
+                  context,
+                  results.first,
+                );
+              }
+              setState(() {
+                _processingReceipts = false;
+                _loadingMessage = null;
+              });
+            });
+          }
+        });
+      } catch (_) {
+        setState(() {
+          _processingReceipts = false;
+          _loadingMessage = null;
+        });
+
+        // ignore: use_build_context_synchronously
+        _resultBanner = showActionResultOverlayBanner(
+          context,
+          ActionResult(
+            success: false,
+            messageTitle: localizations.failurePickingImages,
+          ),
+        );
+      }
     }
   }
 
@@ -119,10 +221,10 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
         await _imagePicker.pickMultiImage().then((imageFiles) async {
           if (imageFiles.isNotEmpty) {
             setState(() {
-              _loading = true;
+              _processingReceipts = true;
               _loadingMessage = localizations.processingReceipts;
             });
-            await processReceipts(
+            await processReceiptFiles(
               imageFiles: imageFiles,
               localizations: localizations,
             ).then((results) async {
@@ -131,10 +233,9 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                   _receiptResults.add(result);
                   if (result.success && result.data != null) {
                     _setReceiptDate(result.data!);
-                    _addProductItemsFromReceipt(
-                      result.data!.imageFile,
-                      result.data!.receiptResponse?.productItems,
-                    );
+                    _setShopName(result.data!);
+
+                    await _addProductItemsFromReceipt(result.data!);
                   }
                 }
               } else {
@@ -144,15 +245,15 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                 );
               }
               setState(() {
-                _loading = false;
+                _processingReceipts = false;
                 _loadingMessage = null;
               });
             });
           }
         });
-      } catch (e) {
+      } catch (_) {
         setState(() {
-          _loading = false;
+          _processingReceipts = false;
           _loadingMessage = null;
         });
 
@@ -182,20 +283,18 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
         );
         if (pickedFile != null) {
           setState(() {
-            _loading = true;
+            _processingReceipts = true;
             _loadingMessage = localizations.processingReceipts;
           });
-          await processReceipt(
+          await processReceiptFile(
             imageFile: pickedFile,
             localizations: localizations,
-          ).then((result) {
+          ).then((result) async {
             if (result.success && result.data != null) {
               _receiptResults.add(result);
               _setReceiptDate(result.data!);
-              _addProductItemsFromReceipt(
-                result.data!.imageFile,
-                result.data!.receiptResponse?.productItems,
-              );
+              _setShopName(result.data!);
+              await _addProductItemsFromReceipt(result.data!);
             } else {
               _resultBanner = showActionResultOverlayBanner(
                 context,
@@ -203,14 +302,14 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
               );
             }
             setState(() {
-              _loading = false;
+              _processingReceipts = false;
               _loadingMessage = null;
             });
           });
         }
       } catch (e) {
         setState(() {
-          _loading = false;
+          _processingReceipts = false;
           _loadingMessage = null;
         });
         // ignore: use_build_context_synchronously
@@ -256,6 +355,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
       categoryTitle: category.title,
       categoryTransactionType: category.transactionType,
       categoryReason: category.categoryReason,
+      parentCategoryId: category.parentCategoryId,
     );
   }
 
@@ -321,18 +421,6 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
     });
   }
 
-  void _onCategorySelectionChanged(
-    List<CustomDropdownEntry<models.Category>> selection,
-  ) {
-    setState(() {
-      if (selection.isNotEmpty) {
-        _category = selection.first.value;
-      } else {
-        _category = null;
-      }
-    });
-  }
-
   @override
   void initState() {
     _dateTime = DateTime.now();
@@ -367,7 +455,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
         .orderByTitle();
 
     return LoadingOverlayWrapper(
-      loading: _loading,
+      loading: _processingReceipts || _detectingCategories,
       loadingMessage: _loadingMessage,
       child: Screen(
         appBar: AppBar(
@@ -386,10 +474,11 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                           context: context,
                           useSafeArea: true,
                           builder: (BuildContext context) =>
-                              CameraGalleryBottomSheet(
+                              PickFileBottomSheet(
                             pickAndHandleGalleryImages:
                                 _pickAndHandleGalleryImages,
                             takeAndHandleCameraImage: _takeAndHandleCameraImage,
+                            pickAndHandlePDFfiles: _pickAndHandlePDFfiles,
                           ),
                         );
                       },
@@ -414,6 +503,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                                 });
                               },
                               imageFile: result.data!.imageFile,
+                              file: result.data!.file,
                               errorMessage:
                                   result.success ? null : result.messageTitle,
                             );
@@ -425,22 +515,42 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                       spacing: PaddingSize.sm,
                       formKey: _formKey,
                       contents: [
-                        DateFormField(
-                          required: true,
-                          setDateTime: (dateTime) {
-                            setState(() {
-                              _dateTime = dateTime;
-                            });
-                          },
-                          dateTime: _dateTime,
-                        ),
-                        CategoryFormField(
-                          onSelectionChanged: _onCategorySelectionChanged,
-                          selectedCategories: [
-                            if (_category != null) _category!
+                        ExpandableContainer(
+                          title: localizations.details,
+                          numberOfShowcasedWidgets: 1,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surfaceVariant,
+                          padding: true,
+                          widgets: [
+                            DateFormField(
+                              required: true,
+                              setDateTime: (dateTime) {
+                                setState(() {
+                                  _dateTime = dateTime;
+                                });
+                              },
+                              dateTime: _dateTime,
+                            ),
+                            TextFormField(
+                              controller: _shopNameController,
+                              decoration: InputDecoration(
+                                label: Text(localizations.shopName),
+                                suffixIcon: Tooltip(
+                                  message:
+                                      localizations.categoryDetectionTooltip,
+                                  triggerMode: TooltipTriggerMode.tap,
+                                  child: const Icon(Icons.info_outline_rounded),
+                                ),
+                              ),
+                            ),
                           ],
-                          categoriesRef: categoriesRef,
                         ),
+                        OutlinedButton(
+                          onPressed: _productItems.isEmpty
+                              ? null
+                              : _categorizeProducts,
+                          child: Text(localizations.detectCategories),
+                        ).colorStyle(OutlinedButtonStyles.primary),
                         FilledButton.icon(
                           onPressed: () {
                             setState(() {
@@ -532,7 +642,7 @@ class _CreateReceiptState extends State<CreateReceipt> with GetItStateMixin {
                     isLoading: _saving,
                     colorStyle: FilledButtonStyles.enterAppPrimary,
                   ),
-            )
+            ),
           ],
         ),
       ),

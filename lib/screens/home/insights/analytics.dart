@@ -64,7 +64,8 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
 
     for (final category in baseCategories) {
       final categoryFamilyIds =
-          categoryFamily(category, categories).map((category) => category.id);
+          categoryFamily(category: category, allCategories: categories)
+              .map((category) => category.id);
 
       final totalCategoryValue = _totalValueTransactionValue(
         valueTransactions.where(
@@ -138,7 +139,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
       (AuthChangeNotifier changeNotifier) => changeNotifier.id,
     );
 
-    models.ValueTransactionQuery valueTransactionsRef = models.usersRef
+    final valueTransactionsRef = models.usersRef
         .doc(userId)
         .valueTransactions
         .whereCronExpression(isNull: true)

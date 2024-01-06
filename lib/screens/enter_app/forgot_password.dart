@@ -85,9 +85,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
-      description: Text(
-        localizations.forgotPasswordInstructions,
-        style: Theme.of(context).textTheme.bodyMedium,
+      description: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          localizations.forgotPasswordInstructions,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       ),
       content: Column(
         children: [

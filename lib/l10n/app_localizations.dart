@@ -1328,13 +1328,6 @@ class AppLocalizations {
     );
   }
 
-  String get couldNotProcessReceipt {
-    return Intl.message(
-      'Could not process receipt',
-      locale: localeName,
-    );
-  }
-
   String get transaction {
     return Intl.message(
       'Transaction',
@@ -1703,6 +1696,137 @@ class AppLocalizations {
     return Intl.message(
       'Deleted budget',
       locale: localeName,
+    );
+  }
+
+  String get requestFailed {
+    return Intl.message(
+      'Request failed',
+      locale: localeName,
+    );
+  }
+
+  String get successfulyEmbeddedInput {
+    return Intl.message(
+      'Successfuly embedded input',
+      locale: localeName,
+    );
+  }
+
+  String get detectCategories {
+    return Intl.message(
+      'Detect categories',
+      locale: localeName,
+    );
+  }
+
+  String get details {
+    return Intl.message(
+      'Details',
+      locale: localeName,
+    );
+  }
+
+  String get shopName {
+    return Intl.message(
+      'Shop name',
+      locale: localeName,
+    );
+  }
+
+  String get categoryDetectionTooltip {
+    return Intl.message(
+      'Filling out this field helps category detection percision',
+      locale: localeName,
+    );
+  }
+
+  String get detectedCategoriesForProducts {
+    return Intl.message(
+      'Detected categories for products',
+      locale: localeName,
+    );
+  }
+
+  String get categoryDetectionTips {
+    return Intl.message(
+      'Titles of all products must be filled out for category detection to work',
+      locale: localeName,
+    );
+  }
+
+  String get categorizationRequestTimedOut {
+    return Intl.message(
+      'Categorization request timed out',
+      locale: localeName,
+    );
+  }
+
+  String get noProductItems {
+    return Intl.message(
+      'No product items',
+      locale: localeName,
+    );
+  }
+
+  String get addAFewItemsAndTryAgain {
+    return Intl.message(
+      'Add a few items and try again',
+      locale: localeName,
+    );
+  }
+
+  String get noCategories {
+    return Intl.message(
+      'No categories',
+      locale: localeName,
+    );
+  }
+
+  String get addAFewCategoriesAndTryAgain {
+    return Intl.message(
+      'Add a few categories and try again',
+      locale: localeName,
+    );
+  }
+
+  String get detectingCategories {
+    return Intl.message(
+      'Detecting categories',
+      locale: localeName,
+    );
+  }
+
+  String get pdfFiles {
+    return Intl.message(
+      'PDF files',
+      locale: localeName,
+    );
+  }
+
+  String get fileIsNotSavedOnDisk {
+    return Intl.message(
+      'File is not saved on disk',
+      locale: localeName,
+    );
+  }
+
+  String get creatingAccount {
+    return Intl.message(
+      'Creating account',
+      locale: localeName,
+    );
+  }
+
+  String categorizedXProducts(int howMany, int all) {
+    return Intl.message(
+      'Categorized $howMany out of $all products because the request was too big. To categorize the remaining products enable categorization of products that don\'t have category selected press the button again.',
+      locale: localeName,
+      name: 'deleteBudgetConfirmationsMsg',
+      args: [
+        howMany,
+        all,
+      ],
     );
   }
 

@@ -24,7 +24,6 @@ void addValueTransaction({
       formKey: addTransactionFormStateKey,
       transactionType: transactionType,
       valueTransaction: valueTransaction,
-      allowRecurring: allowRecurring,
     ),
     onSubmit: () {
       assert(addTransactionFormKey.currentState != null);

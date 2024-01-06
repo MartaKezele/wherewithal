@@ -1,9 +1,10 @@
-import * as functions from 'firebase-functions'
+import * as functions from 'firebase-functions';
 import { categories } from './categories.js';
 import admin from 'firebase-admin';
 import {
     onDocumentUpdated,
     onDocumentDeleted,
+    onDocumentCreated,
 } from 'firebase-functions/v2/firestore';
 import firebase_tools from 'firebase-tools';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
@@ -21,15 +22,14 @@ async function _createCategories(
 ) {
     for (let index = 0; index < categories.length; index++) {
         const category = categories[index];
-        collectionRef.add({
+        await collectionRef.add({
             title: category.title,
             transactionType: category.transactionType,
             categoryReason: category.categoryReason ?? null,
             parentCategoryId: parentCategoryId ?? null,
-            budget: category.budget ?? null,
         }).then(async parentCategory => {
             if (category.subcategories != undefined && category.subcategories.length > 0) {
-                await _createCategories(
+                return await _createCategories(
                     parentCategory.id,
                     category.subcategories,
                     collectionRef,
@@ -39,60 +39,113 @@ async function _createCategories(
     }
 }
 
-export const onCategoryUpdate = onDocumentUpdated('/users/{userDocId}/categories/{categoryDocumentId}', (event) => {
-    admin
-        .firestore()
-        .collection('users')
-        .doc(event.params.userDocId)
-        .collection('valueTransactions')
-        .where('categoryId', '==', event.params.categoryDocumentId).get().then(querySnapshot => {
-            if (querySnapshot.empty) {
-                return null;
-            } else {
-                const promises = []
+export const onFirestoreUserCreate = onDocumentCreated('/users/{userDocId}', async (event) => {
+    const userDocId = event.params.userDocId;
+    try {
+        await _createCategories(
+            null,
+            categories,
+            admin
+                .firestore()
+                .collection('users')
+                .doc(userDocId)
+                .collection('categories'),
+        );
 
-                querySnapshot.forEach(doc => {
-                    event.data.after.title
-                    promises.push(doc.ref.update({
-                        categoryTitle: event.data.after.data().title,
-                        categoryTransactionType: event.data.after.data().transactionType,
-                        categoryReason: event.data.after.data().categoryReason,
-                        parentCategoryId: event.data.after.data().parentCategoryId,
-                    }));
-                });
+        await admin
+            .firestore()
+            .collection('users')
+            .doc(userDocId)
+            .update({
+                shouldSetUpCategories: false,
+            });
 
-                return Promise.all(promises);
-            }
-        });
+        return {
+            success: true,
+            msg: 'Set up data.',
+        };
+    } catch (error) {
+        return {
+            success: false,
+            msg: error,
+        };
+    }
 });
 
-export const onCategoryDelete = onDocumentDeleted('/users/{userDocId}/categories/{categoryDocumentId}', (event) => {
-    admin
-        .firestore()
-        .collection('users')
-        .doc(event.params.userDocId)
-        .collection('valueTransactions')
-        .where('categoryId', '==', event.params.categoryDocumentId).get().then(querySnapshot => {
-            if (querySnapshot.empty) {
-                return null;
-            } else {
-                const promises = []
+export const onCategoryUpdate = onDocumentUpdated('/users/{userDocId}/categories/{categoryDocumentId}', async (event) => {
+    try {
+        const querySnapshot = await admin
+            .firestore()
+            .collection('users')
+            .doc(event.params.userDocId)
+            .collection('valueTransactions')
+            .where('categoryId', '==', event.params.categoryDocumentId)
+            .get();
 
-                querySnapshot.forEach(doc => {
-                    promises.push(doc.ref.delete());
-                    // TODO update instead of delete
-                    // promises.push(doc.ref.update({
-                    //     categoryId: null,
-                    //     categoryTitle: null,
-                    //     categoryTransactionType: null,
-                    //     categoryReason: null,
-                    //     parentCategoryId: null,
-                    // }));
-                });
+        const promises = [];
 
-                return Promise.all(promises);
-            }
+        querySnapshot.forEach(doc => {
+            promises.push(doc.ref.update({
+                categoryTitle: event.data.after.data().title,
+                categoryTransactionType: event.data.after.data().transactionType,
+                categoryReason: event.data.after.data().categoryReason,
+                parentCategoryId: event.data.after.data().parentCategoryId,
+            }));
         });
+
+        await Promise.all(promises);
+
+        return {
+            success: true,
+            msg: 'Updated value transactions with new category data',
+        };
+    } catch (error) {
+        return {
+            success: false,
+            msg: error,
+        };
+    }
+});
+
+export const onCategoryDelete = onDocumentDeleted('/users/{userDocId}/categories/{categoryDocumentId}', async (event) => {
+    try {
+        const querySnapshot = await admin
+            .firestore()
+            .collection('users')
+            .doc(event.params.userDocId)
+            .collection('valueTransactions')
+            .where('categoryId', '==', event.params.categoryDocumentId)
+            .get();
+
+        if (querySnapshot.empty) {
+            return null;
+        } else {
+            const promises = [];
+
+            querySnapshot.forEach(doc => {
+                promises.push(doc.ref.delete());
+                // TODO update instead of delete
+                // promises.push(doc.ref.update({
+                //     categoryId: null,
+                //     categoryTitle: null,
+                //     categoryTransactionType: null,
+                //     categoryReason: null,
+                //     parentCategoryId: null,
+                // }));
+            });
+
+            await Promise.all(promises);
+            return {
+                success: true,
+                msg: 'Deleted value transactions with associated category',
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            msg: error,
+        };
+    }
 });
 
 export const deleteFirestoreUserData = functions.https.onCall(async (data, context) => {
@@ -124,43 +177,25 @@ export const deleteFirestoreUserData = functions.https.onCall(async (data, conte
 
 });
 
-export const createFirestoreUser = functions.https.onCall(async (data, context) => {
+export const onFirebaseAuthUserCreate = functions.auth.user().onCreate(async (user) => {
     try {
-        const userDoc = await admin
-            .firestore()
-            .collection('users').add({
-                uid: data.uid,
-                shouldSetUpData: true,
-                recurringTransactionsNotifications: true,
-            });
-
-        await _createCategories(
-            null,
-            categories,
-            admin
-                .firestore()
-                .collection('users')
-                .doc(userDoc.id)
-                .collection('categories'),
-        );
-
         await admin
             .firestore()
             .collection('users')
-            .doc(userDoc.id)
-            .update({
-                shouldSetUpData: false,
+            .doc(user.uid)
+            .set({
+                shouldSetUpCategories: true,
+                recurringTransactionsNotifications: true
             });
-
         return {
             success: true,
-            msg: 'Created firestore user and set up data.',
-        }
+            msg: 'Created firestore user.'
+        };
     } catch (error) {
         return {
             success: false,
-            msg: error,
-        }
+            msg: error.toString(),
+        };
     }
 });
 

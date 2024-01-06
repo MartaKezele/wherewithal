@@ -9,7 +9,6 @@ import '../../app_models/action_result.dart';
 import '../auth_repo.dart';
 import 'helpers.dart';
 
-// TODO: check this out: https://firebase.google.com/docs/auth/extend-with-blocking-functions?gen=2nd
 class FirebaseAuthRepo extends AuthRepo {
   FirebaseAuthRepo(super.localizations);
 
