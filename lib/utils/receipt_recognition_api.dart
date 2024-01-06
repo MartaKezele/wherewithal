@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../app_models/action_result.dart';
 import '../constants/receipt_processing_api.dart';
-import '../env.dart';
+import '../env/env.dart';
 import '../l10n/app_localizations.dart';
 import '../models/receipt_api_quota_data.dart';
 import '../models/receipt_data.dart';
