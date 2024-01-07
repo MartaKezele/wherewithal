@@ -85,7 +85,7 @@ class Budget {
 class ValueTransaction {
   ValueTransaction({
     required this.id,
-    required this.title,
+    this.title,
     required this.dateTime,
     required this.value,
     required this.categoryId,
