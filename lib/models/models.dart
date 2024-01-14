@@ -13,7 +13,7 @@ class User {
     this.fcmToken,
     this.fcmTokenTimestamp,
     this.shouldSetUpCategories = true,
-    this.recurringTransactionsNotifications = true,
+    this.allowRecurringTransactionsNotifications = true,
   });
 
   @Id()
@@ -21,7 +21,7 @@ class User {
   final String? fcmToken;
   final int? fcmTokenTimestamp;
   final bool shouldSetUpCategories;
-  final bool recurringTransactionsNotifications;
+  final bool allowRecurringTransactionsNotifications;
 }
 
 @firestoreSerializable
@@ -55,7 +55,7 @@ class Budget {
     required this.id,
     required this.title,
     required this.categoryIds,
-    this.cronExpression,
+    this.recurrenceInterval,
     this.startDateTime,
     this.endDateTime,
     required this.budget,
@@ -67,7 +67,7 @@ class Budget {
   final String id;
   final String title;
   final List<String> categoryIds;
-  final String? cronExpression;
+  final String? recurrenceInterval;
   final DateTime? startDateTime;
   final DateTime? endDateTime;
   @Min(0)
@@ -93,10 +93,25 @@ class ValueTransaction {
     required this.categoryTransactionType,
     this.categoryReason,
     this.parentCategoryId,
-    this.cronExpression,
+    this.recurrenceInterval,
   }) {
     _$assertValueTransaction(this);
   }
+
+  ValueTransaction.copyNonRecurring({
+    required ValueTransaction valueTransaction,
+  }) : this(
+          id: '',
+          title: valueTransaction.title,
+          dateTime: valueTransaction.dateTime,
+          value: valueTransaction.value,
+          categoryId: valueTransaction.categoryId,
+          categoryTitle: valueTransaction.categoryTitle,
+          categoryTransactionType: valueTransaction.categoryTransactionType,
+          categoryReason: valueTransaction.categoryReason,
+          parentCategoryId: valueTransaction.parentCategoryId,
+          recurrenceInterval: null,
+        );
 
   @Id()
   final String id;
@@ -109,7 +124,7 @@ class ValueTransaction {
   final String categoryTransactionType;
   final String? categoryReason;
   final String? parentCategoryId;
-  final String? cronExpression;
+  final String? recurrenceInterval;
 
   factory ValueTransaction.fromJson(Map<String, dynamic> json) {
     return ValueTransaction(
@@ -123,7 +138,7 @@ class ValueTransaction {
       categoryTransactionType: json['categoryTransactionType'] as String,
       categoryReason: json['categoryReason'] as String?,
       parentCategoryId: json['parentCategoryId'] as String?,
-      cronExpression: json['cronExpression'] as String?,
+      recurrenceInterval: json['recurrenceInterval'] as String?,
     );
   }
 
@@ -137,14 +152,14 @@ class ValueTransaction {
   int get hashCode => id.hashCode;
 }
 
-@Collection<User>(FirestoreCollections.users)
+@Collection<User>(Collections.users)
 @Collection<ValueTransaction>(
-  '${FirestoreCollections.users}/*/${FirestoreCollections.valueTransactions}',
+  '${Collections.users}/*/${Collections.valueTransactions}',
 )
 @Collection<Category>(
-  '${FirestoreCollections.users}/*/${FirestoreCollections.categories}',
+  '${Collections.users}/*/${Collections.categories}',
 )
 @Collection<Budget>(
-  '${FirestoreCollections.users}/*/${FirestoreCollections.budgets}',
+  '${Collections.users}/*/${Collections.budgets}',
 )
 final usersRef = UserCollectionReference();

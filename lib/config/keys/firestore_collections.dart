@@ -1,4 +1,4 @@
-abstract class FirestoreCollections {
+abstract class Collections {
   static const String users = 'users';
   static const String valueTransactions = 'valueTransactions';
   static const String categories = 'categories';

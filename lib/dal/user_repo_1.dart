@@ -1,9 +1,8 @@
 import '../app_models/action_result.dart';
-import '../l10n/app_localizations.dart';
+import 'repo.dart';
 
-abstract class UserRepo1 {
-  UserRepo1(this.localizations);
-  AppLocalizations localizations;
+abstract class UserRepo1 extends Repo {
+  UserRepo1(super.localizations);
 
   Future<ActionResult> reloadUser();
 

@@ -13,7 +13,7 @@ enum RecurrenceIntervals {
   week(regExpPattern: r'0\s0\s\*\s\*\s([1-7],?){1,7}'),
   // monthly cron example: 0 0 13 * * (Repeats every month on the 13th day)
   month(regExpPattern: r'0\s0\s([1-9]|[12][0-9]|3[01])\s\*\s\*'),
-  // yearly cron example:0 0 13 5 * (Repeats every year on 13th May)
+  // yearly cron example: 0 0 13 5 * (Repeats every year on 13th May)
   year(regExpPattern: r'0\s0\s([1-9]|[12][0-9]|3[01])\s([1-9]|1[0-2])\s\*');
 
   const RecurrenceIntervals({

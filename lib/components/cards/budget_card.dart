@@ -60,7 +60,7 @@ class _BudgetCardState extends State<BudgetCard> with GetItStateMixin {
         ref: models.usersRef
             .doc(userId)
             .valueTransactions
-            .whereCronExpression(isNull: true)
+            .whereRecurrenceInterval(isNull: true)
             .whereCategoryId(whereIn: widget.categoryIds)
             .whereDateTime(
               isGreaterThanOrEqualTo: widget.dateTimeRange.start,

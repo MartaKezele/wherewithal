@@ -76,7 +76,7 @@ class _NotificationsState extends State<Notifications> with GetItStateMixin {
                 subtitle: Text(
                   localizations.remindsAboutUpcomingScheduledPayments,
                 ),
-                value: user.recurringTransactionsNotifications,
+                value: user.allowRecurringTransactionsNotifications,
                 onChanged: (value) async {
                   await GetIt.I<RepoFactoryChangeNotifier>()
                       .repoFactory

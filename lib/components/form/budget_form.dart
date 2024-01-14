@@ -58,7 +58,7 @@ class BudgetFormState extends State<BudgetForm> with GetItStateMixin {
       id: widget.budget?.id ?? '',
       title: _titleController.text,
       categoryIds: _selectedCategories.map((category) => category.id).toList(),
-      cronExpression: _selectedCron?.cronExpression,
+      recurrenceInterval: _selectedCron?.cronExpression,
       startDateTime: _startDateTime,
       endDateTime: _endDateTime,
       budget: budget!,
@@ -78,7 +78,7 @@ class BudgetFormState extends State<BudgetForm> with GetItStateMixin {
           .update(
             title: budgetInfo.title,
             categoryIds: budgetInfo.categoryIds,
-            cronExpression: budgetInfo.cronExpression,
+            recurrenceInterval: budgetInfo.recurrenceInterval,
             startDateTime: budgetInfo.startDateTime,
             endDateTime: budgetInfo.endDateTime,
             budget: budgetInfo.budget,
@@ -200,9 +200,9 @@ class BudgetFormState extends State<BudgetForm> with GetItStateMixin {
       _endDateTime = widget.budget?.endDateTime;
     }
 
-    if (widget.budget?.cronExpression != null) {
+    if (widget.budget?.recurrenceInterval != null) {
       _selectedCron = CronRecurrenceInterval.fromCronExpression(
-        widget.budget!.cronExpression!,
+        widget.budget!.recurrenceInterval!,
       );
       _selectedRecurrenceInterval = _selectedCron?.recurrenceInterval;
     }

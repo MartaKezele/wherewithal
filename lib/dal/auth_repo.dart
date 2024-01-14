@@ -1,9 +1,8 @@
 import '../app_models/action_result.dart';
-import '../l10n/app_localizations.dart';
+import 'repo.dart';
 
-abstract class AuthRepo {
-  AuthRepo(this.localizations);
-  AppLocalizations localizations;
+abstract class AuthRepo extends Repo {
+  AuthRepo(super.localizations);
 
   Future<ActionResult> signInWithEmailAndPassword(
     String email,

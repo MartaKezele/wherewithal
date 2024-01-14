@@ -142,7 +142,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
     final valueTransactionsRef = models.usersRef
         .doc(userId)
         .valueTransactions
-        .whereCronExpression(isNull: true)
+        .whereRecurrenceInterval(isNull: true)
         .whereDateTime(
           isGreaterThanOrEqualTo: _dateTimeRange?.start,
           isLessThanOrEqualTo: _dateTimeRange?.end,

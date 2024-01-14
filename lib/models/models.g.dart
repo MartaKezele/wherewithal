@@ -147,8 +147,8 @@ abstract class UserDocumentReference
     FieldValue fcmTokenTimestampFieldValue,
     bool shouldSetUpCategories,
     FieldValue shouldSetUpCategoriesFieldValue,
-    bool recurringTransactionsNotifications,
-    FieldValue recurringTransactionsNotificationsFieldValue,
+    bool allowRecurringTransactionsNotifications,
+    FieldValue allowRecurringTransactionsNotificationsFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -162,8 +162,8 @@ abstract class UserDocumentReference
     FieldValue fcmTokenTimestampFieldValue,
     bool shouldSetUpCategories,
     FieldValue shouldSetUpCategoriesFieldValue,
-    bool recurringTransactionsNotifications,
-    FieldValue recurringTransactionsNotificationsFieldValue,
+    bool allowRecurringTransactionsNotifications,
+    FieldValue allowRecurringTransactionsNotificationsFieldValue,
   });
 }
 
@@ -216,8 +216,8 @@ class _$UserDocumentReference
     FieldValue? fcmTokenTimestampFieldValue,
     Object? shouldSetUpCategories = _sentinel,
     FieldValue? shouldSetUpCategoriesFieldValue,
-    Object? recurringTransactionsNotifications = _sentinel,
-    FieldValue? recurringTransactionsNotificationsFieldValue,
+    Object? allowRecurringTransactionsNotifications = _sentinel,
+    FieldValue? allowRecurringTransactionsNotificationsFieldValue,
   }) async {
     assert(
       fcmToken == _sentinel || fcmTokenFieldValue == null,
@@ -233,9 +233,9 @@ class _$UserDocumentReference
       "Cannot specify both shouldSetUpCategories and shouldSetUpCategoriesFieldValue",
     );
     assert(
-      recurringTransactionsNotifications == _sentinel ||
-          recurringTransactionsNotificationsFieldValue == null,
-      "Cannot specify both recurringTransactionsNotifications and recurringTransactionsNotificationsFieldValue",
+      allowRecurringTransactionsNotifications == _sentinel ||
+          allowRecurringTransactionsNotificationsFieldValue == null,
+      "Cannot specify both allowRecurringTransactionsNotifications and allowRecurringTransactionsNotificationsFieldValue",
     );
     final json = {
       if (fcmToken != _sentinel)
@@ -251,12 +251,12 @@ class _$UserDocumentReference
       if (shouldSetUpCategoriesFieldValue != null)
         _$UserFieldMap['shouldSetUpCategories']!:
             shouldSetUpCategoriesFieldValue,
-      if (recurringTransactionsNotifications != _sentinel)
-        _$UserFieldMap['recurringTransactionsNotifications']!:
-            recurringTransactionsNotifications as bool,
-      if (recurringTransactionsNotificationsFieldValue != null)
-        _$UserFieldMap['recurringTransactionsNotifications']!:
-            recurringTransactionsNotificationsFieldValue,
+      if (allowRecurringTransactionsNotifications != _sentinel)
+        _$UserFieldMap['allowRecurringTransactionsNotifications']!:
+            allowRecurringTransactionsNotifications as bool,
+      if (allowRecurringTransactionsNotificationsFieldValue != null)
+        _$UserFieldMap['allowRecurringTransactionsNotifications']!:
+            allowRecurringTransactionsNotificationsFieldValue,
     };
 
     return reference.update(json);
@@ -270,8 +270,8 @@ class _$UserDocumentReference
     FieldValue? fcmTokenTimestampFieldValue,
     Object? shouldSetUpCategories = _sentinel,
     FieldValue? shouldSetUpCategoriesFieldValue,
-    Object? recurringTransactionsNotifications = _sentinel,
-    FieldValue? recurringTransactionsNotificationsFieldValue,
+    Object? allowRecurringTransactionsNotifications = _sentinel,
+    FieldValue? allowRecurringTransactionsNotificationsFieldValue,
   }) {
     assert(
       fcmToken == _sentinel || fcmTokenFieldValue == null,
@@ -287,9 +287,9 @@ class _$UserDocumentReference
       "Cannot specify both shouldSetUpCategories and shouldSetUpCategoriesFieldValue",
     );
     assert(
-      recurringTransactionsNotifications == _sentinel ||
-          recurringTransactionsNotificationsFieldValue == null,
-      "Cannot specify both recurringTransactionsNotifications and recurringTransactionsNotificationsFieldValue",
+      allowRecurringTransactionsNotifications == _sentinel ||
+          allowRecurringTransactionsNotificationsFieldValue == null,
+      "Cannot specify both allowRecurringTransactionsNotifications and allowRecurringTransactionsNotificationsFieldValue",
     );
     final json = {
       if (fcmToken != _sentinel)
@@ -305,12 +305,12 @@ class _$UserDocumentReference
       if (shouldSetUpCategoriesFieldValue != null)
         _$UserFieldMap['shouldSetUpCategories']!:
             shouldSetUpCategoriesFieldValue,
-      if (recurringTransactionsNotifications != _sentinel)
-        _$UserFieldMap['recurringTransactionsNotifications']!:
-            recurringTransactionsNotifications as bool,
-      if (recurringTransactionsNotificationsFieldValue != null)
-        _$UserFieldMap['recurringTransactionsNotifications']!:
-            recurringTransactionsNotificationsFieldValue,
+      if (allowRecurringTransactionsNotifications != _sentinel)
+        _$UserFieldMap['allowRecurringTransactionsNotifications']!:
+            allowRecurringTransactionsNotifications as bool,
+      if (allowRecurringTransactionsNotificationsFieldValue != null)
+        _$UserFieldMap['allowRecurringTransactionsNotifications']!:
+            allowRecurringTransactionsNotificationsFieldValue,
     };
 
     transaction.update(reference, json);
@@ -444,7 +444,7 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     List<bool>? whereIn,
     List<bool>? whereNotIn,
   });
-  UserQuery whereRecurringTransactionsNotifications({
+  UserQuery whereAllowRecurringTransactionsNotifications({
     bool? isEqualTo,
     bool? isNotEqualTo,
     bool? isLessThan,
@@ -504,7 +504,7 @@ abstract class UserQuery implements QueryReference<User, UserQuerySnapshot> {
     UserDocumentSnapshot? startAfterDocument,
   });
 
-  UserQuery orderByRecurringTransactionsNotifications({
+  UserQuery orderByAllowRecurringTransactionsNotifications({
     bool descending = false,
     bool startAt,
     bool startAfter,
@@ -780,7 +780,7 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
-  UserQuery whereRecurringTransactionsNotifications({
+  UserQuery whereAllowRecurringTransactionsNotifications({
     bool? isEqualTo,
     bool? isNotEqualTo,
     bool? isLessThan,
@@ -794,7 +794,7 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     return _$UserQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$UserFieldMap['recurringTransactionsNotifications']!,
+        _$UserFieldMap['allowRecurringTransactionsNotifications']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -1098,7 +1098,7 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     );
   }
 
-  UserQuery orderByRecurringTransactionsNotifications({
+  UserQuery orderByAllowRecurringTransactionsNotifications({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -1110,7 +1110,7 @@ class _$UserQuery extends QueryReference<User, UserQuerySnapshot>
     UserDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor.orderBy(
-        _$UserFieldMap['recurringTransactionsNotifications']!,
+        _$UserFieldMap['allowRecurringTransactionsNotifications']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -1409,8 +1409,8 @@ abstract class ValueTransactionDocumentReference
     FieldValue categoryReasonFieldValue,
     String? parentCategoryId,
     FieldValue parentCategoryIdFieldValue,
-    String? cronExpression,
-    FieldValue cronExpressionFieldValue,
+    String? recurrenceInterval,
+    FieldValue recurrenceIntervalFieldValue,
   });
 
   /// Updates fields in the current document using the transaction API.
@@ -1434,8 +1434,8 @@ abstract class ValueTransactionDocumentReference
     FieldValue categoryReasonFieldValue,
     String? parentCategoryId,
     FieldValue parentCategoryIdFieldValue,
-    String? cronExpression,
-    FieldValue cronExpressionFieldValue,
+    String? recurrenceInterval,
+    FieldValue recurrenceIntervalFieldValue,
   });
 }
 
@@ -1490,8 +1490,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
     FieldValue? categoryReasonFieldValue,
     Object? parentCategoryId = _sentinel,
     FieldValue? parentCategoryIdFieldValue,
-    Object? cronExpression = _sentinel,
-    FieldValue? cronExpressionFieldValue,
+    Object? recurrenceInterval = _sentinel,
+    FieldValue? recurrenceIntervalFieldValue,
   }) async {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -1527,8 +1527,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
     );
     assert(
-      cronExpression == _sentinel || cronExpressionFieldValue == null,
-      "Cannot specify both cronExpression and cronExpressionFieldValue",
+      recurrenceInterval == _sentinel || recurrenceIntervalFieldValue == null,
+      "Cannot specify both recurrenceInterval and recurrenceIntervalFieldValue",
     );
     final json = {
       if (title != _sentinel)
@@ -1568,11 +1568,12 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       if (parentCategoryIdFieldValue != null)
         _$ValueTransactionFieldMap['parentCategoryId']!:
             parentCategoryIdFieldValue,
-      if (cronExpression != _sentinel)
-        _$ValueTransactionFieldMap['cronExpression']!:
-            cronExpression as String?,
-      if (cronExpressionFieldValue != null)
-        _$ValueTransactionFieldMap['cronExpression']!: cronExpressionFieldValue,
+      if (recurrenceInterval != _sentinel)
+        _$ValueTransactionFieldMap['recurrenceInterval']!:
+            recurrenceInterval as String?,
+      if (recurrenceIntervalFieldValue != null)
+        _$ValueTransactionFieldMap['recurrenceInterval']!:
+            recurrenceIntervalFieldValue,
     };
 
     return reference.update(json);
@@ -1596,8 +1597,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
     FieldValue? categoryReasonFieldValue,
     Object? parentCategoryId = _sentinel,
     FieldValue? parentCategoryIdFieldValue,
-    Object? cronExpression = _sentinel,
-    FieldValue? cronExpressionFieldValue,
+    Object? recurrenceInterval = _sentinel,
+    FieldValue? recurrenceIntervalFieldValue,
   }) {
     assert(
       title == _sentinel || titleFieldValue == null,
@@ -1633,8 +1634,8 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       "Cannot specify both parentCategoryId and parentCategoryIdFieldValue",
     );
     assert(
-      cronExpression == _sentinel || cronExpressionFieldValue == null,
-      "Cannot specify both cronExpression and cronExpressionFieldValue",
+      recurrenceInterval == _sentinel || recurrenceIntervalFieldValue == null,
+      "Cannot specify both recurrenceInterval and recurrenceIntervalFieldValue",
     );
     final json = {
       if (title != _sentinel)
@@ -1674,11 +1675,12 @@ class _$ValueTransactionDocumentReference extends FirestoreDocumentReference<
       if (parentCategoryIdFieldValue != null)
         _$ValueTransactionFieldMap['parentCategoryId']!:
             parentCategoryIdFieldValue,
-      if (cronExpression != _sentinel)
-        _$ValueTransactionFieldMap['cronExpression']!:
-            cronExpression as String?,
-      if (cronExpressionFieldValue != null)
-        _$ValueTransactionFieldMap['cronExpression']!: cronExpressionFieldValue,
+      if (recurrenceInterval != _sentinel)
+        _$ValueTransactionFieldMap['recurrenceInterval']!:
+            recurrenceInterval as String?,
+      if (recurrenceIntervalFieldValue != null)
+        _$ValueTransactionFieldMap['recurrenceInterval']!:
+            recurrenceIntervalFieldValue,
     };
 
     transaction.update(reference, json);
@@ -1868,7 +1870,7 @@ abstract class ValueTransactionQuery
     List<String?>? whereIn,
     List<String?>? whereNotIn,
   });
-  ValueTransactionQuery whereCronExpression({
+  ValueTransactionQuery whereRecurrenceInterval({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -1988,7 +1990,7 @@ abstract class ValueTransactionQuery
     ValueTransactionDocumentSnapshot? startAfterDocument,
   });
 
-  ValueTransactionQuery orderByCronExpression({
+  ValueTransactionQuery orderByRecurrenceInterval({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -2414,7 +2416,7 @@ class _$ValueTransactionQuery
     );
   }
 
-  ValueTransactionQuery whereCronExpression({
+  ValueTransactionQuery whereRecurrenceInterval({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -2428,7 +2430,7 @@ class _$ValueTransactionQuery
     return _$ValueTransactionQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$ValueTransactionFieldMap['cronExpression']!,
+        _$ValueTransactionFieldMap['recurrenceInterval']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -3097,7 +3099,7 @@ class _$ValueTransactionQuery
     );
   }
 
-  ValueTransactionQuery orderByCronExpression({
+  ValueTransactionQuery orderByRecurrenceInterval({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -3109,7 +3111,7 @@ class _$ValueTransactionQuery
     ValueTransactionDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor.orderBy(
-        _$ValueTransactionFieldMap['cronExpression']!,
+        _$ValueTransactionFieldMap['recurrenceInterval']!,
         descending: descending);
     var queryCursor = $queryCursor;
 
@@ -4629,8 +4631,8 @@ abstract class BudgetDocumentReference
     FieldValue titleFieldValue,
     List<String> categoryIds,
     FieldValue categoryIdsFieldValue,
-    String? cronExpression,
-    FieldValue cronExpressionFieldValue,
+    String? recurrenceInterval,
+    FieldValue recurrenceIntervalFieldValue,
     DateTime? startDateTime,
     FieldValue startDateTimeFieldValue,
     DateTime? endDateTime,
@@ -4648,8 +4650,8 @@ abstract class BudgetDocumentReference
     FieldValue titleFieldValue,
     List<String> categoryIds,
     FieldValue categoryIdsFieldValue,
-    String? cronExpression,
-    FieldValue cronExpressionFieldValue,
+    String? recurrenceInterval,
+    FieldValue recurrenceIntervalFieldValue,
     DateTime? startDateTime,
     FieldValue startDateTimeFieldValue,
     DateTime? endDateTime,
@@ -4697,8 +4699,8 @@ class _$BudgetDocumentReference
     FieldValue? titleFieldValue,
     Object? categoryIds = _sentinel,
     FieldValue? categoryIdsFieldValue,
-    Object? cronExpression = _sentinel,
-    FieldValue? cronExpressionFieldValue,
+    Object? recurrenceInterval = _sentinel,
+    FieldValue? recurrenceIntervalFieldValue,
     Object? startDateTime = _sentinel,
     FieldValue? startDateTimeFieldValue,
     Object? endDateTime = _sentinel,
@@ -4715,8 +4717,8 @@ class _$BudgetDocumentReference
       "Cannot specify both categoryIds and categoryIdsFieldValue",
     );
     assert(
-      cronExpression == _sentinel || cronExpressionFieldValue == null,
-      "Cannot specify both cronExpression and cronExpressionFieldValue",
+      recurrenceInterval == _sentinel || recurrenceIntervalFieldValue == null,
+      "Cannot specify both recurrenceInterval and recurrenceIntervalFieldValue",
     );
     assert(
       startDateTime == _sentinel || startDateTimeFieldValue == null,
@@ -4737,10 +4739,10 @@ class _$BudgetDocumentReference
         _$BudgetFieldMap['categoryIds']!: categoryIds as List<String>,
       if (categoryIdsFieldValue != null)
         _$BudgetFieldMap['categoryIds']!: categoryIdsFieldValue,
-      if (cronExpression != _sentinel)
-        _$BudgetFieldMap['cronExpression']!: cronExpression as String?,
-      if (cronExpressionFieldValue != null)
-        _$BudgetFieldMap['cronExpression']!: cronExpressionFieldValue,
+      if (recurrenceInterval != _sentinel)
+        _$BudgetFieldMap['recurrenceInterval']!: recurrenceInterval as String?,
+      if (recurrenceIntervalFieldValue != null)
+        _$BudgetFieldMap['recurrenceInterval']!: recurrenceIntervalFieldValue,
       if (startDateTime != _sentinel)
         _$BudgetFieldMap['startDateTime']!: startDateTime as DateTime?,
       if (startDateTimeFieldValue != null)
@@ -4763,8 +4765,8 @@ class _$BudgetDocumentReference
     FieldValue? titleFieldValue,
     Object? categoryIds = _sentinel,
     FieldValue? categoryIdsFieldValue,
-    Object? cronExpression = _sentinel,
-    FieldValue? cronExpressionFieldValue,
+    Object? recurrenceInterval = _sentinel,
+    FieldValue? recurrenceIntervalFieldValue,
     Object? startDateTime = _sentinel,
     FieldValue? startDateTimeFieldValue,
     Object? endDateTime = _sentinel,
@@ -4781,8 +4783,8 @@ class _$BudgetDocumentReference
       "Cannot specify both categoryIds and categoryIdsFieldValue",
     );
     assert(
-      cronExpression == _sentinel || cronExpressionFieldValue == null,
-      "Cannot specify both cronExpression and cronExpressionFieldValue",
+      recurrenceInterval == _sentinel || recurrenceIntervalFieldValue == null,
+      "Cannot specify both recurrenceInterval and recurrenceIntervalFieldValue",
     );
     assert(
       startDateTime == _sentinel || startDateTimeFieldValue == null,
@@ -4803,10 +4805,10 @@ class _$BudgetDocumentReference
         _$BudgetFieldMap['categoryIds']!: categoryIds as List<String>,
       if (categoryIdsFieldValue != null)
         _$BudgetFieldMap['categoryIds']!: categoryIdsFieldValue,
-      if (cronExpression != _sentinel)
-        _$BudgetFieldMap['cronExpression']!: cronExpression as String?,
-      if (cronExpressionFieldValue != null)
-        _$BudgetFieldMap['cronExpression']!: cronExpressionFieldValue,
+      if (recurrenceInterval != _sentinel)
+        _$BudgetFieldMap['recurrenceInterval']!: recurrenceInterval as String?,
+      if (recurrenceIntervalFieldValue != null)
+        _$BudgetFieldMap['recurrenceInterval']!: recurrenceIntervalFieldValue,
       if (startDateTime != _sentinel)
         _$BudgetFieldMap['startDateTime']!: startDateTime as DateTime?,
       if (startDateTimeFieldValue != null)
@@ -4941,7 +4943,7 @@ abstract class BudgetQuery
     String? arrayContains,
     List<String>? arrayContainsAny,
   });
-  BudgetQuery whereCronExpression({
+  BudgetQuery whereRecurrenceInterval({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -5022,7 +5024,7 @@ abstract class BudgetQuery
     BudgetDocumentSnapshot? startAfterDocument,
   });
 
-  BudgetQuery orderByCronExpression({
+  BudgetQuery orderByRecurrenceInterval({
     bool descending = false,
     String? startAt,
     String? startAfter,
@@ -5305,7 +5307,7 @@ class _$BudgetQuery extends QueryReference<Budget, BudgetQuerySnapshot>
     );
   }
 
-  BudgetQuery whereCronExpression({
+  BudgetQuery whereRecurrenceInterval({
     String? isEqualTo,
     String? isNotEqualTo,
     String? isLessThan,
@@ -5319,7 +5321,7 @@ class _$BudgetQuery extends QueryReference<Budget, BudgetQuerySnapshot>
     return _$BudgetQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$BudgetFieldMap['cronExpression']!,
+        _$BudgetFieldMap['recurrenceInterval']!,
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -5637,7 +5639,7 @@ class _$BudgetQuery extends QueryReference<Budget, BudgetQuerySnapshot>
     );
   }
 
-  BudgetQuery orderByCronExpression({
+  BudgetQuery orderByRecurrenceInterval({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -5648,8 +5650,9 @@ class _$BudgetQuery extends QueryReference<Budget, BudgetQuerySnapshot>
     BudgetDocumentSnapshot? endBeforeDocument,
     BudgetDocumentSnapshot? startAfterDocument,
   }) {
-    final query = $referenceWithoutCursor
-        .orderBy(_$BudgetFieldMap['cronExpression']!, descending: descending);
+    final query = $referenceWithoutCursor.orderBy(
+        _$BudgetFieldMap['recurrenceInterval']!,
+        descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -6039,8 +6042,8 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       fcmToken: json['fcmToken'] as String?,
       fcmTokenTimestamp: json['fcmTokenTimestamp'] as int?,
       shouldSetUpCategories: json['shouldSetUpCategories'] as bool? ?? true,
-      recurringTransactionsNotifications:
-          json['recurringTransactionsNotifications'] as bool? ?? true,
+      allowRecurringTransactionsNotifications:
+          json['allowRecurringTransactionsNotifications'] as bool? ?? true,
     );
 
 const _$UserFieldMap = <String, String>{
@@ -6048,7 +6051,8 @@ const _$UserFieldMap = <String, String>{
   'fcmToken': 'fcmToken',
   'fcmTokenTimestamp': 'fcmTokenTimestamp',
   'shouldSetUpCategories': 'shouldSetUpCategories',
-  'recurringTransactionsNotifications': 'recurringTransactionsNotifications',
+  'allowRecurringTransactionsNotifications':
+      'allowRecurringTransactionsNotifications',
 };
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -6056,8 +6060,8 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'fcmToken': instance.fcmToken,
       'fcmTokenTimestamp': instance.fcmTokenTimestamp,
       'shouldSetUpCategories': instance.shouldSetUpCategories,
-      'recurringTransactionsNotifications':
-          instance.recurringTransactionsNotifications,
+      'allowRecurringTransactionsNotifications':
+          instance.allowRecurringTransactionsNotifications,
     };
 
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
@@ -6090,7 +6094,7 @@ Budget _$BudgetFromJson(Map<String, dynamic> json) => Budget(
       categoryIds: (json['categoryIds'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      cronExpression: json['cronExpression'] as String?,
+      recurrenceInterval: json['recurrenceInterval'] as String?,
       startDateTime: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['startDateTime'], const FirestoreDateTimeConverter().fromJson),
       endDateTime: _$JsonConverterFromJson<Timestamp, DateTime>(
@@ -6102,7 +6106,7 @@ const _$BudgetFieldMap = <String, String>{
   'id': 'id',
   'title': 'title',
   'categoryIds': 'categoryIds',
-  'cronExpression': 'cronExpression',
+  'recurrenceInterval': 'recurrenceInterval',
   'startDateTime': 'startDateTime',
   'endDateTime': 'endDateTime',
   'budget': 'budget',
@@ -6112,7 +6116,7 @@ Map<String, dynamic> _$BudgetToJson(Budget instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'categoryIds': instance.categoryIds,
-      'cronExpression': instance.cronExpression,
+      'recurrenceInterval': instance.recurrenceInterval,
       'startDateTime': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.startDateTime, const FirestoreDateTimeConverter().toJson),
       'endDateTime': _$JsonConverterToJson<Timestamp, DateTime>(
@@ -6144,7 +6148,7 @@ ValueTransaction _$ValueTransactionFromJson(Map<String, dynamic> json) =>
       categoryTransactionType: json['categoryTransactionType'] as String,
       categoryReason: json['categoryReason'] as String?,
       parentCategoryId: json['parentCategoryId'] as String?,
-      cronExpression: json['cronExpression'] as String?,
+      recurrenceInterval: json['recurrenceInterval'] as String?,
     );
 
 const _$ValueTransactionFieldMap = <String, String>{
@@ -6157,7 +6161,7 @@ const _$ValueTransactionFieldMap = <String, String>{
   'categoryTransactionType': 'categoryTransactionType',
   'categoryReason': 'categoryReason',
   'parentCategoryId': 'parentCategoryId',
-  'cronExpression': 'cronExpression',
+  'recurrenceInterval': 'recurrenceInterval',
 };
 
 Map<String, dynamic> _$ValueTransactionToJson(ValueTransaction instance) =>
@@ -6171,5 +6175,5 @@ Map<String, dynamic> _$ValueTransactionToJson(ValueTransaction instance) =>
       'categoryTransactionType': instance.categoryTransactionType,
       'categoryReason': instance.categoryReason,
       'parentCategoryId': instance.parentCategoryId,
-      'cronExpression': instance.cronExpression,
+      'recurrenceInterval': instance.recurrenceInterval,
     };

@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:wherewithal/config/keys/notification.dart';
 
 import '../../change_notifiers/auth.dart';
 import '../../components/animated_branch_container.dart';
@@ -162,6 +163,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state
     FirebaseMessaging.instance.getInitialMessage().then((initialMessage) {
       if (initialMessage != null) {
         _handleNotification(initialMessage.data);
@@ -178,31 +181,19 @@ class _HomeState extends State<Home> {
   Future<void> _handleNotification(
     Map<String, dynamic> messageData,
   ) async {
-    assert(messageData['type'] != null);
-
-    switch (messageData['type']) {
-      case 'addRecurringTransaction':
-        assert(messageData['valueTransactionId'] != null);
-
+    assert(messageData[NotificationFields.type] != null);
+    switch (messageData[NotificationFields.type]) {
+      case NotificationTypes.addRecurringTransaction:
+        assert(messageData[NotificationFields.valueTransactionId] != null);
         final valueTransaction = (await models.usersRef
                 .doc(GetIt.I<AuthChangeNotifier>().id)
                 .valueTransactions
-                .doc(messageData['valueTransactionId'])
+                .doc(messageData[NotificationFields.valueTransactionId])
                 .get())
             .data;
-
         final nonRecurringTransaction = valueTransaction != null
-            ? models.ValueTransaction(
-                id: '',
-                title: valueTransaction.title,
-                dateTime: DateTime.now(),
-                value: valueTransaction.value,
-                categoryId: valueTransaction.categoryId,
-                categoryTitle: valueTransaction.categoryTitle,
-                categoryTransactionType:
-                    valueTransaction.categoryTransactionType,
-                categoryReason: valueTransaction.categoryReason,
-                parentCategoryId: valueTransaction.parentCategoryId,
+            ? models.ValueTransaction.copyNonRecurring(
+                valueTransaction: valueTransaction,
               )
             : null;
 
@@ -265,9 +256,7 @@ class _HomeState extends State<Home> {
         .then((_) {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         final notification = message.notification;
-        final android = message.notification?.android;
-
-        if (notification != null && android != null) {
+        if (notification != null && notification.android != null) {
           flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,

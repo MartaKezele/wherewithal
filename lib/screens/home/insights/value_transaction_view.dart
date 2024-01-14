@@ -218,7 +218,7 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
                                 isLoading: _updating,
                                 colorStyle: FilledButtonStyles.primaryContainer,
                               ),
-                          if (valueTransaction.cronExpression != null)
+                          if (valueTransaction.recurrenceInterval != null)
                             Padding(
                               padding: const EdgeInsets.only(
                                 top: PaddingSize.xs,
@@ -251,8 +251,8 @@ class _ValueTransactionViewState extends State<ValueTransactionView> {
                                               valueTransaction.categoryReason,
                                           parentCategoryId:
                                               valueTransaction.parentCategoryId,
-                                          cronExpression:
-                                              valueTransaction.cronExpression,
+                                          recurrenceInterval: valueTransaction
+                                              .recurrenceInterval,
                                         ),
                                         allowRecurring: false,
                                       );

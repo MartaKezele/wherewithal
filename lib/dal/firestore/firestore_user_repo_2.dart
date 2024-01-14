@@ -39,7 +39,7 @@ class FirestoreUserRepo2 extends UserRepo2 {
   }) async {
     try {
       await models.usersRef.doc(id).update(
-            recurringTransactionsNotifications:
+            allowRecurringTransactionsNotifications:
                 recurringTransactionsNotifications,
           );
       return ActionResult(

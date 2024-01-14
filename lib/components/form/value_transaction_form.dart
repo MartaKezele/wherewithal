@@ -66,7 +66,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
       categoryTransactionType: _selectedTransactionTypes.first.name,
       categoryReason: _selectedCategories.first.categoryReason,
       parentCategoryId: _selectedCategories.first.parentCategoryId,
-      cronExpression: _selectedCron?.cronExpression,
+      recurrenceInterval: _selectedCron?.cronExpression,
     );
   }
 
@@ -88,7 +88,7 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
             categoryTransactionType: valueTransaction.categoryTransactionType,
             categoryReason: valueTransaction.categoryReason,
             parentCategoryId: valueTransaction.parentCategoryId,
-            cronExpression: valueTransaction.cronExpression,
+            recurrenceInterval: valueTransaction.recurrenceInterval,
           );
       return ActionResult(
         success: true,
@@ -260,9 +260,9 @@ class ValueTransactionFormState extends State<ValueTransactionForm>
 
     _dateTime = widget.valueTransaction?.dateTime ?? DateTime.now();
 
-    if (widget.valueTransaction?.cronExpression != null) {
+    if (widget.valueTransaction?.recurrenceInterval != null) {
       _selectedCron = CronRecurrenceInterval.fromCronExpression(
-        widget.valueTransaction!.cronExpression!,
+        widget.valueTransaction!.recurrenceInterval!,
       );
       _selectedRecurrenceInterval = _selectedCron?.recurrenceInterval;
     } else {

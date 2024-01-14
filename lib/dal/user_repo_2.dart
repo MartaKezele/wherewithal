@@ -1,9 +1,9 @@
-import '../app_models/action_result.dart';
-import '../l10n/app_localizations.dart';
 
-abstract class UserRepo2 {
-  UserRepo2(this.localizations);
-  AppLocalizations localizations;
+import '../app_models/action_result.dart';
+import 'repo.dart';
+
+abstract class UserRepo2 extends Repo {
+  UserRepo2(super.localizations);
 
   Future<ActionResult> signOut(String uid);
 

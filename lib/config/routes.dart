@@ -195,7 +195,7 @@ class TopLevelRoutes {
       ref: models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
           .valueTransactions
-          .whereCronExpression(isNull: false)
+          .whereRecurrenceInterval(isNull: false)
           .whereCategoryTransactionType(
             isEqualTo: TransactionTypes.expense.name,
           ),
@@ -209,7 +209,7 @@ class TopLevelRoutes {
       ref: models.usersRef
           .doc(GetIt.I<AuthChangeNotifier>().id)
           .valueTransactions
-          .whereCronExpression(isNull: false)
+          .whereRecurrenceInterval(isNull: false)
           .whereCategoryTransactionType(
             isEqualTo: TransactionTypes.income.name,
           ),

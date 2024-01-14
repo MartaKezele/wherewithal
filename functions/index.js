@@ -185,7 +185,7 @@ export const onFirebaseAuthUserCreate = functions.auth.user().onCreate(async (us
             .doc(user.uid)
             .set({
                 shouldSetUpCategories: true,
-                recurringTransactionsNotifications: true
+                allowRecurringTransactionsNotifications: true
             });
         return {
             success: true,
@@ -204,15 +204,20 @@ export const recurringTransactionReminders = onSchedule('0 1 * * *', async (_) =
     const users = (await admin
         .firestore()
         .collection('users')
+        .where('allowRecurringTransactionsNotifications', '==', true)
         .get())
         .docs;
+
+    const currentDate = new Date(Date.now());
+    const yesterday = new Date(Date.now());
+    yesterday.setHours(0, 0, 0, 0);
+    yesterday.setDate(yesterday.getDate() - 1);
 
     for (let i = 0; i < users.length; i++) {
         const user = users[i];
         const fcmToken = user.data().fcmToken;
         const fcmTokenTimestamp = user.data().fcmTokenTimestamp;
-        if (user.data().recurringTransactionsNotifications == true &&
-            fcmToken != null &&
+        if (fcmToken != null &&
             fcmTokenTimestamp != null &&
             Date.now() - fcmTokenTimestamp <= FCM_TOKEN_EXPIRATION_TIME) {
             const recurringTransactions = (await admin
@@ -220,28 +225,23 @@ export const recurringTransactionReminders = onSchedule('0 1 * * *', async (_) =
                 .collection('users')
                 .doc(user.id)
                 .collection('valueTransactions')
-                .where('cronExpression', '!=', null)
+                .where('recurrenceInterval', '!=', null)
                 .get())
                 .docs;
 
             for (let j = 0; j < recurringTransactions.length; j++) {
                 const recurringTransaction = recurringTransactions[j];
-                const cronExpression = recurringTransaction.data().cronExpression;
+                const recurrenceInterval = recurringTransaction.data().recurrenceInterval;
 
-                if (cronExpression != '') {
-                    const yesterday = new Date(Date.now());
-                    yesterday.setHours(0, 0, 0, 0);
-                    yesterday.setDate(yesterday.getDate() - 1);
-
+                if (recurrenceInterval != '') {
                     try {
                         const interval = parser.parseExpression(
-                            cronExpression,
+                            recurrenceInterval,
                             {
                                 currentDate: yesterday,
                             }
                         );
                         const nextCronJob = interval.next();
-                        const currentDate = new Date(Date.now());
 
                         if (nextCronJob.getDay() == currentDate.getDay() &&
                             nextCronJob.getMonth() == currentDate.getMonth() &&
@@ -283,9 +283,14 @@ export const recurringTransactionReminders = onSchedule('0 1 * * *', async (_) =
 
 export const pruneTokens = onSchedule('0 0 * * *', async (_) => {
     const staleTokensResult = await admin.firestore().collection('users')
-        .where('timestamp', '<', Date.now() - FCM_TOKEN_EXPIRATION_TIME)
+        .where('fcmTokenTimestamp', '<', Date.now() - FCM_TOKEN_EXPIRATION_TIME)
         .get();
-    staleTokensResult.forEach(function (doc) { doc.ref.delete(); });
+    staleTokensResult.forEach(function (doc) {
+        doc.ref.update({
+            fcmToken: null,
+            fcmTokenTimestamp: null,
+        });
+    });
 });
 
 

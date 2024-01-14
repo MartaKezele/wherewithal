@@ -81,10 +81,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
       (AuthChangeNotifier changeNotifier) => changeNotifier.id,
     );
 
-    models.ValueTransactionQuery valueTransactionsRef = models.usersRef
+    var valueTransactionsRef = models.usersRef
         .doc(userId)
         .valueTransactions
-        .whereCronExpression(isNull: true)
+        .whereRecurrenceInterval(isNull: true)
         .whereDateTime(
           isGreaterThanOrEqualTo: _dateTimeRange?.start,
           isLessThanOrEqualTo: _dateTimeRange?.end,
