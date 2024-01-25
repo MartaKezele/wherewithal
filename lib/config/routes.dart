@@ -40,6 +40,102 @@ import '../l10n/app_localizations.dart';
 import 'auth_provider.dart';
 import 'router.dart';
 
+final _insightsBranch = TabStatefulShellBranch(
+  label: (context) => AppLocalizations.of(context).insights,
+  icon: Icons.insights_rounded,
+  routes: [
+    StatefulShellRoute(
+      builder: (context, state, navigationShell) {
+        return navigationShell;
+      },
+      navigatorContainerBuilder: (context, navigationShell, children) {
+        return TabbedRootScreen(
+          appBarTitle: AppLocalizations.of(context).insights,
+          navigationShell: navigationShell,
+          children: children,
+        );
+      },
+      branches: [
+        TabStatefulShellBranch(
+          label: (context) => AppLocalizations.of(context).analytics,
+          icon: Icons.bar_chart_rounded,
+          routes: [TopLevelRoutes.analytics],
+        ),
+        TabStatefulShellBranch(
+          label: (context) => AppLocalizations.of(context).history,
+          icon: Icons.history_rounded,
+          routes: [TopLevelRoutes.history],
+        ),
+      ],
+    ),
+  ],
+);
+final _recurringTransactionsBranch = TabStatefulShellBranch(
+  label: (context) => AppLocalizations.of(context).recurringTransactions,
+  icon: Icons.event_repeat_rounded,
+  routes: [
+    StatefulShellRoute(
+      builder: (context, state, navigationShell) {
+        return navigationShell;
+      },
+      navigatorContainerBuilder: (context, navigationShell, children) {
+        return TabbedRootScreen(
+          appBarTitle: AppLocalizations.of(context).recurringTransactions,
+          navigationShell: navigationShell,
+          children: children,
+        );
+      },
+      branches: [
+        TabStatefulShellBranch(
+          label: (context) => AppLocalizations.of(context).expense,
+          icon: TransactionTypes.expense.icon,
+          routes: [TopLevelRoutes.expenseRecurringTransactions],
+        ),
+        TabStatefulShellBranch(
+          label: (context) => AppLocalizations.of(context).income,
+          icon: TransactionTypes.income.icon,
+          routes: [TopLevelRoutes.incomeRecurringTransactions],
+        ),
+      ],
+    ),
+  ],
+);
+final _categoriesBranch = TabStatefulShellBranch(
+  label: (context) => AppLocalizations.of(context).categories,
+  icon: Icons.category_rounded,
+  routes: [
+    StatefulShellRoute(
+      builder: (context, state, navigationShell) {
+        return navigationShell;
+      },
+      navigatorContainerBuilder: (context, navigationShell, children) {
+        return TabbedRootScreen(
+          appBarTitle: AppLocalizations.of(context).categories,
+          navigationShell: navigationShell,
+          children: children,
+        );
+      },
+      branches: [
+        TabStatefulShellBranch(
+          label: (context) => AppLocalizations.of(context).expense,
+          icon: TransactionTypes.expense.icon,
+          routes: [TopLevelRoutes.expenseCategories],
+        ),
+        TabStatefulShellBranch(
+          label: (context) => AppLocalizations.of(context).income,
+          icon: TransactionTypes.income.icon,
+          routes: [TopLevelRoutes.incomeCategories],
+        ),
+      ],
+    ),
+  ],
+);
+final _budgetBranch = TabStatefulShellBranch(
+  label: (context) => AppLocalizations.of(context).budget,
+  icon: Icons.savings_rounded,
+  routes: [TopLevelRoutes.budget],
+);
+
 final homeShellRoute = TabStatefulShellRoute(
   builder: (context, state, navigationShell) {
     return navigationShell;
@@ -51,101 +147,10 @@ final homeShellRoute = TabStatefulShellRoute(
     );
   },
   tabBranches: [
-    TabStatefulShellBranch(
-      label: (context) => AppLocalizations.of(context).insights,
-      icon: Icons.insights_rounded,
-      routes: [
-        StatefulShellRoute(
-          builder: (context, state, navigationShell) {
-            return navigationShell;
-          },
-          navigatorContainerBuilder: (context, navigationShell, children) {
-            return TabbedRootScreen(
-              appBarTitle: AppLocalizations.of(context).insights,
-              navigationShell: navigationShell,
-              children: children,
-            );
-          },
-          branches: [
-            TabStatefulShellBranch(
-              label: (context) => AppLocalizations.of(context).analytics,
-              icon: Icons.bar_chart_rounded,
-              routes: [TopLevelRoutes.analytics],
-            ),
-            TabStatefulShellBranch(
-              label: (context) => AppLocalizations.of(context).history,
-              icon: Icons.history_rounded,
-              routes: [TopLevelRoutes.history],
-            ),
-          ],
-        ),
-      ],
-    ),
-    TabStatefulShellBranch(
-      label: (context) => AppLocalizations.of(context).recurringTransactions,
-      icon: Icons.event_repeat_rounded,
-      routes: [
-        StatefulShellRoute(
-          builder: (context, state, navigationShell) {
-            return navigationShell;
-          },
-          navigatorContainerBuilder: (context, navigationShell, children) {
-            return TabbedRootScreen(
-              appBarTitle: AppLocalizations.of(context).recurringTransactions,
-              navigationShell: navigationShell,
-              children: children,
-            );
-          },
-          branches: [
-            TabStatefulShellBranch(
-              label: (context) => AppLocalizations.of(context).expense,
-              icon: TransactionTypes.expense.icon,
-              routes: [TopLevelRoutes.expenseRecurringTransactions],
-            ),
-            TabStatefulShellBranch(
-              label: (context) => AppLocalizations.of(context).income,
-              icon: TransactionTypes.income.icon,
-              routes: [TopLevelRoutes.incomeRecurringTransactions],
-            ),
-          ],
-        ),
-      ],
-    ),
-    TabStatefulShellBranch(
-      label: (context) => AppLocalizations.of(context).categories,
-      icon: Icons.category_rounded,
-      routes: [
-        StatefulShellRoute(
-          builder: (context, state, navigationShell) {
-            return navigationShell;
-          },
-          navigatorContainerBuilder: (context, navigationShell, children) {
-            return TabbedRootScreen(
-              appBarTitle: AppLocalizations.of(context).categories,
-              navigationShell: navigationShell,
-              children: children,
-            );
-          },
-          branches: [
-            TabStatefulShellBranch(
-              label: (context) => AppLocalizations.of(context).expense,
-              icon: TransactionTypes.expense.icon,
-              routes: [TopLevelRoutes.expenseCategories],
-            ),
-            TabStatefulShellBranch(
-              label: (context) => AppLocalizations.of(context).income,
-              icon: TransactionTypes.income.icon,
-              routes: [TopLevelRoutes.incomeCategories],
-            ),
-          ],
-        ),
-      ],
-    ),
-    TabStatefulShellBranch(
-      label: (context) => AppLocalizations.of(context).budget,
-      icon: Icons.savings_rounded,
-      routes: [TopLevelRoutes.budget],
-    ),
+    _insightsBranch,
+    _recurringTransactionsBranch,
+    _categoriesBranch,
+    _budgetBranch
   ],
 );
 
@@ -458,6 +463,7 @@ class NamedChildRoutes {
       );
     },
   );
+
   static final budgetView = NamedGoRoute(
     parentNavigatorKey: navigatorKey,
     nonNullableName: 'budget-view',

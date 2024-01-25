@@ -1419,9 +1419,9 @@ class AppLocalizations {
     );
   }
 
-  String get incomeByCategories {
+  String get incomeByCategory {
     return Intl.message(
-      'Income by categories',
+      'Income by category',
       locale: localeName,
     );
   }
@@ -1454,9 +1454,9 @@ class AppLocalizations {
     );
   }
 
-  String get spendingByCategories {
+  String get spendingByCategory {
     return Intl.message(
-      'Spending by categories',
+      'Spending by category',
       locale: localeName,
     );
   }

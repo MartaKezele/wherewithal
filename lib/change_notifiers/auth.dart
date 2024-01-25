@@ -9,12 +9,12 @@ import '../models/models.dart' as models;
 import '../utils/prefs.dart';
 
 class AuthChangeNotifier extends ChangeNotifier {
-  AuthChangeNotifier._privateConstructor() {
+  AuthChangeNotifier._() {
     _registerListeners();
   }
 
   static final AuthChangeNotifier instance =
-      AuthChangeNotifier._privateConstructor();
+      AuthChangeNotifier._();
 
   User? _firebaseAuthUser;
   models.User? _user;
@@ -27,15 +27,11 @@ class AuthChangeNotifier extends ChangeNotifier {
   bool get emailVerified => signedIn && _firebaseAuthUser!.emailVerified;
   String? get email => _firebaseAuthUser?.email;
   String? get displayName => _firebaseAuthUser?.displayName;
-  String? get uid => _firebaseAuthUser?.uid;
   String? get id => _user?.id;
-
   // whether user should be created in firestore
   bool get shouldSetUpUserData => _user == null;
-
   bool get shouldSetUpCategories =>
       shouldSetUpUserData || (_user != null && _user!.shouldSetUpCategories);
-
   List<config.AuthProvider> get authProviders => _authProviders;
 
   void _updateAuthProviders() {

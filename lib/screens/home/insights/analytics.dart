@@ -1,4 +1,5 @@
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -63,9 +64,10 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
     final List<double> totalCategoryValues = [];
 
     for (final category in baseCategories) {
-      final categoryFamilyIds =
-          categoryFamily(category: category, allCategories: categories)
-              .map((category) => category.id);
+      final categoryFamilyIds = categoryFamily(
+        category: category,
+        allCategories: categories,
+      ).map((category) => category.id);
 
       final totalCategoryValue = _totalValueTransactionValue(
         valueTransactions.where(
@@ -79,14 +81,13 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
     }
 
     final List<PieSectionData> sections = [];
-
     if (parentSection != null) {
       final totalParentCategoryValue = _totalValueTransactionValue(
         valueTransactions.where(
           (valueTransaction) => valueTransaction.categoryId == parentSection.id,
         ),
       );
-      if (totalParentCategoryValue > 0 && totalValue > 0.0) {
+      if (totalParentCategoryValue > 0.0 && totalValue > 0.0) {
         totalValue += totalParentCategoryValue;
         sections.add(
           PieSectionData(
@@ -115,12 +116,10 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
       );
     }
 
-    final filteredSections =
-        sections.where((element) => element.value > 0.0).toList();
-
-    filteredSections.sort(
-      (section1, section2) => -section1.value.compareTo(section2.value),
-    );
+    final filteredSections = sections
+        .where((element) => element.value > 0.0)
+        .sorted(
+            (section1, section2) => -section1.value.compareTo(section2.value));
 
     return filteredSections;
   }
@@ -298,8 +297,8 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
 
                         return Column(
                           children: [
-                            ValueTransactionsByCategoryCard(
-                              title: localizations.spendingByCategories,
+                            ValueTransactionsPieChartCard(
+                              title: localizations.spendingByCategory,
                               sections: expenseByCategoriesSections,
                               selectedSection: _selectedExpenseSection,
                               parentSectionTitle:
@@ -338,8 +337,8 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                                     },
                             ),
                             HeightSpacer.md,
-                            ValueTransactionsByCategoryCard(
-                              title: localizations.incomeByCategories,
+                            ValueTransactionsPieChartCard(
+                              title: localizations.incomeByCategory,
                               sections: incomeByCategoriesSections,
                               selectedSection: _selectedIncomeSection,
                               parentSectionTitle:
@@ -382,7 +381,7 @@ class _AnalyticsState extends State<Analytics> with GetItStateMixin {
                       },
                     ),
                     HeightSpacer.md,
-                    ValueTransactionsByCategoryCard(
+                    ValueTransactionsPieChartCard(
                       title: localizations.spendingByReason,
                       sections: expenseByReasonSections,
                       onLegendItemClicked: (section) {

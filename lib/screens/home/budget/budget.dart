@@ -16,7 +16,6 @@ import '../../../components/loading_content.dart';
 import '../../../components/no_data_content.dart';
 import '../../../components/wrappers/screen.dart';
 import '../../../constants/padding_size.dart';
-import '../../../constants/spacers.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/models.dart' as models;
 import '../../../utils/date_time.dart';
@@ -135,146 +134,171 @@ class _BudgetState extends State<Budget> with GetItStateMixin {
                   showSelectAllOption: true,
                   multiselect: true,
                 ),
-                HeightSpacer.lg,
-                if (_selectedRecurrenceIntervals.isEmpty ||
-                    _selectedRecurrenceIntervals
-                        .contains(RecurrenceIntervals.day))
-                  CustomCard(
-                    title: RecurrenceIntervals.day.localizedName2(
-                      context,
+                if ((_selectedRecurrenceIntervals.isEmpty ||
+                        _selectedRecurrenceIntervals
+                            .contains(RecurrenceIntervals.day)) &&
+                    dailyBudgets.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: PaddingSize.lg,
                     ),
-                    showSpacer: dailyBudgets.isEmpty,
-                    child: dailyBudgets.isEmpty
-                        ? const NoDataContent()
-                        : ExpandableContainer(
-                            widgets: dailyBudgets
-                                .map(
-                                  (budget) => BudgetCard(
-                                    budgetId: budget.id,
-                                    title: budget.title,
-                                    budget: budget.budget,
-                                    categoryIds: budget.categoryIds,
-                                    dateTimeRange: DateTimeRange(
-                                      start: beginningOfToday(),
-                                      end: endOfToday(),
+                    child: CustomCard(
+                      title: RecurrenceIntervals.day.localizedName2(
+                        context,
+                      ),
+                      showSpacer: dailyBudgets.isEmpty,
+                      child: dailyBudgets.isEmpty
+                          ? const NoDataContent()
+                          : ExpandableContainer(
+                              widgets: dailyBudgets
+                                  .map(
+                                    (budget) => BudgetCard(
+                                      budgetId: budget.id,
+                                      title: budget.title,
+                                      budget: budget.budget,
+                                      categoryIds: budget.categoryIds,
+                                      dateTimeRange: DateTimeRange(
+                                        start: beginningOfToday(),
+                                        end: endOfToday(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                                  )
+                                  .toList(),
+                            ),
+                    ),
                   ),
-                HeightSpacer.lg,
-                if (_selectedRecurrenceIntervals.isEmpty ||
-                    _selectedRecurrenceIntervals
-                        .contains(RecurrenceIntervals.week))
-                  CustomCard(
-                    title: RecurrenceIntervals.week.localizedName2(
-                      context,
+                if ((_selectedRecurrenceIntervals.isEmpty ||
+                        _selectedRecurrenceIntervals
+                            .contains(RecurrenceIntervals.week)) &&
+                    weeklyBudgets.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: PaddingSize.lg,
                     ),
-                    showSpacer: weeklyBudgets.isEmpty,
-                    child: weeklyBudgets.isEmpty
-                        ? const NoDataContent()
-                        : ExpandableContainer(
-                            widgets: weeklyBudgets
-                                .map(
-                                  (budget) => BudgetCard(
-                                    budgetId: budget.id,
-                                    title: budget.title,
-                                    budget: budget.budget,
-                                    categoryIds: budget.categoryIds,
-                                    dateTimeRange: DateTimeRange(
-                                      start: beginningOfThisWeek(),
-                                      end: endOfThisWeek(),
+                    child: CustomCard(
+                      title: RecurrenceIntervals.week.localizedName2(
+                        context,
+                      ),
+                      showSpacer: weeklyBudgets.isEmpty,
+                      child: weeklyBudgets.isEmpty
+                          ? const NoDataContent()
+                          : ExpandableContainer(
+                              widgets: weeklyBudgets
+                                  .map(
+                                    (budget) => BudgetCard(
+                                      budgetId: budget.id,
+                                      title: budget.title,
+                                      budget: budget.budget,
+                                      categoryIds: budget.categoryIds,
+                                      dateTimeRange: DateTimeRange(
+                                        start: beginningOfThisWeek(),
+                                        end: endOfThisWeek(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                                  )
+                                  .toList(),
+                            ),
+                    ),
                   ),
-                HeightSpacer.lg,
-                if (_selectedRecurrenceIntervals.isEmpty ||
-                    _selectedRecurrenceIntervals
-                        .contains(RecurrenceIntervals.month))
-                  CustomCard(
-                    title: RecurrenceIntervals.month.localizedName2(
-                      context,
+                if ((_selectedRecurrenceIntervals.isEmpty ||
+                        _selectedRecurrenceIntervals
+                            .contains(RecurrenceIntervals.month)) &&
+                    monthlyBudgets.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: PaddingSize.lg,
                     ),
-                    showSpacer: monthlyBudgets.isEmpty,
-                    child: monthlyBudgets.isEmpty
-                        ? const NoDataContent()
-                        : ExpandableContainer(
-                            widgets: monthlyBudgets
-                                .map(
-                                  (budget) => BudgetCard(
-                                    budgetId: budget.id,
-                                    title: budget.title,
-                                    budget: budget.budget,
-                                    categoryIds: budget.categoryIds,
-                                    dateTimeRange: DateTimeRange(
-                                      start: beginningOfThisMonth(),
-                                      end: endOfThisMonth(),
+                    child: CustomCard(
+                      title: RecurrenceIntervals.month.localizedName2(
+                        context,
+                      ),
+                      showSpacer: monthlyBudgets.isEmpty,
+                      child: monthlyBudgets.isEmpty
+                          ? const NoDataContent()
+                          : ExpandableContainer(
+                              widgets: monthlyBudgets
+                                  .map(
+                                    (budget) => BudgetCard(
+                                      budgetId: budget.id,
+                                      title: budget.title,
+                                      budget: budget.budget,
+                                      categoryIds: budget.categoryIds,
+                                      dateTimeRange: DateTimeRange(
+                                        start: beginningOfThisMonth(),
+                                        end: endOfThisMonth(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                                  )
+                                  .toList(),
+                            ),
+                    ),
                   ),
-                HeightSpacer.lg,
-                if (_selectedRecurrenceIntervals.isEmpty ||
-                    _selectedRecurrenceIntervals
-                        .contains(RecurrenceIntervals.year))
-                  CustomCard(
-                    title: RecurrenceIntervals.year.localizedName2(
-                      context,
+                if ((_selectedRecurrenceIntervals.isEmpty ||
+                        _selectedRecurrenceIntervals
+                            .contains(RecurrenceIntervals.year)) &&
+                    yearlyBudgets.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: PaddingSize.lg,
                     ),
-                    showSpacer: yearlyBudgets.isEmpty,
-                    child: yearlyBudgets.isEmpty
-                        ? const NoDataContent()
-                        : ExpandableContainer(
-                            widgets: yearlyBudgets
-                                .map(
-                                  (budget) => BudgetCard(
-                                    budgetId: budget.id,
-                                    title: budget.title,
-                                    budget: budget.budget,
-                                    categoryIds: budget.categoryIds,
-                                    dateTimeRange: DateTimeRange(
-                                      start: beginningOfThisYear(),
-                                      end: endOfThisYear(),
+                    child: CustomCard(
+                      title: RecurrenceIntervals.year.localizedName2(
+                        context,
+                      ),
+                      showSpacer: yearlyBudgets.isEmpty,
+                      child: yearlyBudgets.isEmpty
+                          ? const NoDataContent()
+                          : ExpandableContainer(
+                              widgets: yearlyBudgets
+                                  .map(
+                                    (budget) => BudgetCard(
+                                      budgetId: budget.id,
+                                      title: budget.title,
+                                      budget: budget.budget,
+                                      categoryIds: budget.categoryIds,
+                                      dateTimeRange: DateTimeRange(
+                                        start: beginningOfThisYear(),
+                                        end: endOfThisYear(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                                  )
+                                  .toList(),
+                            ),
+                    ),
                   ),
-                HeightSpacer.lg,
-                if (_selectedRecurrenceIntervals.isEmpty ||
-                    _selectedRecurrenceIntervals
-                        .contains(RecurrenceIntervals.oneTime))
-                  CustomCard(
-                    title: RecurrenceIntervals.oneTime.localizedName2(
-                      context,
+                if ((_selectedRecurrenceIntervals.isEmpty ||
+                        _selectedRecurrenceIntervals
+                            .contains(RecurrenceIntervals.oneTime)) &&
+                    oneTimeBudgets.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: PaddingSize.lg,
                     ),
-                    showSpacer: oneTimeBudgets.isEmpty,
-                    child: oneTimeBudgets.isEmpty
-                        ? const NoDataContent()
-                        : ExpandableContainer(
-                            widgets: oneTimeBudgets
-                                .map(
-                                  (budget) => BudgetCard(
-                                    budgetId: budget.id,
-                                    title: budget.title,
-                                    budget: budget.budget,
-                                    categoryIds: budget.categoryIds,
-                                    dateTimeRange: DateTimeRange(
-                                      start: budget.startDateTime!,
-                                      end: budget.endDateTime!,
+                    child: CustomCard(
+                      title: RecurrenceIntervals.oneTime.localizedName2(
+                        context,
+                      ),
+                      showSpacer: oneTimeBudgets.isEmpty,
+                      child: oneTimeBudgets.isEmpty
+                          ? const NoDataContent()
+                          : ExpandableContainer(
+                              widgets: oneTimeBudgets
+                                  .map(
+                                    (budget) => BudgetCard(
+                                      budgetId: budget.id,
+                                      title: budget.title,
+                                      budget: budget.budget,
+                                      categoryIds: budget.categoryIds,
+                                      dateTimeRange: DateTimeRange(
+                                        start: budget.startDateTime!,
+                                        end: budget.endDateTime!,
+                                      ),
+                                      showDates: true,
                                     ),
-                                    showDates: true,
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                                  )
+                                  .toList(),
+                            ),
+                    ),
                   ),
               ],
             ),

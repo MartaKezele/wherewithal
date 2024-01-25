@@ -8,5 +8,4 @@ const unselectedSectionRadius = 40.0;
 const numberOfShowcasedSections = 3;
 
 double pieChartSize(BuildContext context) =>
-    MediaQuery.of(context).size.width - 4 * PaddingSize.xxl;
-
+    MediaQuery.of(context).size.width - 5 * PaddingSize.xl;

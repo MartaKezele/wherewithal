@@ -6,7 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:wherewithal/config/keys/notification.dart';
 
 import '../../change_notifiers/auth.dart';
 import '../../components/animated_branch_container.dart';
@@ -15,6 +14,7 @@ import '../../components/dialogs/scrollable_form_dialog.dart';
 import '../../components/form/budget_form.dart';
 import '../../components/form/category_form.dart';
 import '../../components/form/value_transaction_form.dart';
+import '../../config/keys/notification.dart';
 import '../../config/keys/shared_prefs.dart';
 import '../../config/routes.dart';
 import '../../constants/styles/container.dart';

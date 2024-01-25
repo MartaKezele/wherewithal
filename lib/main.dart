@@ -140,6 +140,7 @@ class App extends StatelessWidget with GetItMixin {
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: themeMode[mode],
+          debugShowCheckedModeBanner: false,
           localizationsDelegates: const [
             AppLocalizationsDelegate(),
             ...GlobalMaterialLocalizations.delegates,

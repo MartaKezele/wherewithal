@@ -16,9 +16,8 @@ import '../expandable_container.dart';
 import 'custom_card.dart';
 import '../../extensions/button/text_button.dart';
 
-class ValueTransactionsByCategoryCard extends StatelessWidget
-    with GetItMixin {
-  ValueTransactionsByCategoryCard({
+class ValueTransactionsPieChartCard extends StatelessWidget with GetItMixin {
+  ValueTransactionsPieChartCard({
     super.key,
     required this.title,
     required this.sections,
@@ -90,42 +89,32 @@ class ValueTransactionsByCategoryCard extends StatelessWidget
             ],
           ),
           HeightSpacer.md,
-          SizedBox(
-            width: pieChartSize(context),
-            height: pieChartSize(context),
-            child: PieChart(
-              PieChartData(
-                sections: sections.isNotEmpty
-                    ? sections
-                        .asMap()
-                        .map((index, section) {
-                          return MapEntry(
-                            index,
-                            PieChartSectionData(
-                              value: section.value,
-                              color: chartSectionColorFromIndex(index),
-                              showTitle: false,
-                              radius: section == selectedSection
-                                  ? selectedSectionRadius
-                                  : unselectedSectionRadius,
-                            ),
-                          );
-                        })
-                        .values
-                        .toList()
-                    : [
-                        PieChartSectionData(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurfaceVariant
-                              .withOpacity(0.5),
-                          showTitle: false,
-                          radius: unselectedSectionRadius,
-                        ),
-                      ],
+          if (sections.isNotEmpty)
+            SizedBox(
+              width: pieChartSize(context),
+              height: pieChartSize(context),
+              child: PieChart(
+                PieChartData(
+                  sections: sections
+                      .asMap()
+                      .map((index, section) {
+                        return MapEntry(
+                          index,
+                          PieChartSectionData(
+                            value: section.value,
+                            color: chartSectionColorFromIndex(index),
+                            showTitle: false,
+                            radius: section == selectedSection
+                                ? selectedSectionRadius
+                                : unselectedSectionRadius,
+                          ),
+                        );
+                      })
+                      .values
+                      .toList(),
+                ),
               ),
             ),
-          ),
           if (goBackFn != null || moreDetailsFn != null)
             Padding(
               padding: const EdgeInsets.only(

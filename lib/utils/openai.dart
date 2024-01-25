@@ -120,25 +120,24 @@ List<models.Category?>? parseProductCategories(
   List<models.Category> categories,
 ) {
   List<models.Category?>? productCategories;
-
   if (chatModel.choices.isNotEmpty) {
-    final responseMessage = chatModel.choices.first.message;
-    if (responseMessage.role == OpenAIChatMessageRole.assistant &&
-        responseMessage.haveContent &&
-        responseMessage.content?.isNotEmpty == true) {
-      final content = responseMessage.content!.first.text;
+    final responseMsg = chatModel.choices.first.message;
+    if (responseMsg.role == OpenAIChatMessageRole.assistant &&
+        responseMsg.haveContent &&
+        responseMsg.content?.isNotEmpty == true) {
+      final content = responseMsg.content!.first.text;
       if (content != null && content.isNotEmpty) {
         productCategories = [];
         final productsWithCategories = content.split('\n');
         for (final element in productsWithCategories) {
-          final categoryIndexStart = element.lastIndexOf('(');
-          final categoryIndexEnd = element.lastIndexOf(')');
-          final categoryIndex = int.tryParse(
-            element.substring(categoryIndexStart + 1, categoryIndexEnd),
+          final categoryIdxStart = element.lastIndexOf('(');
+          final categoryIdxEnd = element.lastIndexOf(')');
+          final categoryIdx = int.tryParse(
+            element.substring(categoryIdxStart + 1, categoryIdxEnd),
           );
-          if (categoryIndex != null) {
+          if (categoryIdx != null) {
             final hierarchicalCategory =
-                categoriesWithHierarchicalTitles.elementAt(categoryIndex - 1);
+                categoriesWithHierarchicalTitles.elementAt(categoryIdx - 1);
             final category = categories
                 .firstWhere((element) => element.id == hierarchicalCategory.id);
             productCategories.add(category);
@@ -149,6 +148,5 @@ List<models.Category?>? parseProductCategories(
       }
     }
   }
-
   return productCategories;
 }
