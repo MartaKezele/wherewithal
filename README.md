@@ -1,6 +1,4 @@
-# Wherewithal
-
-Personal finance tracker
+# Wherewithal - Personal finance tracker
 
 Key features:
 - ability to perform very detailed transaction analysis by categories
